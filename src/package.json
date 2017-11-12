@@ -1,0 +1,29 @@
+{
+  "name": "ng2-konva",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rafaesc/ng2-konva.git"
+  },
+  "author": {
+    "name": "Rafael Escala",
+    "email": "rafaesc92@gmail.com"
+  },
+  "keywords": [
+    "angular"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rafaesc/ng2-konva.git/issues"
+  },
+  "main": "ng2-konva.umd.js",
+  "module": "ng2-konva.js",
+  "jsnext:main": "ng2-konva.js",
+  "typings": "ng2-konva.d.ts",
+  "peerDependencies": {
+    "@angular/core": "^4.0.0",
+    "konva": "^1.7.6",
+    "rxjs": "^5.1.0",
+    "zone.js": "^0.8.4"
+  }
+}
