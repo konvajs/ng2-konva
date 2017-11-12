@@ -1,2 +1,6 @@
-# ng2-konva
-Angular &amp; Canvas - JavaScript library for drawing complex canvas graphics using Angular.
+# ng2-konva (0.0.0)
+
+This package is in development - check back later!
+
+## License
+[MIT](LICENSE) License
