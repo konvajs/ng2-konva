@@ -18,8 +18,9 @@
     "docs:watch": "npm run docs:build -- -s -w",
     "lint": "tslint --type-check --project tsconfig.json src/**/*.ts",
     "lite": "lite-server",
-    "playground:build": "tsc -p playground -w",
-    "playground": "concurrently \"npm run build:watch\" \"npm run playground:build\" \"npm run lite\"",
+    "playground:watch": "tsc -p playground -w",
+    "playground:build": "tsc -p playground",
+    "playground": "concurrently \"npm run build:watch\" \"npm run playground:watch\" \"npm run lite\"",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:ci": "jest --runInBand"

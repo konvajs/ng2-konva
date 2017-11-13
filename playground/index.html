@@ -1,23 +1,48 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>ng2-konva Playground</title>
-    <base href="/">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Polyfill(s) for older browsers -->
-    <script src="node_modules/core-js/client/shim.min.js"></script>
 
-    <script src="node_modules/zone.js/dist/zone.js"></script>
-    <script src="node_modules/systemjs/dist/system.src.js"></script>
+<head>
+  <title>Angular Konva</title>
+  <base href="/">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <script src="systemjs.config.js"></script>
-    <script>
-      System.import('.playground/index.js').catch(function(err){ console.error(err); });
-    </script>
-  </head>
+  <!--link to bootstrap.css-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/prettify-angulario.css">
 
-  <body>
-    <app>Loading AppComponent content here ...</app>
-  </body>
+  <style media="screen">
+    .header {
+      background-color: #0143A3;
+      background: -webkit-linear-gradient(#0143A3, #0273D4);
+      background: linear-gradient(#0143A3, #0273D4);
+      color: #FFF;
+      padding: 30px;
+    }
+
+    section {
+      padding-top: 30px;
+    }
+  </style>
+
+  <!-- Polyfill(s) for older browsers -->
+  <script src="node_modules/core-js/client/shim.min.js"></script>
+
+  <script src="node_modules/zone.js/dist/zone.js"></script>
+  <script src="node_modules/systemjs/dist/system.src.js"></script>
+
+  <script src="systemjs.config.js"></script>
+  <script>
+    System.import('.playground/index.js').catch(function (err) {
+      console.error(err);
+    });
+  </script>
+</head>
+
+<body>
+  <app>Loading AppComponent content here ...</app>
+</body>
+<script src="assets/js/prettify.min.js"></script>
+
 </html>

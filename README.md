@@ -65,7 +65,7 @@ Once your library is imported, you can use its components in your Angular applic
     </ko-stage>`
 })
 class AppComponent implements OnInit {
-  public configStage = new BehaviorSubject({
+  public configStage = Observable.of({
     width: 200,
     height: 200
   });
