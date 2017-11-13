@@ -1,12 +1,82 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  AfterContentInit,
+  ElementRef,
+  ContentChildren,
+  QueryList,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
+import { ShapeComponent as Shape } from './shape.component';
+import { Observable } from 'rxjs/Observable';
+import { updatePicture, createListener, applyNodeProps } from '../utils/index';
+
+declare const Konva: any;
 
 @Component({
-  selector: 'stage',
-  template: `<h1>Stage component</h1>`
+  selector: 'ko-stage',
+  template: `<div><ng-content></ng-content>{{config}}</div>`,
 })
-export class StageComponent {
+export class StageComponent implements AfterContentInit, OnInit, OnDestroy {
+  @ContentChildren(Shape) shapes = new QueryList<Shape>();
+  @Input() config: Observable<any>;
+  @Output() click: EventEmitter<any> = new EventEmitter();
+  @Output() dblclick: EventEmitter<any> = new EventEmitter();
+  @Output() mouseover: EventEmitter<any> = new EventEmitter();
+  @Output() tap: EventEmitter<any> = new EventEmitter();
+  @Output() dbltap: EventEmitter<any> = new EventEmitter();
+  @Output() touchstart: EventEmitter<any> = new EventEmitter();
+  @Output() scaleXChange: EventEmitter<any> = new EventEmitter();
+  @Output() fillChange: EventEmitter<any> = new EventEmitter();
+  @Output() dragstart: EventEmitter<any> = new EventEmitter();
+  @Output() dragmove: EventEmitter<any> = new EventEmitter();
+  @Output() dragend: EventEmitter<any> = new EventEmitter();
 
-  constructor() {
+  private _stage;
+  private cacheProps: any = {};
+
+  public getStage() {
+    return this._stage || {};
   }
 
+  constructor(private elementRef: ElementRef) {}
+
+  private uploadKonva(config) {
+    const props = {
+      ...config,
+      ...createListener(this),
+    };
+    applyNodeProps(this, props, this.cacheProps);
+    this.cacheProps = props;
+  }
+
+  ngOnInit() {
+    const nodeContainer = this.elementRef.nativeElement;
+    this.config.subscribe(config => {
+      if (!this._stage) {
+        this._stage = new Konva.Stage({
+          width: config.width,
+          height: config.height,
+          container: nodeContainer
+        });
+        this.uploadKonva(config);
+      } else {
+        this.uploadKonva(config);
+      }
+    });
+  }
+
+  ngAfterContentInit() {
+    this.shapes.forEach((item: Shape) => {
+      this._stage.add(item.getStage());
+      updatePicture(this._stage);
+    });
+  }
+
+  ngOnDestroy() {
+    this._stage.destroy();
+  }
 }

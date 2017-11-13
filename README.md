@@ -43,12 +43,34 @@ export class AppModule { }
 
 Once your library is imported, you can use its components, directives and pipes in your Angular application:
 
-```xml
-<!-- You can now use your library component in app.component.html -->
-<h1>
-  {{title}}
-</h1>
-<stage></stage>
+```typescript
+@Component({
+  selector: 'app',
+  template: `
+    <ko-stage [config]="configStage">
+      <ko-layer>
+        <ko-circle [config]="configCircle" (click)="handleClick($event)"></ko-circle>
+      </ko-layer>
+    </ko-stage>`
+})
+class AppComponent implements OnInit {
+  public configStage = new BehaviorSubject({
+    width: 200,
+    height: 200
+  });
+  public configCircle = Observable.of({
+    x: 100,
+    y: 100,
+    radius: 70,
+    fill: 'red',
+    stroke: 'black',
+    strokeWidth: 4
+  });
+
+  public handleClick(component) {
+    console.log('Hello Circle', component);
+  }
+}
 ```
 
 ## Development

@@ -28,6 +28,8 @@
       rxjs: 'npm:rxjs',
       'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js',
       konva: 'npm:konva/konva.js',
+      'rxjs/observable/of': 'npm:rxjs/observable/of',
+      'lodash/camelCase': 'npm:lodash/camelCase.js',
       'ng2-konva': '../dist'
     },
     // packages tells the System loader how to load when no filename and/or no extension

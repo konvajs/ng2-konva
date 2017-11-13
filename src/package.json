@@ -22,8 +22,10 @@
   "typings": "ng2-konva.d.ts",
   "peerDependencies": {
     "@angular/core": "^4.0.0",
-    "konva": "^1.7.6",
     "rxjs": "^5.1.0",
     "zone.js": "^0.8.4"
+  },
+  "dependencies": {
+    "konva": "^1.7.6"
   }
 }
