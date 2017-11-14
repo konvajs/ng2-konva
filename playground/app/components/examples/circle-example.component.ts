@@ -1,21 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
 
 @Component({
-  selector: 'examples',
+  selector: 'circle-example',
   template: `
   <br>
-  <section [attr.id]="name">
-      <div class="row">
-          <h1>{{name}}
-          </h1>
-      </div>
-      <hr>
-      <div class="row">
-          <h2 id="examples">Circle</h2>
-      </div>
+  <section>
       <ko-stage [config]="configStage">
           <ko-layer>
               <ko-circle [config]="configCircle" (click)="handleClick($event)"></ko-circle>
@@ -25,9 +16,7 @@ import 'rxjs/add/observable/of';
   </section>
   `
 })
-export class ExamplesComponent implements OnInit {
-  public name = 'Examples';
-
+export class CircleExampleComponent implements OnInit {
   public configStage = new BehaviorSubject({
     width: 200,
     height: 200

@@ -20,8 +20,8 @@ declare const Konva: any;
   selector: 'ko-shape, ko-layer, ko-circle, ko-fastlayer, ko-group, ko-label, ko-rect, ko-ellipse, ko-wedge, ko-line, ko-sprite, ko-image, ko-text, ko-text-path, ko-star, ko-ring, ko-arc, ko-tag, ko-path, ko-regular-polygon, ko-arrow',
   template: `<div><ng-content></ng-content></div>`
 })
-export class ShapeComponent implements AfterContentInit, OnDestroy, OnInit {
-  @ContentChildren(ShapeComponent) shapes = new QueryList<ShapeComponent>();
+export class CoreShapeComponent implements AfterContentInit, OnDestroy, OnInit {
+  @ContentChildren(CoreShapeComponent) shapes = new QueryList<CoreShapeComponent>();
   @Input() config: Observable<any>;
   @Output() click: EventEmitter<any> = new EventEmitter();
   @Output() dblclick: EventEmitter<any> = new EventEmitter();
@@ -86,7 +86,7 @@ export class ShapeComponent implements AfterContentInit, OnDestroy, OnInit {
   }
 
   ngAfterContentInit() {
-    this.shapes.forEach((item: ShapeComponent) => {
+    this.shapes.forEach((item: CoreShapeComponent) => {
       if (this !== item) {
         this._stage.add(item.getStage());
         updatePicture(this._stage);

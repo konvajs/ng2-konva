@@ -1,6 +1,6 @@
 {
   "name": "ng2-konva",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Angular binding to canvas element via Konva framework",
   "keywords": [
     "angular",
@@ -9,6 +9,9 @@
     "konva",
     "canvas"
   ],
+  "main": "dist/ng2-konva.umd.js",
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "build": "gulp build",
     "build:watch": "gulp",
@@ -47,6 +50,7 @@
     "@angular/compiler": "^4.0.0",
     "@angular/compiler-cli": "^4.0.0",
     "@angular/core": "^4.0.0",
+    "@angular/forms": "4.0.0",
     "@angular/platform-browser": "^4.0.0",
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@compodoc/compodoc": "^1.0.0-beta.10",
@@ -66,10 +70,13 @@
     "konva": "^1.7.6",
     "lite-server": "^2.3.0",
     "markdown-loader": "^2.0.1",
+    "ng2-konva": "^1.0.2",
+    "ngx-bootstrap": "^2.0.0-beta.8",
     "node-sass": "^4.5.2",
     "node-sass-tilde-importer": "^1.0.0",
     "node-watch": "^0.5.2",
     "protractor": "~5.1.0",
+    "raw-loader": "^0.5.1",
     "rollup": "^0.41.6",
     "run-sequence": "^1.2.2",
     "rxjs": "^5.1.0",

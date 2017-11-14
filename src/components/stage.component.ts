@@ -10,7 +10,7 @@ import {
   OnInit,
   OnDestroy,
 } from '@angular/core';
-import { ShapeComponent as Shape } from './shape.component';
+import { CoreShapeComponent as CoreShape } from './core-shape.component';
 import { Observable } from 'rxjs/Observable';
 import { updatePicture, createListener, applyNodeProps } from '../utils/index';
 
@@ -21,7 +21,7 @@ declare const Konva: any;
   template: `<div><ng-content></ng-content>{{config}}</div>`,
 })
 export class StageComponent implements AfterContentInit, OnInit, OnDestroy {
-  @ContentChildren(Shape) shapes = new QueryList<Shape>();
+  @ContentChildren(CoreShape) shapes = new QueryList<CoreShape>();
   @Input() config: Observable<any>;
   @Output() click: EventEmitter<any> = new EventEmitter();
   @Output() dblclick: EventEmitter<any> = new EventEmitter();
@@ -70,7 +70,7 @@ export class StageComponent implements AfterContentInit, OnInit, OnDestroy {
   }
 
   ngAfterContentInit() {
-    this.shapes.forEach((item: Shape) => {
+    this.shapes.forEach((item: CoreShape) => {
       this._stage.add(item.getStage());
       updatePicture(this._stage);
     });
