@@ -1,6 +1,6 @@
 {
   "name": "ng2-konva",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Angular binding to canvas element via Konva framework",
   "keywords": [
     "angular",
@@ -70,10 +70,7 @@
     "konva": "^1.7.6",
     "lite-server": "^2.3.0",
     "markdown-loader": "^2.0.1",
-<<<<<<< HEAD
-    "ng2-konva": "^1.0.2",
-=======
->>>>>>> 0d0c475f6d3d5b94640333aef13472d772758b4f
+    "ng2-konva": "^1.0.4",
     "ngx-bootstrap": "^2.0.0-beta.8",
     "node-sass": "^4.5.2",
     "node-sass-tilde-importer": "^1.0.0",

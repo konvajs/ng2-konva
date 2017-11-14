@@ -1,23 +1,30 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { CoreShape } from 'n2-konva';
+import { KonvaComponent } from 'ng2-konva';
 
 @Component({
   selector: 'event-example',
   template: `
   <br>
   <section>
-      <ko-stage [config]="configStage">
+      <ko-stage #layer [config]="configStage">
           <ko-layer #layer>
-              <ko-regular-polygon [config]="configItem" (click)="handleClick($event)"></ko-regular-polygon>
+              <ko-regular-polygon
+                [config]="configItem"
+                (mouseout)="handleMouseOut($event)"
+                (mousemove)="handleMouseMove($event)"
+              ></ko-regular-polygon>
+              <ko-text #text [config]="configText"></ko-text>
           </ko-layer>
       </ko-stage>
       <br>
   </section>
   `
 })
-export class EventExampleComponent implements OnInit {
-  @ViewChild('layer') layer: CoreShape;
+export class EventExampleComponent {
+  @ViewChild('stage') stage: KonvaComponent;
+  @ViewChild('layer') layer: KonvaComponent;
+  @ViewChild('text') text: KonvaComponent;
 
   public configStage = Observable.of({
     width: 300,
@@ -32,12 +39,30 @@ export class EventExampleComponent implements OnInit {
     stroke: 'black',
     strokeWidth: 4
   });
+  public configText = Observable.of({
+    x: 10,
+    y: 10,
+    fontFamily: 'Calibri',
+    fontSize: 24,
+    text: '',
+    fill: 'black'
+  });
 
-  public handleClick(event: any) {
-    console.log('Hello Circle', event);
+  public writeMessage(message: string) {
+    this.text.getStage().setText(message);
+    this.layer.getStage().draw();
   }
 
-  ngOnInit() {
-    console.log(this.layer.getStage());
+  public handleMouseOut() {
+    console.log('handleMouseOut')
+    this.writeMessage('Mouseout triangle');
+  }
+
+  public handleMouseMove() {
+    console.log('handleMouseMove')
+    const mousePos = this.stage.getStage().getPointerPosition();
+    const x = mousePos.x - 190;
+    const y = mousePos.y - 40;
+    this.writeMessage('x: ' + x + ', y: ' + y);
   }
 }

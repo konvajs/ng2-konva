@@ -4064,13 +4064,10 @@ negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
 
-<<<<<<< HEAD
-ng2-konva@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/ng2-konva/-/ng2-konva-1.0.2.tgz#8a92e58d474913441c7191ad19c6e9f2eac3494e"
+ng2-konva@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/ng2-konva/-/ng2-konva-1.0.3.tgz#226bec1219f00042249a637daa43d3d5e3b91bce"
 
-=======
->>>>>>> 0d0c475f6d3d5b94640333aef13472d772758b4f
 ngx-bootstrap@^2.0.0-beta.8:
   version "2.0.0-beta.8"
   resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-2.0.0-beta.8.tgz#3209c818e89a4b4ea88c7c45fc53cebf000c0699"

@@ -13,6 +13,7 @@ import {
 import { CoreShapeComponent as CoreShape } from './core-shape.component';
 import { Observable } from 'rxjs/Observable';
 import { updatePicture, createListener, applyNodeProps } from '../utils/index';
+import { KonvaComponent } from '../ko.interface';
 
 declare const Konva: any;
 
@@ -20,12 +21,14 @@ declare const Konva: any;
   selector: 'ko-stage',
   template: `<div><ng-content></ng-content>{{config}}</div>`,
 })
-export class StageComponent implements AfterContentInit, OnInit, OnDestroy {
+export class StageComponent implements KonvaComponent, AfterContentInit, OnInit, OnDestroy {
   @ContentChildren(CoreShape) shapes = new QueryList<CoreShape>();
   @Input() config: Observable<any>;
   @Output() click: EventEmitter<any> = new EventEmitter();
   @Output() dblclick: EventEmitter<any> = new EventEmitter();
   @Output() mouseover: EventEmitter<any> = new EventEmitter();
+  @Output() mouseout: EventEmitter<any> = new EventEmitter();
+  @Output() mousemove: EventEmitter<any> = new EventEmitter();
   @Output() tap: EventEmitter<any> = new EventEmitter();
   @Output() dbltap: EventEmitter<any> = new EventEmitter();
   @Output() touchstart: EventEmitter<any> = new EventEmitter();

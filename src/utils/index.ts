@@ -23,6 +23,8 @@ export function createListener(instance: any) {
     'click',
     'dblclick',
     'mouseover',
+    'mouseout',
+    'mousemove',
     'tap',
     'dbltap',
     'touchstart',

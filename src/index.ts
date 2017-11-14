@@ -6,6 +6,7 @@ import 'konva';
 
 export * from './components/stage.component';
 export * from './components/core-shape.component';
+export * from './ko.interface';
 
 @NgModule({
   imports: [

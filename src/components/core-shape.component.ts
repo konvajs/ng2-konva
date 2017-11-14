@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { getName, createListener, applyNodeProps, updatePicture } from '../utils/index';
+import { KonvaComponent } from '../ko.interface';
 
 declare const Konva: any;
 
@@ -20,12 +21,14 @@ declare const Konva: any;
   selector: 'ko-shape, ko-layer, ko-circle, ko-fastlayer, ko-group, ko-label, ko-rect, ko-ellipse, ko-wedge, ko-line, ko-sprite, ko-image, ko-text, ko-text-path, ko-star, ko-ring, ko-arc, ko-tag, ko-path, ko-regular-polygon, ko-arrow',
   template: `<div><ng-content></ng-content></div>`
 })
-export class CoreShapeComponent implements AfterContentInit, OnDestroy, OnInit {
+export class CoreShapeComponent implements KonvaComponent, AfterContentInit, OnDestroy, OnInit {
   @ContentChildren(CoreShapeComponent) shapes = new QueryList<CoreShapeComponent>();
   @Input() config: Observable<any>;
   @Output() click: EventEmitter<any> = new EventEmitter();
   @Output() dblclick: EventEmitter<any> = new EventEmitter();
   @Output() mouseover: EventEmitter<any> = new EventEmitter();
+  @Output() mouseout: EventEmitter<any> = new EventEmitter();
+  @Output() mousemove: EventEmitter<any> = new EventEmitter();
   @Output() tap: EventEmitter<any> = new EventEmitter();
   @Output() dbltap: EventEmitter<any> = new EventEmitter();
   @Output() touchstart: EventEmitter<any> = new EventEmitter();
