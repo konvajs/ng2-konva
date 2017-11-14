@@ -8,6 +8,7 @@
       "es2015",
       "dom"
     ],
+    "sourceMap": true,
     "skipLibCheck": true,
     "types": []
   }
