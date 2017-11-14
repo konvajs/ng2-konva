@@ -7,20 +7,14 @@ import 'rxjs/add/observable/of';
   selector: 'examples',
   template: `
   <br>
-  <div class="row">
-      <h2>API</h2>
-      <div class="card card-block panel panel-default panel-body"></div>
-  </div>
   <section [attr.id]="name">
       <div class="row">
           <h1>{{name}}
           </h1>
       </div>
-  
       <hr>
-  
       <div class="row">
-          <h2>Examples</h2>
+          <h2 id="examples">Circle</h2>
       </div>
       <ko-stage [config]="configStage">
           <ko-layer>

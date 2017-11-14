@@ -1,15 +1,6 @@
-# ng2-konva (WORK IN PROGRESS)
-
 **ng2-konva** is a JavaScript library for drawing complex canvas graphics using Angular.
 
 It provides declarative and reactive bindings to the [Konva Framework](http://konvajs.github.io/).
-
-All `ng2-konva` components correspond to `Konva` components of the same name with the prefix 'ko-'. All the parameters available for `Konva` objects can add as `config` in the prop as Observable for corresponding `ng2-konva` components.
-
-Core shapes are: ko-stage, ko-layer, ko-rect, ko-circle, ko-ellipse, ko-line, ko-image, ko-text, ko-text-path, ko-star, ko-label, SVG Path, ko-regular-polygon.
-Also you can create custom shape.
-
-To get more info about `Konva` you can read [Konva Overview](http://konvajs.github.io/docs/overview.html).
 
 ## Installation
 
@@ -75,21 +66,3 @@ class AppComponent implements OnInit {
   }
 }
 ```
-
-## Development
-
-To generate all `*.js`, `*.d.ts` and `*.metadata.json` files:
-
-```bash
-$ npm run build
-```
-
-To lint all `*.ts` files:
-
-```bash
-$ npm run lint
-```
-
-## License
-
-MIT © [Rafael Escala](mailto:rafaesc92@gmail.com)

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
 let components = [
-  { name: 'Examples', href: 'examples' },
+  { name: 'API', href: 'API' },
+  { name: 'Examples', href: 'Examples' },
 ];
 
 @Component({
@@ -23,7 +24,7 @@ let components = [
           <li class="nav-item"><a href="{{prefix}}#top" role="button" class="navbar-brand">ng2-konva</a></li>
           <li class="nav-item dropdown"  *ngFor="let comp of components">
             <a role="button" class="nav-link dropdown-toggle" href="{{prefix}}#{{comp.href}}">
-                {{comp.name}} <b class="caret"></b>
+                {{comp.name}}
             </a>
           </li>
         </ul>

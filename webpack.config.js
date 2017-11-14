@@ -9,7 +9,12 @@ module.exports = {
     libraryTarget: 'umd'
   },
   devtool: 'source-map',
-  externals: ['@angular/core', '@angular/common', 'ng2-konva', '@angular/platform-browser-dynamic'],
+  externals: [
+    '@angular/core',
+    '@angular/common',
+    'ng2-konva',
+    '@angular/platform-browser-dynamic'
+  ],
   resolve: {
     // Add `.ts` and `.tsx` as a resolvable extension.
     extensions: ['.ts', '.tsx', '.js']
@@ -17,7 +22,21 @@ module.exports = {
   module: {
     rules: [
       // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
-      { test: /\.tsx?$/, loader: 'ts-loader' }
+      { test: /\.tsx?$/, loader: 'ts-loader' },
+      {
+        test: /\.md$/,
+        use: [
+          {
+            loader: 'html-loader'
+          },
+          {
+            loader: 'markdown-loader',
+            options: {
+              /* your options here */
+            }
+          }
+        ]
+      }
     ]
   }
 };

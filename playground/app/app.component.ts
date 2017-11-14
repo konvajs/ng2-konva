@@ -1,4 +1,8 @@
+import { DomSanitizer } from '@angular/platform-browser';
 import { Component, AfterContentInit } from '@angular/core';
+
+const introduction = require('../introduction.md');
+
 declare const PR: any;
 
 @Component({
@@ -23,7 +27,8 @@ declare const PR: any;
   </main>
 
   <div class="container">
-    <section id="getting-started"></section>
+    <section id="introduction" [innerHtml]="introduction"></section>
+    <api></api>
     <examples></examples>
   </div>
 
@@ -36,6 +41,14 @@ declare const PR: any;
   `
 })
 export class AppComponent implements AfterContentInit {
+  public _introduction: string = introduction;
+
+  constructor(private _sanitizer: DomSanitizer) {}
+
+  public get introduction() {
+    return this._sanitizer.bypassSecurityTrustHtml(this._introduction);
+  }
+
   public ngAfterContentInit(): any {
     setTimeout(() => {
       if (typeof PR !== 'undefined') {
