@@ -7,7 +7,7 @@ It provides declarative and reactive bindings to the [Konva Framework](http://ko
 To install this library, run:
 
 ```bash
-$ npm install ng2-konva --save
+$ npm install konva ng2-konva --save
 ```
 
 and then from your Angular `AppModule`:

@@ -16,7 +16,7 @@ To get more info about `Konva` you can read [Konva Overview](http://konvajs.gith
 To install this library, run:
 
 ```bash
-$ npm install ng2-konva --save
+$ npm install konva ng2-konva --save
 ```
 
 and then from your Angular `AppModule`:
