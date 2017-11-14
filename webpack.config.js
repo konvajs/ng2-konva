@@ -11,6 +11,7 @@ module.exports = {
   devtool: 'source-map',
   externals: [
     '@angular/core',
+    '@angular/forms',
     '@angular/common',
     'ng2-konva',
     '@angular/platform-browser-dynamic'

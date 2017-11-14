@@ -14,7 +14,7 @@ function capitalizeFirstLetter(string) {
 }
 
 export function getName(componentTag) {
-  return capitalizeFirstLetter(camelize(componentTag.substr(3).replace('-', '')));
+  return capitalizeFirstLetter(camelize(componentTag.substr(3).replace('-', ' ')));
 }
 
 export function createListener(instance: any) {

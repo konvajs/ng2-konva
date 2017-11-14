@@ -29,7 +29,30 @@ declare const PR: any;
   <div class="container">
     <section id="introduction" [innerHtml]="introduction"></section>
     <api></api>
-    <examples></examples>
+    <section>
+      <div class="row">
+        <h2 id="Examples">Examples</h2>
+        <example-section
+            [ts]="desc.circle.ts"
+            [id]="desc.circle.id"
+            [heading]="desc.circle.heading">
+            <circle-example></circle-example>
+        </example-section>
+        <example-section
+            [ts]="desc.shapes.ts"
+            [id]="desc.shapes.id"
+            [heading]="desc.shapes.heading">
+            <shapes-example></shapes-example>
+        </example-section>
+        <example-section
+            [ts]="desc.stylesExample.ts"
+            [id]="desc.stylesExample.id"
+            [heading]="desc.stylesExample.heading">
+            <styles-example></styles-example>
+        </example-section>
+        <event-example></event-example>
+      </div>
+    </section>
   </div>
 
   <footer class="footer">
@@ -42,6 +65,28 @@ declare const PR: any;
 })
 export class AppComponent implements AfterContentInit {
   public _introduction: string = introduction;
+  public desc: any = {
+    circle: {
+      heading: 'Circle',
+      id: 'circle',
+      ts: require('!!raw-loader?lang=typescript!./components/examples/circle-example.component.ts')
+    },
+    event: {
+      heading: 'Event',
+      id: 'event',
+      ts: require('!!raw-loader?lang=typescript!./components/examples/event-example.component.ts')
+    },
+    shapes: {
+      heading: 'Shapes',
+      id: 'shapes',
+      ts: require('!!raw-loader?lang=typescript!./components/examples/shapes-example.component.ts')
+    },
+    stylesExample: {
+      heading: 'Styles',
+      id: 'styles',
+      ts: require('!!raw-loader?lang=typescript!./components/examples/styles-example.component.ts')
+    },
+  };
 
   constructor(private _sanitizer: DomSanitizer) {}
 

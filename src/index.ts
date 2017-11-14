@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StageComponent } from './components/stage.component';
-import { ShapeComponent } from './components/shape.component';
+import { CoreShapeComponent } from './components/core-shape.component';
 import 'konva';
 
 export * from './components/stage.component';
+export * from './components/core-shape.component';
 
 @NgModule({
   imports: [
@@ -12,11 +13,11 @@ export * from './components/stage.component';
   ],
   declarations: [
     StageComponent,
-    ShapeComponent,
+    CoreShapeComponent,
   ],
   exports: [
     StageComponent,
-    ShapeComponent,
+    CoreShapeComponent,
   ]
 })
 export class KonvaModule {
