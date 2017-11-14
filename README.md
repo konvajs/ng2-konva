@@ -1,4 +1,4 @@
-# ng2-konva (WORK IN PROGRESS)
+# ng2-konva
 
 **ng2-konva** is a JavaScript library for drawing complex canvas graphics using Angular.
 

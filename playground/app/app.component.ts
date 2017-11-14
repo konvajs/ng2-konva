@@ -50,7 +50,18 @@ declare const PR: any;
             [heading]="desc.stylesExample.heading">
             <styles-example></styles-example>
         </example-section>
-        <event-example></event-example>
+        <example-section
+            [ts]="desc.event.ts"
+            [id]="desc.event.id"
+            [heading]="desc.event.heading">
+            <event-example></event-example>
+        </example-section>
+        <example-section
+            [ts]="desc.animation.ts"
+            [id]="desc.animation.id"
+            [heading]="desc.animation.heading">
+            <animation-example></animation-example>
+        </example-section>
       </div>
     </section>
   </div>
@@ -85,6 +96,11 @@ export class AppComponent implements AfterContentInit {
       heading: 'Styles',
       id: 'styles',
       ts: require('!!raw-loader?lang=typescript!./components/examples/styles-example.component.ts')
+    },
+    animation: {
+      heading: 'Animation',
+      id: 'animation',
+      ts: require('!!raw-loader?lang=typescript!./components/examples/animation-example.component.ts')
     },
   };
 

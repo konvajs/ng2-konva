@@ -7,7 +7,7 @@ import { KonvaComponent } from 'ng2-konva';
   template: `
   <br>
   <section>
-      <ko-stage #layer [config]="configStage">
+      <ko-stage #stage [config]="configStage">
           <ko-layer #layer>
               <ko-regular-polygon
                 [config]="configItem"
@@ -54,12 +54,10 @@ export class EventExampleComponent {
   }
 
   public handleMouseOut() {
-    console.log('handleMouseOut')
     this.writeMessage('Mouseout triangle');
   }
 
   public handleMouseMove() {
-    console.log('handleMouseMove')
     const mousePos = this.stage.getStage().getPointerPosition();
     const x = mousePos.x - 190;
     const y = mousePos.y - 40;

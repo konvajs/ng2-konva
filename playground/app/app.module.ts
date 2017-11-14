@@ -12,6 +12,7 @@ import { CircleExampleComponent } from './components/examples/circle-example.com
 import { EventExampleComponent } from './components/examples/event-example.component';
 import { ShapesExampleComponent } from './components/examples/shapes-example.component';
 import { StylesExampleComponent } from './components/examples/styles-example.component';
+import { AnimationExampleComponent } from './components/examples/animation-example.component';
 
 @NgModule({
   bootstrap: [AppComponent],
@@ -23,6 +24,7 @@ import { StylesExampleComponent } from './components/examples/styles-example.com
     EventExampleComponent,
     ShapesExampleComponent,
     StylesExampleComponent,
+    AnimationExampleComponent,
     ApiComponent
   ],
   imports: [BrowserModule, KonvaModule]
