@@ -70,7 +70,7 @@
     "konva": "^1.7.6",
     "lite-server": "^2.3.0",
     "markdown-loader": "^2.0.1",
-    "ng2-konva": "1.0.6",
+    "ng2-konva": "^1.0.6",
     "ngx-bootstrap": "^2.0.0-beta.8",
     "node-sass": "^4.5.2",
     "node-sass-tilde-importer": "^1.0.0",
@@ -85,6 +85,8 @@
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",
     "typescript": "~2.2.0",
+    "uglifyjs-webpack-plugin": "^1.0.1",
+    "url-loader": "^0.6.2",
     "webpack": "^3.8.1",
     "zone.js": "^0.8.4"
   },

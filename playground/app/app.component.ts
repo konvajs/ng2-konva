@@ -27,6 +27,7 @@ declare const PR: any;
   </main>
 
   <div class="container">
+    <img src="../../n2-konva.png">
     <section id="introduction" [innerHtml]="introduction"></section>
     <api></api>
     <section>
@@ -61,6 +62,12 @@ declare const PR: any;
             [id]="desc.animation.id"
             [heading]="desc.animation.heading">
             <animation-example></animation-example>
+        </example-section>
+        <example-section
+            [ts]="desc.star.ts"
+            [id]="desc.star.id"
+            [heading]="desc.star.heading">
+            <star-example></star-example>
         </example-section>
       </div>
     </section>
@@ -101,6 +108,11 @@ export class AppComponent implements AfterContentInit {
       heading: 'Animation',
       id: 'animation',
       ts: require('!!raw-loader?lang=typescript!./components/examples/animation-example.component.ts')
+    },
+    star: {
+      heading: 'Star',
+      id: 'star',
+      ts: require('!!raw-loader?lang=typescript!./components/examples/star-example.component.ts')
     },
   };
 

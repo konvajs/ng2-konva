@@ -8,7 +8,7 @@ import {
   ContentChildren,
   QueryList,
   OnInit,
-  OnDestroy,
+  OnDestroy
 } from '@angular/core';
 import { CoreShapeComponent as CoreShape } from './core-shape.component';
 import { Observable } from 'rxjs/Observable';
@@ -19,9 +19,10 @@ declare const Konva: any;
 
 @Component({
   selector: 'ko-stage',
-  template: `<div><ng-content></ng-content>{{config}}</div>`,
+  template: `<div><ng-content></ng-content>{{config}}</div>`
 })
-export class StageComponent implements KonvaComponent, AfterContentInit, OnInit, OnDestroy {
+export class StageComponent
+  implements KonvaComponent, AfterContentInit, OnInit, OnDestroy {
   @ContentChildren(CoreShape) shapes = new QueryList<CoreShape>();
   @Input() config: Observable<any>;
   @Output() click: EventEmitter<any> = new EventEmitter();
@@ -39,10 +40,15 @@ export class StageComponent implements KonvaComponent, AfterContentInit, OnInit,
   @Output() dragend: EventEmitter<any> = new EventEmitter();
 
   private _stage;
+  private _config;
   private cacheProps: any = {};
 
   public getStage() {
     return this._stage || {};
+  }
+
+  public getConfig() {
+    return this._config || {};
   }
 
   constructor(private elementRef: ElementRef) {}
@@ -50,7 +56,7 @@ export class StageComponent implements KonvaComponent, AfterContentInit, OnInit,
   private uploadKonva(config) {
     const props = {
       ...config,
-      ...createListener(this),
+      ...createListener(this)
     };
     applyNodeProps(this, props, this.cacheProps);
     this.cacheProps = props;
@@ -59,6 +65,7 @@ export class StageComponent implements KonvaComponent, AfterContentInit, OnInit,
   ngOnInit() {
     const nodeContainer = this.elementRef.nativeElement;
     this.config.subscribe(config => {
+      this._config = config;
       if (!this._stage) {
         this._stage = new Konva.Stage({
           width: config.width,

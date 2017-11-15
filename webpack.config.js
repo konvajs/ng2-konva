@@ -1,4 +1,5 @@
 const path = require('path');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
   devtool: 'inline-source-map',
@@ -9,13 +10,13 @@ module.exports = {
     libraryTarget: 'umd'
   },
   devtool: 'source-map',
-  externals: [
+  /*externals: [
     '@angular/core',
     '@angular/forms',
     '@angular/common',
     'ng2-konva',
     '@angular/platform-browser-dynamic'
-  ],
+  ],*/
   resolve: {
     // Add `.ts` and `.tsx` as a resolvable extension.
     extensions: ['.ts', '.tsx', '.js']
@@ -37,7 +38,14 @@ module.exports = {
             }
           }
         ]
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        loader: 'url-loader',
       }
     ]
-  }
+  },
+  plugins: [
+    new UglifyJSPlugin()
+  ]
 };

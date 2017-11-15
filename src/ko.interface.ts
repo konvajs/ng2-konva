@@ -3,5 +3,6 @@ import { Observable } from 'rxjs/Observable';
 
 export interface KonvaComponent extends Component {
     getStage: Function;
-    config: Observable<any>;
+    getConfig: Function;
+    config: any|Observable<any>;
 };

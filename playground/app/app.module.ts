@@ -13,6 +13,7 @@ import { EventExampleComponent } from './components/examples/event-example.compo
 import { ShapesExampleComponent } from './components/examples/shapes-example.component';
 import { StylesExampleComponent } from './components/examples/styles-example.component';
 import { AnimationExampleComponent } from './components/examples/animation-example.component';
+import { StarExampleComponent } from './components/examples/star-example.component';
 
 @NgModule({
   bootstrap: [AppComponent],
@@ -25,6 +26,7 @@ import { AnimationExampleComponent } from './components/examples/animation-examp
     ShapesExampleComponent,
     StylesExampleComponent,
     AnimationExampleComponent,
+    StarExampleComponent,
     ApiComponent
   ],
   imports: [BrowserModule, KonvaModule]

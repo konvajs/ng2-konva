@@ -11,6 +11,10 @@ Also you can create custom shape.
 
 To get more info about `Konva` you can read [Konva Overview](http://konvajs.github.io/docs/overview.html).
 
+## Documentation
+
+[http://rafaelescala.com/ng2-konva/](http://rafaelescala.com/ng2-konva/)
+
 ## Installation
 
 To install this library, run:
@@ -76,19 +80,11 @@ class AppComponent implements OnInit {
 }
 ```
 
-## Development
+## Related repositories
 
-To generate all `*.js`, `*.d.ts` and `*.metadata.json` files:
+* [react-konva](https://github.com/lavrton/react-konva) - React + Konva
+* [vue-konva](http://rafaelescala.com/vue-konva-doc/) - Vue + Konva
 
-```bash
-$ npm run build
-```
-
-To lint all `*.ts` files:
-
-```bash
-$ npm run lint
-```
 
 ## License
 

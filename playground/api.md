@@ -12,6 +12,7 @@ All `ng2-konva` components correspond to `Konva` components of the same name wit
 
 ### Methods
 
+- `getConfig`: Getting config props
 - `getStage`: Getting reference to Konva objects. Returns — Konva object
 
 ### Events
