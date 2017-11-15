@@ -1,4 +1,14 @@
 # ng2-konva
+<span class="badge-npmdownloads">
+  <a href="https://www.npmjs.com/package/ng2-konva">
+    <img src="https://img.shields.io/npm/v/ng2-konva.svg" alt="Version">
+  </a>
+  <a href="https://www.npmjs.com/package/ng2-konva">
+    <img src="https://img.shields.io/npm/l/ng2-konva.svg" alt="License">
+  </a>
+  </span>
+
+![Ng2Konva Logo](https://github.com/rafaesc/ng2-konva/raw/master/ng2-konva.png)
 
 **ng2-konva** is a JavaScript library for drawing complex canvas graphics using Angular.
 
