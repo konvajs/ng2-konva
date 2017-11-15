@@ -1,6 +1,6 @@
 {
   "name": "ng2-konva",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Angular binding to canvas element via Konva framework",
   "keywords": [
     "angular",
