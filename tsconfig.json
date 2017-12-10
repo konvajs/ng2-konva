@@ -1,15 +1,26 @@
 {
   "compilerOptions": {
     "baseUrl": "./src",
-    "experimentalDecorators": true,
-    "moduleResolution": "node",
     "rootDir": "./src",
-    "lib": [
-      "es2015",
-      "dom"
-    ],
+    "target": "es5",
+    "module": "es2015",
     "sourceMap": true,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "lib": ["es2015", "dom"],
+    "declaration": true,
+    "stripInternal": true,
     "skipLibCheck": true,
-    "types": []
+    "types": [],
+    "paths": {
+      "@angular/*": ["node_modules/@angular/*"],
+      "rxjs/*": ["node_modules/rxjs/*"],
+      "ng2-konva": ["node_modules/ng2-konva"]
+    }
+  },
+  "angularCompilerOptions": {
+    "strictMetadataEmit": true,
+    "skipTemplateCodegen": true
   }
 }

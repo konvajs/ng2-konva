@@ -38,6 +38,9 @@ export class AppModule { }
 Once `KonvaModule` is imported, you can use its components in your Angular application:
 
 ```typescript
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+
 @Component({
   selector: 'app',
   template: `
