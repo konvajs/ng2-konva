@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { KonvaModule } from '../../dist/konva.module';
+import { KonvaModule } from '../../dist/ng2-konva';
 
 import { AppComponent } from './app.component';
 

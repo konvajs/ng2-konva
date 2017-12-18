@@ -21,7 +21,8 @@
     "lite": "lite-server",
     "webpack": "webpack",
     "build": "rimraf dist && tsc -p tsconfig-esm.json && rollup -c rollup.config.js dist/konva.module.js > dist/konva.bundle.js && cp package.json dist && ts-node tools/cleanup.ts && ngc && cp readme.md dist",
-    "lint": "tslint -c tslint.json lib/**/*.ts test/**/*.ts"
+    "lint": "tslint -c tslint.json lib/**/*.ts test/**/*.ts",
+    "packagr": "ng-packagr -p ng-package.json"
   },
   "repository": {
     "type": "git",
@@ -69,6 +70,7 @@
     "konva": "^1.7.6",
     "lite-server": "^2.3.0",
     "markdown-loader": "^2.0.1",
+    "ng-packagr": "^1.6.0",
     "ng2-konva": "^1.0.8",
     "node-sass": "^4.7.2",
     "node-sass-tilde-importer": "^1.0.0",
