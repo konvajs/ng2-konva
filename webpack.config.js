@@ -3,9 +3,9 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
   devtool: 'inline-source-map',
-  entry: './playground/main.ts',
+  entry: './doc/main.ts',
   output: {
-    path: path.resolve(__dirname, '.playground'),
+    path: path.resolve(__dirname, '.doc'),
     filename: 'bundle.umd.js',
     libraryTarget: 'umd'
   },

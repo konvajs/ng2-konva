@@ -2,10 +2,10 @@
   "server": {
     "baseDir": "src",
     "routes": {
-      "/": "playground",
+      "/": "doc",
       "/node_modules/": "node_modules",
       "/dist/": "dist",
-      "/.playground": ".playground"
+      "/.doc": ".doc"
     }
   }
 }

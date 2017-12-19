@@ -1,5 +1,7 @@
 {
+  "compileOnSave": false,
   "compilerOptions": {
+<<<<<<< HEAD
     "baseUrl": "./src",
     "rootDir": "./src",
     "target": "es5",
@@ -21,6 +23,28 @@
   },
   "angularCompilerOptions": {
     "strictMetadataEmit": true,
+=======
+    "target": "es5",
+    "module": "commonjs",
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "stripInternal": true,
+    "declaration": true,
+    "outDir": "./dist",
+    "lib": ["es2015", "dom"],
+    "typeRoots": ["node_modules/@types", "./node_modules"],
+    "types": ["node"]
+  },
+  "exclude": [
+    "e2e",
+    "node_modules",
+    "**/*.spec.ts",
+    "doc"
+  ],
+  "angularCompilerOptions": {
+>>>>>>> 1de4ae324fb73f8cc21ca07bfe8717df5b965a0a
     "skipTemplateCodegen": true
   }
 }
