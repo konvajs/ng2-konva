@@ -2,7 +2,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StageComponent } from './components/stage.component';
 import { CoreShapeComponent } from './components/core-shape.component';
-import 'konva';
+
+declare global {
+  interface Window { Konva: any; }
+}
+
+if (typeof window !== 'undefined' && !window.Konva) {
+  require('konva');
+}
 
 export * from './components/stage.component';
 export * from './components/core-shape.component';
