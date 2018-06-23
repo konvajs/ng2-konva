@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'styles-example',
@@ -16,11 +16,11 @@ import { Observable } from 'rxjs/Observable';
   `
 })
 export class StylesExampleComponent {
-  public configStage = Observable.of({
+  public configStage: Observable<any> = of({
     width: 400,
     height: 200
   });
-  public configRegularPolygon = Observable.of({
+  public configRegularPolygon: Observable<any> = of({
     x: 100,
     y: 100,
     sides: 5,

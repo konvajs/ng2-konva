@@ -1,5 +1,5 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { of, Observable } from 'rxjs';
 import { KonvaComponent } from 'ng2-konva';
 
 declare const Konva: any;
@@ -28,11 +28,11 @@ export class AnimationExampleComponent implements AfterViewInit {
   @ViewChild('layer') layer: KonvaComponent;
   @ViewChild('hexagon') hexagon: KonvaComponent;
 
-  public configStage = Observable.of({
+  public configStage: Observable<any> = of({
     width: 400,
     height: 200
   });
-  public configItem = Observable.of({
+  public configItem: Observable<any> = of({
     x: 200,
     y: 100,
     sides: 6,
@@ -49,8 +49,12 @@ export class AnimationExampleComponent implements AfterViewInit {
     // in ms
     const centerX = this.stage.getStage().getWidth() / 2;
 
-    const anim = new Konva.Animation(function (frame: any) {
-        ng.hexagon.getStage().setX(amplitude * Math.sin(frame.time * 2 * Math.PI / period) + centerX);
+    const anim = new Konva.Animation(function(frame: any) {
+      ng.hexagon
+        .getStage()
+        .setX(
+          amplitude * Math.sin((frame.time * 2 * Math.PI) / period) + centerX
+        );
     }, ng.layer.getStage());
 
     anim.start();

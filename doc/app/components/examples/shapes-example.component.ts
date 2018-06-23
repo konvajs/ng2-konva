@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'shapes-example',
@@ -16,11 +16,11 @@ import { Observable } from 'rxjs/Observable';
   `
 })
 export class ShapesExampleComponent {
-  public configStage = Observable.of({
+  public configStage: Observable<any> = of({
     width: 400,
     height: 200
   });
-  public configShape = Observable.of({
+  public configShape: Observable<any> = of({
     sceneFunc: function(context: any) {
       context.beginPath();
       context.moveTo(20, 50);

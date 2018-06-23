@@ -11,7 +11,7 @@ import {
   OnDestroy
 } from '@angular/core';
 import { CoreShapeComponent as CoreShape } from './core-shape.component';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { updatePicture, createListener, applyNodeProps } from '../utils/index';
 import { KonvaComponent } from '../ko.interface';
 

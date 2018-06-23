@@ -10,7 +10,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import {
   getName,
   createListener,
@@ -24,6 +24,7 @@ declare const Konva: any;
 @Component({
   // tslint:disable-next-line:max-line-length
   selector:
+    // tslint:disable-next-line:max-line-length
     'ko-shape, ko-layer, ko-circle, ko-fastlayer, ko-group, ko-label, ko-rect, ko-ellipse, ko-wedge, ko-line, ko-sprite, ko-image, ko-text, ko-text-path, ko-star, ko-ring, ko-arc, ko-tag, ko-path, ko-regular-polygon, ko-arrow',
   template: `<div><ng-content></ng-content></div>`
 })
@@ -47,7 +48,7 @@ export class CoreShapeComponent
   @Output() dragend: EventEmitter<any> = new EventEmitter();
 
   public nameNode: string;
-  public added: boolean = false;
+  public added = false;
 
   private cacheProps: any = {};
   private _stage: any = {};

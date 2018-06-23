@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'circle-example',
@@ -21,7 +21,7 @@ export class CircleExampleComponent implements OnInit {
     width: 200,
     height: 200
   });
-  public configCircle = Observable.of({
+  public configCircle: Observable<any> = of({
     x: 100,
     y: 100,
     radius: 70,

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { KonvaComponent } from 'ng2-konva';
 
 declare const Konva: any;
@@ -32,7 +32,7 @@ export class StarExampleComponent implements OnInit {
   public height = 200;
   public list: Array<any> = [];
 
-  public configStage = Observable.of({
+  public configStage: Observable<any> = of({
     width: this.width,
     height: this.height
   });

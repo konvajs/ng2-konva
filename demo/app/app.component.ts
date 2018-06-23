@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
+import { of, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +8,11 @@ import 'rxjs/add/observable/of';
 })
 export class AppComponent {
   title = 'app';
-  public configStage = Observable.of({
+  public configStage: Observable<any> = of({
     width: 200,
     height: 200
   });
-  public configCircle = Observable.of({
+  public configCircle: Observable<any> = of({
     x: 100,
     y: 100,
     radius: 70,

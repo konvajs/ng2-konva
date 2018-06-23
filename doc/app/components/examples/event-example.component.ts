@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { KonvaComponent } from 'ng2-konva';
 
 @Component({
@@ -26,11 +26,11 @@ export class EventExampleComponent {
   @ViewChild('layer') layer: KonvaComponent;
   @ViewChild('text') text: KonvaComponent;
 
-  public configStage = Observable.of({
+  public configStage: Observable<any> = of({
     width: 300,
     height: 200
   });
-  public configItem = Observable.of({
+  public configItem: Observable<any> = of({
     x: 80,
     y: 120,
     sides: 3,

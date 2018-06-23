@@ -22,40 +22,34 @@ import { AppComponent } from './app.component';
 import { KonvaModule } from 'ng2-konva';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    KonvaModule
-  ],
+  declarations: [AppComponent],
+  imports: [BrowserModule, KonvaModule],
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
 ```
 
 Once `KonvaModule` is imported, you can use its components in your Angular application:
 
 ```typescript
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
+import { of, Observable } from 'rxjs';
 
 @Component({
   selector: 'app',
   template: `
-    <ko-stage [config]="configStage">
+    <ko-stage [config]='configStage'
       <ko-layer>
-        <ko-circle [config]="configCircle" (click)="handleClick($event)"></ko-circle>
+        <ko-circle [config]='configCircle' (click)='handleClick($event)'></ko-circle>
       </ko-layer>
     </ko-stage>`
 })
 class AppComponent implements OnInit {
-  public configStage = Observable.of({
+  public configStage: Observable<any> = of({
     width: 200,
     height: 200
   });
-  public configCircle = Observable.of({
+  public configCircle: Observable<any> = of({
     x: 100,
     y: 100,
     radius: 70,

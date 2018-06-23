@@ -61,8 +61,7 @@ export class AppModule { }
 Once `KonvaModule` is imported, you can use its components in your Angular application:
 
 ```typescript
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/of';
+import { of } from 'rxjs/Observable';
 
 @Component({
   selector: 'app',
@@ -74,11 +73,11 @@ import 'rxjs/add/observable/of';
     </ko-stage>`
 })
 class AppComponent implements OnInit {
-  public configStage = Observable.of({
+  public configStage: Observable<any> = of({
     width: 200,
     height: 200
   });
-  public configCircle = Observable.of({
+  public configCircle: Observable<any> = of({
     x: 100,
     y: 100,
     radius: 70,
