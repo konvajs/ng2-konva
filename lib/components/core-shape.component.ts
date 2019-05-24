@@ -112,13 +112,6 @@ export class CoreShapeComponent
   }
 
   ngAfterContentInit() {
-    this.shapes.forEach((item: CoreShapeComponent) => {
-      if (this !== item) {
-        item.added = true;
-        this._stage.add(item.getStage());
-        updatePicture(this._stage);
-      }
-    });
   }
 
   ngOnDestroy() {
