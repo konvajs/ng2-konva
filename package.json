@@ -71,7 +71,7 @@
     "konva": "^2.1.6",
     "lite-server": "^2.3.0",
     "markdown-loader": "^3.0.0",
-    "ng-packagr": "^3.0.3",
+    "ng-packagr": "^10.1.1",
     "ng2-konva": "^2.0.6",
     "node-sass": "^4.7.2",
     "node-sass-tilde-importer": "^1.0.0",
