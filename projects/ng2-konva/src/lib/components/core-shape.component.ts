@@ -9,8 +9,8 @@ import {
   QueryList,
   OnDestroy,
   OnInit,
+  inject,
 } from '@angular/core';
-import { Observable } from 'rxjs';
 import {
   getName,
   createListener,
@@ -18,8 +18,7 @@ import {
   updatePicture,
 } from '../utils/index';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
-
-declare const Konva: any;
+import { Konva } from 'konva/lib/Core';
 
 @Component({
   selector:
@@ -32,7 +31,15 @@ export class CoreShapeComponent
 {
   @ContentChildren(CoreShapeComponent)
   shapes = new QueryList<CoreShapeComponent>();
-  @Input() config: Observable<any>;
+  @Input({ required: true }) set config(config: any) {
+    // todo config type
+    this._config = config;
+    this.uploadKonva(config);
+  }
+  get config(): any {
+    return this._config;
+  }
+
   @Output() click: EventEmitter<any> = new EventEmitter();
   @Output() dblclick: EventEmitter<any> = new EventEmitter();
   @Output() mouseover: EventEmitter<any> = new EventEmitter();
@@ -47,12 +54,14 @@ export class CoreShapeComponent
   @Output() dragmove: EventEmitter<any> = new EventEmitter();
   @Output() dragend: EventEmitter<any> = new EventEmitter();
 
-  public nameNode: string;
+  public nameNode: keyof typeof Konva = getName(
+    inject(ElementRef).nativeElement.localName
+  ) as keyof typeof Konva;
   public added = false;
 
   private cacheProps: any = {};
   private _stage: any = {};
-  private _config;
+  private _config: any; // todo config type
 
   public getStage() {
     return this._stage;
@@ -62,40 +71,29 @@ export class CoreShapeComponent
     return this._config || {};
   }
 
-  constructor(private elementRef: ElementRef) {
-    this.nameNode = getName(elementRef.nativeElement.localName);
-  }
-
   ngOnInit() {
     this.initKonva();
   }
 
   private initKonva() {
-    const ng = this;
     const NodeClass = Konva[this.nameNode];
     this._stage = new NodeClass();
     this._stage.AngularComponent = this;
     const animationStage = this._stage.to.bind(this._stage);
 
-    this._stage.to = function (newConfig) {
+    this._stage.to = (newConfig: any) => {
       animationStage(newConfig);
       setTimeout(() => {
-        Object.keys(ng._stage.attrs).forEach((key) => {
-          if (typeof ng._stage.attrs[key] !== 'function') {
-            ng.config[key] = ng._stage.attrs[key];
+        Object.keys(this._stage.attrs).forEach((key) => {
+          if (typeof this._stage.attrs[key] !== 'function') {
+            this.config[key] = this._stage.attrs[key];
           }
         });
       }, 200);
-    };
-    if (this.config) {
-      this.config.subscribe((config) => {
-        this._config = config;
-        this.uploadKonva(config);
-      });
-    }
+    }; // todo test upload konva before init
   }
 
-  private uploadKonva(config) {
+  private uploadKonva(config: any) {
     const props = {
       ...config,
       ...createListener(this),

@@ -1,7 +1,7 @@
 import updatePicture from './updatePicture';
 import applyNodeProps from './applyNodeProps';
 
-function camelize(str) {
+function camelize(str: string) {
   return str
     .replace(/(?:^\w|[A-Z]|\b\w)/g, function (letter, index) {
       return index == 0 ? letter.toLowerCase() : letter.toUpperCase();
@@ -9,13 +9,13 @@ function camelize(str) {
     .replace(/\s+/g, '');
 }
 
-function capitalizeFirstLetter(string) {
+function capitalizeFirstLetter(string: string): string {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function getName(componentTag) {
+export function getName(componentTag: string): string {
   return capitalizeFirstLetter(
-    camelize(componentTag.substr(3).replace('-', ' '))
+    camelize(componentTag.slice(3).replace('-', ' '))
   );
 }
 
