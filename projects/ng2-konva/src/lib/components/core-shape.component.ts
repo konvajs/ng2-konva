@@ -19,6 +19,7 @@ import {
 } from '../utils/index';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
 import { Konva } from 'konva/lib/Core';
+import { ShapeConfig } from 'konva/lib/Shape';
 
 @Component({
   selector:
@@ -31,12 +32,11 @@ export class CoreShapeComponent
 {
   @ContentChildren(CoreShapeComponent)
   shapes = new QueryList<CoreShapeComponent>();
-  @Input({ required: true }) set config(config: any) {
-    // todo config type
+  @Input({ required: true }) set config(config: ShapeConfig) {
     this._config = config;
     this.uploadKonva(config);
   }
-  get config(): any {
+  get config(): ShapeConfig {
     return this._config;
   }
 
@@ -61,21 +61,23 @@ export class CoreShapeComponent
 
   private cacheProps: any = {};
   private _stage: any = {};
-  private _config: any; // todo config type
+  protected _config: ShapeConfig; // todo config type
 
   public getStage() {
     return this._stage;
   }
 
-  public getConfig() {
+  public getConfig(): ShapeConfig {
     return this._config || {};
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.initKonva();
+
+    this.click.emit.bind(this.click);
   }
 
-  private initKonva() {
+  private initKonva(): void {
     const NodeClass = Konva[this.nameNode];
     this._stage = new NodeClass();
     this._stage.AngularComponent = this;
@@ -93,7 +95,7 @@ export class CoreShapeComponent
     }; // todo test upload konva before init
   }
 
-  private uploadKonva(config: any) {
+  protected uploadKonva(config: ShapeConfig): void {
     const props = {
       ...config,
       ...createListener(this),
@@ -102,7 +104,7 @@ export class CoreShapeComponent
     this.cacheProps = props;
   }
 
-  ngAfterContentInit() {
+  ngAfterContentInit(): void {
     this.shapes.forEach((item: CoreShapeComponent) => {
       if (this !== item) {
         item.added = true;
@@ -112,7 +114,7 @@ export class CoreShapeComponent
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this._stage.destroy();
   }
 }

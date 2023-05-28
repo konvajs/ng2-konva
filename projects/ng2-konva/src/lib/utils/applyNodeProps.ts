@@ -1,16 +1,21 @@
 // adapted FROM: https://github.com/lavrton/react-konva/blob/master/src/react-konva-fiber.js
 
 import updatePicture from './updatePicture';
+import { KonvaComponent } from 'ng2-konva';
 
 declare const Image: any;
 
-export default function applyNodeProps(component, props = {}, oldProps = {}) {
+export default function applyNodeProps(
+  component: KonvaComponent,
+  props = {},
+  oldProps = {}
+): void {
   if ('id' in props) {
     const message = `ng2-konva: You are using "id" attribute for Konva node. In some very rare cases it may produce bugs. Currently we recommend not to use it and use "name" attribute instead.`;
     console.warn(message);
   }
 
-  const instance = component._stage;
+  const instance = component.getStage();
   const updatedProps = {};
   let hasUpdates = false;
 
