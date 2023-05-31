@@ -2,13 +2,15 @@
 
 import updatePicture from './updatePicture';
 import { KonvaComponent } from 'ng2-konva';
+import { NodeConfig } from 'konva/lib/Node';
+import { AngularNode } from '../interfaces/angular-node.interface';
+import { Stage } from 'konva/lib/Stage';
+import { Shape } from 'konva/lib/Shape';
 
-declare const Image: any;
-
-export default function applyNodeProps(
+export default function applyNodeProps<T extends NodeConfig>(
   component: KonvaComponent,
-  props = {},
-  oldProps = {}
+  props: T | Record<string, never> = {},
+  oldProps: T | Record<string, never> = {}
 ): void {
   if ('id' in props) {
     const message = `ng2-konva: You are using "id" attribute for Konva node. In some very rare cases it may produce bugs. Currently we recommend not to use it and use "name" attribute instead.`;
@@ -16,7 +18,7 @@ export default function applyNodeProps(
   }
 
   const instance = component.getStage();
-  const updatedProps = {};
+  const updatedProps: T | Record<string, never> = {};
   let hasUpdates = false;
 
   Object.keys(oldProps).forEach((key) => {
@@ -30,7 +32,7 @@ export default function applyNodeProps(
       }
       instance.off(eventName, oldProps[key]);
     }
-    const toRemove = !props.hasOwnProperty(key);
+    const toRemove = !Object.hasOwn(props, key);
     if (toRemove) {
       instance.setAttr(key, undefined);
     }
@@ -47,7 +49,10 @@ export default function applyNodeProps(
       if (props[key]) {
         instance.off(eventName);
         instance.on(eventName, (evt) => {
-          props[key](evt.target.AngularComponent, evt);
+          props[key](
+            (evt.target as AngularNode<Stage | Shape>).AngularComponent,
+            evt
+          );
         });
       }
     }

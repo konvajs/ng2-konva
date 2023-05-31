@@ -1,7 +1,8 @@
 import updatePicture from './updatePicture';
 import applyNodeProps from './applyNodeProps';
+import { KonvaComponent } from '../interfaces/ko-component.interface';
 
-function camelize(str: string) {
+function camelize(str: string): string {
   return str
     .replace(/(?:^\w|[A-Z]|\b\w)/g, function (letter, index) {
       return index == 0 ? letter.toLowerCase() : letter.toUpperCase();
@@ -19,7 +20,9 @@ export function getName(componentTag: string): string {
   );
 }
 
-export function createListener(instance: any) {
+export function createListener(
+  instance: KonvaComponent
+): Record<string, (value?: unknown) => void> {
   const output = {};
   [
     'click',
@@ -35,7 +38,7 @@ export function createListener(instance: any) {
     'dragstart',
     'dragmove',
     'dragend',
-  ].forEach((eventName) => {
+  ].forEach((eventName: keyof KonvaComponent) => {
     if (instance[eventName].observers.length) {
       output['on' + eventName] = instance[eventName].emit.bind(
         instance[eventName]
