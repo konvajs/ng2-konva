@@ -1,6 +1,7 @@
 import updatePicture from './updatePicture';
 import applyNodeProps from './applyNodeProps';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
+import { EventEmitter } from '@angular/core';
 
 function camelize(str: string): string {
   return str
@@ -23,7 +24,7 @@ export function getName(componentTag: string): string {
 export function createListener(
   instance: KonvaComponent
 ): Record<string, (value?: unknown) => void> {
-  const output = {};
+  const output: Record<string, (value?: unknown) => void> = {};
   [
     'click',
     'dblclick',
@@ -38,11 +39,14 @@ export function createListener(
     'dragstart',
     'dragmove',
     'dragend',
-  ].forEach((eventName: keyof KonvaComponent) => {
-    if (instance[eventName].observers.length) {
-      output['on' + eventName] = instance[eventName].emit.bind(
-        instance[eventName]
-      );
+  ].forEach((eventName) => {
+    const name: keyof KonvaComponent = <keyof KonvaComponent>eventName;
+
+    const eventEmitter: EventEmitter<unknown> = <EventEmitter<unknown>>(
+      instance[name]
+    );
+    if (eventEmitter.observed) {
+      output['on' + eventName] = eventEmitter.emit.bind(eventEmitter);
     }
   });
   return output;

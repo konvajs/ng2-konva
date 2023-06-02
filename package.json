@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve --watch --project demo",
     "build": "ng build",
+    "build:ng2-konva": "ng build --configuration production --project ng2-konva",
     "watch": "ng build --watch --configuration development --project demo",
     "test": "ng test",
     "lint": "ng lint"

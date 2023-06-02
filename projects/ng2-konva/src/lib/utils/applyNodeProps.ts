@@ -1,7 +1,7 @@
 // adapted FROM: https://github.com/lavrton/react-konva/blob/master/src/react-konva-fiber.js
 
 import updatePicture from './updatePicture';
-import { KonvaComponent } from 'ng2-konva';
+import { KonvaComponent } from '../interfaces/ko-component.interface';
 import { NodeConfig } from 'konva/lib/Node';
 import { AngularNode } from '../interfaces/angular-node.interface';
 import { Stage } from 'konva/lib/Stage';
@@ -18,7 +18,7 @@ export default function applyNodeProps<T extends NodeConfig>(
   }
 
   const instance = component.getStage();
-  const updatedProps: T | Record<string, never> = {};
+  const updatedProps: T | Record<string, unknown> = {};
   let hasUpdates = false;
 
   Object.keys(oldProps).forEach((key) => {
@@ -28,7 +28,7 @@ export default function applyNodeProps<T extends NodeConfig>(
       let eventName = key.slice(2).toLowerCase();
       if (eventName.slice(0, 7) === 'content') {
         eventName =
-          'content' + eventName.slice(7, 1).toUpperCase() + eventName.slice(8);
+          'content' + eventName.slice(7, 8).toUpperCase() + eventName.slice(8);
       }
       instance.off(eventName, oldProps[key]);
     }
@@ -44,13 +44,13 @@ export default function applyNodeProps<T extends NodeConfig>(
       let eventName = key.slice(2).toLowerCase();
       if (eventName.slice(0, 7) === 'content') {
         eventName =
-          'content' + eventName.slice(7, 1).toUpperCase() + eventName.slice(8);
+          'content' + eventName.slice(7, 8).toUpperCase() + eventName.slice(8);
       }
       if (props[key]) {
         instance.off(eventName);
         instance.on(eventName, (evt) => {
           props[key](
-            (evt.target as AngularNode<Stage | Shape>).AngularComponent,
+            (evt.target as AngularNode<Stage | Shape>).AngularComponent, // todo: reference needed?
             evt
           );
         });

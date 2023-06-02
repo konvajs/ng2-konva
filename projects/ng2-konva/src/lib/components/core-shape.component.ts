@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/no-output-native */
 import {
   Component,
   Input,
@@ -20,6 +21,8 @@ import {
 import { KonvaComponent } from '../interfaces/ko-component.interface';
 import { Konva } from 'konva/lib/Core';
 import { ShapeConfig } from 'konva/lib/Shape';
+import { ShapeConfigTypes } from '../utils/configTypes';
+import { KonvaEventObject, Node } from 'konva/lib/Node';
 
 @Component({
   selector:
@@ -32,7 +35,7 @@ export class CoreShapeComponent
 {
   @ContentChildren(CoreShapeComponent)
   shapes = new QueryList<CoreShapeComponent>();
-  @Input({ required: true }) set config(config: ShapeConfig) {
+  @Input({ required: true }) set config(config: ShapeConfigTypes) {
     this._config = config;
     this.uploadKonva(config);
   }
@@ -40,19 +43,30 @@ export class CoreShapeComponent
     return this._config;
   }
 
-  @Output() click: EventEmitter<any> = new EventEmitter();
-  @Output() dblclick: EventEmitter<any> = new EventEmitter();
-  @Output() mouseover: EventEmitter<any> = new EventEmitter();
-  @Output() mouseout: EventEmitter<any> = new EventEmitter();
-  @Output() mousemove: EventEmitter<any> = new EventEmitter();
-  @Output() tap: EventEmitter<any> = new EventEmitter();
-  @Output() dbltap: EventEmitter<any> = new EventEmitter();
-  @Output() touchstart: EventEmitter<any> = new EventEmitter();
-  @Output() scaleXChange: EventEmitter<any> = new EventEmitter();
-  @Output() fillChange: EventEmitter<any> = new EventEmitter();
-  @Output() dragstart: EventEmitter<any> = new EventEmitter();
-  @Output() dragmove: EventEmitter<any> = new EventEmitter();
-  @Output() dragend: EventEmitter<any> = new EventEmitter();
+  @Output() click: EventEmitter<KonvaEventObject<unknown>> = new EventEmitter();
+  @Output() dblclick: EventEmitter<KonvaEventObject<unknown>> =
+    new EventEmitter();
+  @Output() mouseover: EventEmitter<KonvaEventObject<unknown>> =
+    new EventEmitter();
+  @Output() mouseout: EventEmitter<KonvaEventObject<unknown>> =
+    new EventEmitter();
+  @Output() mousemove: EventEmitter<KonvaEventObject<unknown>> =
+    new EventEmitter();
+  @Output() tap: EventEmitter<KonvaEventObject<unknown>> = new EventEmitter();
+  @Output() dbltap: EventEmitter<KonvaEventObject<unknown>> =
+    new EventEmitter();
+  @Output() touchstart: EventEmitter<KonvaEventObject<unknown>> =
+    new EventEmitter();
+  @Output() scaleXChange: EventEmitter<KonvaEventObject<unknown>> =
+    new EventEmitter();
+  @Output() fillChange: EventEmitter<KonvaEventObject<unknown>> =
+    new EventEmitter();
+  @Output() dragstart: EventEmitter<KonvaEventObject<unknown>> =
+    new EventEmitter();
+  @Output() dragmove: EventEmitter<KonvaEventObject<unknown>> =
+    new EventEmitter();
+  @Output() dragend: EventEmitter<KonvaEventObject<unknown>> =
+    new EventEmitter();
 
   public nameNode: keyof typeof Konva = getName(
     inject(ElementRef).nativeElement.localName
@@ -61,9 +75,9 @@ export class CoreShapeComponent
 
   private cacheProps: any = {};
   private _stage: any = {};
-  protected _config: ShapeConfig; // todo config type
+  protected _config: ShapeConfigTypes; // todo config type
 
-  public getStage() {
+  public getStage(): Node {
     return this._stage;
   }
 
@@ -83,7 +97,7 @@ export class CoreShapeComponent
     this._stage.AngularComponent = this;
     const animationStage = this._stage.to.bind(this._stage);
 
-    this._stage.to = (newConfig: any) => {
+    this._stage.to = (newConfig: any): void => {
       animationStage(newConfig);
       setTimeout(() => {
         Object.keys(this._stage.attrs).forEach((key) => {
@@ -95,7 +109,7 @@ export class CoreShapeComponent
     }; // todo test upload konva before init
   }
 
-  protected uploadKonva(config: ShapeConfig): void {
+  protected uploadKonva(config: ShapeConfigTypes): void {
     const props = {
       ...config,
       ...createListener(this),
