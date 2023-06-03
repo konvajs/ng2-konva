@@ -90,7 +90,10 @@ export class StageComponent
 
   ngAfterContentInit(): void {
     this.shapes.forEach((item: CoreShape) => {
-      this._stage.add(<Layer>item.getStage()); // todo: throw error if wrong type?
+      if (!(item.getStage() instanceof Layer)) {
+        throw 'You can only add Layer Nodes to Stage Nodes!';
+      }
+      this._stage.add(<Layer>item.getStage());
       updatePicture(this._stage);
     });
   }

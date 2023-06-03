@@ -1,8 +1,9 @@
 import { Component, ViewChild, AfterViewInit } from '@angular/core';
-import { of, Observable } from 'rxjs';
-import { KonvaComponent, StageComponent, CoreShapeComponent } from 'ng2-konva';
-
-declare const Konva: any;
+import { StageComponent, CoreShapeComponent } from 'ng2-konva';
+import { Animation } from 'konva/lib/Animation';
+import { IFrame } from 'konva/lib/types';
+import { RegularPolygonConfig } from 'konva/lib/shapes/RegularPolygon';
+import { StageConfig } from 'konva/lib/Stage';
 
 @Component({
   selector: 'app-animation-example',
@@ -24,15 +25,16 @@ declare const Konva: any;
   imports: [StageComponent, CoreShapeComponent],
 })
 export class AnimationExampleComponent implements AfterViewInit {
-  @ViewChild('stage') stage: KonvaComponent;
-  @ViewChild('layer') layer: KonvaComponent;
-  @ViewChild('hexagon') hexagon: KonvaComponent;
+  @ViewChild('stage') stage: StageComponent;
+  @ViewChild('layer') layer: CoreShapeComponent;
+  @ViewChild('hexagon') hexagon: CoreShapeComponent;
 
-  public configStage: Observable<any> = of({
+  public configStage: StageConfig = {
     width: 400,
     height: 200,
-  });
-  public configItem: Observable<any> = of({
+    container: 'stage',
+  };
+  public configItem: RegularPolygonConfig = {
     x: 200,
     y: 100,
     sides: 6,
@@ -40,22 +42,20 @@ export class AnimationExampleComponent implements AfterViewInit {
     fill: 'red',
     stroke: 'black',
     strokeWidth: 4,
-  });
+  };
 
-  ngAfterViewInit() {
-    const ng = this;
+  ngAfterViewInit(): void {
     const amplitude = 100;
     const period = 5000;
     // in ms
-    const centerX = this.stage.getStage().getWidth() / 2;
+    const centerX = this.stage.getStage().width() / 2;
 
-    const anim = new Konva.Animation(function (frame: any) {
-      ng.hexagon
+    const anim = new Animation((frame?: IFrame) => {
+      if (!frame) return;
+      this.hexagon
         .getStage()
-        .setX(
-          amplitude * Math.sin((frame.time * 2 * Math.PI) / period) + centerX
-        );
-    }, ng.layer.getStage());
+        .x(amplitude * Math.sin((frame.time * 2 * Math.PI) / period) + centerX);
+    }, this.layer.getStage());
 
     anim.start();
   }

@@ -2,10 +2,7 @@
 
 import updatePicture from './updatePicture';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
-import { NodeConfig } from 'konva/lib/Node';
-import { AngularNode } from '../interfaces/angular-node.interface';
-import { Stage } from 'konva/lib/Stage';
-import { Shape } from 'konva/lib/Shape';
+import { KonvaEventObject, NodeConfig } from 'konva/lib/Node';
 
 export default function applyNodeProps<T extends NodeConfig>(
   component: KonvaComponent,
@@ -48,9 +45,9 @@ export default function applyNodeProps<T extends NodeConfig>(
       }
       if (props[key]) {
         instance.off(eventName);
-        instance.on(eventName, (evt) => {
+        instance.on(eventName, (evt: KonvaEventObject<unknown>) => {
           props[key](
-            (evt.target as AngularNode<Stage | Shape>).AngularComponent, // todo: reference needed?
+            //(evt.target as AngularNode).AngularComponent, // todo: reference needed?
             evt
           );
         });

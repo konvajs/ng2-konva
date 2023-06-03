@@ -1,13 +1,13 @@
 import { Component, EventEmitter } from '@angular/core';
-import { ShapeConfig } from 'konva/lib/Shape';
 import { ShapeConfigTypes } from '../utils/configTypes';
-import { KonvaEventObject, Node } from 'konva/lib/Node';
+import { KonvaEventObject } from 'konva/lib/Node';
+import { AngularNode } from './angular-node.interface';
 import { Stage } from 'konva/lib/Stage';
 
 export interface KonvaComponent extends Component {
-  getStage: () => Stage | Node;
+  getStage: () => AngularNode | Stage;
   getConfig: () => ShapeConfigTypes;
-  config: ShapeConfig;
+  config: ShapeConfigTypes;
 
   click?: EventEmitter<KonvaEventObject<unknown>>;
   dblclick?: EventEmitter<KonvaEventObject<unknown>>;

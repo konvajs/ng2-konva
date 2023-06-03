@@ -1,7 +1,9 @@
-import { Shape } from 'konva/lib/Shape';
-import { Stage } from 'konva/lib/Stage';
 import { KonvaComponent } from './ko-component.interface';
+import { Container } from 'konva/lib/Container';
+import { Shape } from 'konva/lib/Shape';
+import Konva from 'konva';
+import Group = Konva.Group;
 
-export type AngularNode<T extends Stage | Shape> = T & {
-  AngularComponent: KonvaComponent;
-};
+export abstract class AngularNode extends Container<Group | Shape> {
+  AngularComponent?: KonvaComponent;
+}

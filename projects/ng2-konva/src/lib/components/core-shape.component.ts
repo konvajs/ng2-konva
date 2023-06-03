@@ -22,7 +22,8 @@ import { KonvaComponent } from '../interfaces/ko-component.interface';
 import { Konva } from 'konva/lib/Core';
 import { ShapeConfig } from 'konva/lib/Shape';
 import { ShapeConfigTypes } from '../utils/configTypes';
-import { KonvaEventObject, Node } from 'konva/lib/Node';
+import { KonvaEventObject } from 'konva/lib/Node';
+import { AngularNode } from '../interfaces/angular-node.interface';
 
 @Component({
   selector:
@@ -35,7 +36,7 @@ export class CoreShapeComponent
 {
   @ContentChildren(CoreShapeComponent)
   shapes = new QueryList<CoreShapeComponent>();
-  @Input({ required: true }) set config(config: ShapeConfigTypes) {
+  @Input() set config(config: ShapeConfigTypes) {
     this._config = config;
     this.uploadKonva(config);
   }
@@ -74,10 +75,10 @@ export class CoreShapeComponent
   public added = false;
 
   private cacheProps: any = {};
-  private _stage: any = {};
-  protected _config: ShapeConfigTypes; // todo config type
+  private _stage: AngularNode;
+  protected _config: ShapeConfigTypes;
 
-  public getStage(): Node {
+  public getStage(): AngularNode {
     return this._stage;
   }
 
@@ -97,7 +98,7 @@ export class CoreShapeComponent
     this._stage.AngularComponent = this;
     const animationStage = this._stage.to.bind(this._stage);
 
-    this._stage.to = (newConfig: any): void => {
+    this._stage.to = (newConfig: ShapeConfigTypes): void => {
       animationStage(newConfig);
       setTimeout(() => {
         Object.keys(this._stage.attrs).forEach((key) => {
