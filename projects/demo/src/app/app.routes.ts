@@ -8,4 +8,5 @@ export const routes: Routes = [
         (c) => c.AnimationExampleComponent
       ),
   },
+  { path: '**', pathMatch: 'full', redirectTo: 'animation' },
 ];

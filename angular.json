@@ -81,7 +81,10 @@
             "styles": [
               "projects/demo/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "konva"
+            ]
           },
           "configurations": {
             "production": {
