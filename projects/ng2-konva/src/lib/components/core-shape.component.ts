@@ -19,15 +19,15 @@ import {
   updatePicture,
 } from '../utils/index';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
-import { Konva } from 'konva/lib/Core';
 import { ShapeConfig } from 'konva/lib/Shape';
 import { ShapeConfigTypes } from '../utils/configTypes';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { AngularNode } from '../interfaces/angular-node.interface';
+import { NodeTypes } from '../utils/nodeTypes';
 
 @Component({
   selector:
-    'ko-shape, ko-layer, ko-circle, ko-fastlayer, ko-group, ko-label, ko-rect, ko-ellipse, ko-wedge, ko-line, ko-sprite, ko-image, ko-text, ko-text-path, ko-star, ko-ring, ko-arc, ko-tag, ko-path, ko-regular-polygon, ko-arrow',
+    'ko-shape, ko-layer, ko-circle, ko-fastlayer, ko-group, ko-label, ko-rect, ko-ellipse, ko-wedge, ko-line, ko-sprite, ko-image, ko-text, ko-text-path, ko-star, ko-ring, ko-arc, ko-tag, ko-path, ko-regular-polygon, ko-arrow, ko-transformer',
   standalone: true,
   template: `<div><ng-content></ng-content></div>`,
 })
@@ -69,9 +69,9 @@ export class CoreShapeComponent
   @Output() dragend: EventEmitter<KonvaEventObject<unknown>> =
     new EventEmitter();
 
-  public nameNode: keyof typeof Konva = getName(
+  public nameNode: keyof typeof NodeTypes = getName(
     inject(ElementRef).nativeElement.localName
-  ) as keyof typeof Konva;
+  ) as keyof typeof NodeTypes;
   public added = false;
 
   private cacheProps: any = {};
@@ -93,8 +93,9 @@ export class CoreShapeComponent
   }
 
   private initKonva(): void {
-    const NodeClass = Konva[this.nameNode];
+    const NodeClass = NodeTypes[this.nameNode];
     this._stage = new NodeClass();
+
     this._stage.AngularComponent = this;
     const animationStage = this._stage.to.bind(this._stage);
 

@@ -14,10 +14,10 @@ import {
 import { CoreShapeComponent as CoreShape } from './core-shape.component';
 import { updatePicture, createListener, applyNodeProps } from '../utils/index';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
-import { ShapeConfigTypes } from '../utils/configTypes';
 import { Stage } from 'konva/lib/Stage';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Layer } from 'konva/lib/Layer';
+import { ContainerConfig } from 'konva/lib/Container';
 
 @Component({
   selector: 'ko-stage',
@@ -29,12 +29,11 @@ export class StageComponent
 {
   private nodeContainer = inject(ElementRef).nativeElement;
   @ContentChildren(CoreShape) shapes = new QueryList<CoreShape>();
-  @Input() set config(config: ShapeConfigTypes) {
+  @Input() set config(config: ContainerConfig) {
     this._config = config;
     if (!this._stage) {
       this._stage = new Stage({
-        width: config.width,
-        height: config.height,
+        ...config,
         container: this.nodeContainer,
       });
       this.uploadKonva(config);
@@ -68,18 +67,18 @@ export class StageComponent
     new EventEmitter();
 
   private _stage: Stage;
-  private _config: ShapeConfigTypes;
+  private _config: ContainerConfig;
   private cacheProps: any = {};
 
   public getStage(): Stage {
     return this._stage;
   }
 
-  public getConfig(): ShapeConfigTypes {
+  public getConfig(): ContainerConfig {
     return this._config;
   }
 
-  private uploadKonva(config: ShapeConfigTypes): void {
+  private uploadKonva(config: ContainerConfig): void {
     const props = {
       ...config,
       ...createListener(this),
