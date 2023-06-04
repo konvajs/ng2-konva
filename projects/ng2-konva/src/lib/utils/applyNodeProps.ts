@@ -3,7 +3,6 @@
 import updatePicture from './updatePicture';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
 import { KonvaEventObject, NodeConfig } from 'konva/lib/Node';
-import { AngularNode } from '../interfaces/angular-node.interface';
 
 export default function applyNodeProps<T extends NodeConfig>(
   component: KonvaComponent,
