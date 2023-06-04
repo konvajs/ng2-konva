@@ -87,8 +87,6 @@ export class CoreShapeComponent
 
   ngOnInit(): void {
     this.initKonva();
-
-    this.click.emit.bind(this.click);
   }
 
   private initKonva(): void {

@@ -46,11 +46,7 @@ export default function applyNodeProps<T extends NodeConfig>(
       if (props[key]) {
         instance.shape.off(eventName);
         instance.shape.on(eventName, (evt: KonvaEventObject<unknown>) => {
-          console.log(evt.target);
-          props[key](
-            //(evt.target as AngularNode).AngularComponent, // todo: reference needed?
-            evt
-          );
+          props[key](evt);
         });
       }
     }

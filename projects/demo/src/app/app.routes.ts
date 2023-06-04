@@ -8,5 +8,12 @@ export const routes: Routes = [
         (c) => c.AnimationExampleComponent
       ),
   },
+  {
+    path: 'circle',
+    loadComponent: () =>
+      import('./examples/circle.component').then(
+        (c) => c.CircleExampleComponent
+      ),
+  },
   { path: '**', pathMatch: 'full', redirectTo: 'animation' },
 ];
