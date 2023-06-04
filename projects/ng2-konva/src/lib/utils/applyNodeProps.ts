@@ -3,6 +3,7 @@
 import updatePicture from './updatePicture';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
 import { KonvaEventObject, NodeConfig } from 'konva/lib/Node';
+import { AngularNode } from '../interfaces/angular-node.interface';
 
 export default function applyNodeProps<T extends NodeConfig>(
   component: KonvaComponent,
@@ -27,11 +28,11 @@ export default function applyNodeProps<T extends NodeConfig>(
         eventName =
           'content' + eventName.slice(7, 8).toUpperCase() + eventName.slice(8);
       }
-      instance.off(eventName, oldProps[key]);
+      instance.shape.off(eventName, oldProps[key]);
     }
     const toRemove = !Object.hasOwn(props, key);
     if (toRemove) {
-      instance.setAttr(key, undefined);
+      instance.shape.setAttr(key, undefined);
     }
   });
   Object.keys(props).forEach((key) => {
@@ -44,8 +45,9 @@ export default function applyNodeProps<T extends NodeConfig>(
           'content' + eventName.slice(7, 8).toUpperCase() + eventName.slice(8);
       }
       if (props[key]) {
-        instance.off(eventName);
-        instance.on(eventName, (evt: KonvaEventObject<unknown>) => {
+        instance.shape.off(eventName);
+        instance.shape.on(eventName, (evt: KonvaEventObject<unknown>) => {
+          console.log(evt.target);
           props[key](
             //(evt.target as AngularNode).AngularComponent, // todo: reference needed?
             evt
@@ -55,7 +57,8 @@ export default function applyNodeProps<T extends NodeConfig>(
     }
     if (
       !isEvent &&
-      (props[key] !== oldProps[key] || props[key] !== instance.getAttr(key))
+      (props[key] !== oldProps[key] ||
+        props[key] !== instance.shape.getAttr(key))
     ) {
       hasUpdates = true;
       updatedProps[key] = props[key];
@@ -63,13 +66,13 @@ export default function applyNodeProps<T extends NodeConfig>(
   });
 
   if (hasUpdates) {
-    instance.setAttrs(updatedProps);
-    updatePicture(instance);
+    instance.shape.setAttrs(updatedProps);
+    updatePicture(instance.shape);
     let val;
     Object.keys(updatedProps).forEach((prop) => {
       val = updatedProps[prop];
       if (val instanceof Image && !val.complete) {
-        const node = instance;
+        const node = instance.shape;
         val.addEventListener('load', function () {
           const layer = node.getLayer();
           if (layer) {

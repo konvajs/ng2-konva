@@ -32,10 +32,12 @@ export class StageComponent
   @Input() set config(config: ContainerConfig) {
     this._config = config;
     if (!this._stage) {
-      this._stage = new Stage({
-        ...config,
-        container: this.nodeContainer,
-      });
+      this._stage = {
+        shape: new Stage({
+          ...config,
+          container: this.nodeContainer,
+        }),
+      };
       this.uploadKonva(config);
     } else {
       this.uploadKonva(config);
@@ -66,11 +68,11 @@ export class StageComponent
   @Output() dragend: EventEmitter<KonvaEventObject<unknown>> =
     new EventEmitter();
 
-  private _stage: Stage;
+  private _stage: { shape: Stage };
   private _config: ContainerConfig;
   private cacheProps: any = {};
 
-  public getStage(): Stage {
+  public getStage(): { shape: Stage } {
     return this._stage;
   }
 
@@ -89,15 +91,15 @@ export class StageComponent
 
   ngAfterContentInit(): void {
     this.shapes.forEach((item: CoreShape) => {
-      if (!(item.getStage() instanceof Layer)) {
+      if (!(item.getStage().shape instanceof Layer)) {
         throw 'You can only add Layer Nodes to Stage Nodes!';
       }
-      this._stage.add(<Layer>item.getStage());
-      updatePicture(this._stage);
+      this._stage.shape.add(<Layer>item.getStage().shape);
+      updatePicture(this._stage.shape);
     });
   }
 
   ngOnDestroy(): void {
-    this._stage.destroy();
+    this._stage.shape.destroy();
   }
 }

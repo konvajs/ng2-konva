@@ -9,10 +9,10 @@ import { ContainerConfig } from 'konva/lib/Container';
     <section>
       <ko-stage #stage [config]="configStage">
         <ko-layer #layer>
-          <!--          <ko-regular-polygon-->
-          <!--            #hexagon-->
-          <!--            [config]="polygonConfig"-->
-          <!--          ></ko-regular-polygon>-->
+          <ko-regular-polygon
+            #hexagon
+            [config]="polygonConfig"
+          ></ko-regular-polygon>
         </ko-layer>
       </ko-stage>
     </section>

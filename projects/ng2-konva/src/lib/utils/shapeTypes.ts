@@ -1,4 +1,3 @@
-import { Shape } from 'konva/lib/Shape';
 import { Circle } from 'konva/lib/shapes/Circle';
 import { FastLayer } from 'konva/lib/FastLayer';
 import { Group } from 'konva/lib/Group';
@@ -13,18 +12,14 @@ import { Line } from 'konva/lib/shapes/Line';
 import { Path } from 'konva/lib/shapes/Path';
 import { RegularPolygon } from 'konva/lib/shapes/RegularPolygon';
 import { Ring } from 'konva/lib/shapes/Ring';
-import { Sprite } from 'konva/lib/shapes/Sprite';
 import { Star } from 'konva/lib/shapes/Star';
 import { Text } from 'konva/lib/shapes/Text';
 import { TextPath } from 'konva/lib/shapes/TextPath';
 import { Wedge } from 'konva/lib/shapes/Wedge';
 import { Transformer } from 'konva/lib/shapes/Transformer';
 
-export const NodeTypes = {
-  Shape,
-  Group,
-  Layer,
-  FastLayer,
+export const ShapeTypes = {
+  //Shape,
   Arc,
   Arrow,
   Circle,
@@ -37,10 +32,13 @@ export const NodeTypes = {
   Rect,
   RegularPolygon,
   Ring,
-  Sprite,
+  //Sprite,
   Star,
   Text,
   TextPath,
   Transformer,
   Wedge,
+  Group,
+  Layer,
+  FastLayer,
 };

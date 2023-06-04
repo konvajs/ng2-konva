@@ -4,8 +4,8 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import { AngularNode } from './angular-node.interface';
 import { Stage } from 'konva/lib/Stage';
 
-export interface KonvaComponent extends Component {
-  getStage: () => AngularNode | Stage;
+export abstract class KonvaComponent extends Component {
+  getStage: () => AngularNode | { shape: Stage };
   getConfig: () => ShapeConfigTypes;
   config: ShapeConfigTypes;
 
