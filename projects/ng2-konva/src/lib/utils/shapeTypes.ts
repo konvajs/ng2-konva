@@ -19,7 +19,6 @@ import { Wedge } from 'konva/lib/shapes/Wedge';
 import { Transformer } from 'konva/lib/shapes/Transformer';
 
 export const ShapeTypes = {
-  //Shape,
   Arc,
   Arrow,
   Circle,
@@ -32,7 +31,6 @@ export const ShapeTypes = {
   Rect,
   RegularPolygon,
   Ring,
-  //Sprite,
   Star,
   Text,
   TextPath,
