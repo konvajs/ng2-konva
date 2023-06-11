@@ -16,7 +16,6 @@ import { getName, createListener, applyNodeProps } from '../utils/index';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
 import { ShapeConfigTypes } from '../utils/configTypes';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { AngularNode } from '../interfaces/angular-node.interface';
 import { ShapeTypes } from '../utils/shapeTypes';
 import Konva from 'konva';
 import { updatePicture } from '../utils';
@@ -24,6 +23,23 @@ import { Group } from 'konva/lib/Group';
 import { Layer } from 'konva/lib/Layer';
 import { Shape } from 'konva/lib/Shape';
 import { Sprite, SpriteConfig } from 'konva/lib/shapes/Sprite';
+import { Arc } from 'konva/lib/shapes/Arc';
+import { Arrow } from 'konva/lib/shapes/Arrow';
+import { Circle } from 'konva/lib/shapes/Circle';
+import { Ellipse } from 'konva/lib/shapes/Ellipse';
+import { Image } from 'konva/lib/shapes/Image';
+import { Label, Tag } from 'konva/lib/shapes/Label';
+import { Line } from 'konva/lib/shapes/Line';
+import { Path } from 'konva/lib/shapes/Path';
+import { Rect } from 'konva/lib/shapes/Rect';
+import { RegularPolygon } from 'konva/lib/shapes/RegularPolygon';
+import { Ring } from 'konva/lib/shapes/Ring';
+import { Star } from 'konva/lib/shapes/Star';
+import { Text } from 'konva/lib/shapes/Text';
+import { TextPath } from 'konva/lib/shapes/TextPath';
+import { Transformer } from 'konva/lib/shapes/Transformer';
+import { Wedge } from 'konva/lib/shapes/Wedge';
+import { FastLayer } from 'konva/lib/FastLayer';
 
 @Component({
   selector:
@@ -89,10 +105,54 @@ export class CoreShapeComponent
   ) as keyof typeof ShapeTypes | 'Shape' | 'Sprite';
 
   private cacheProps: any = {};
-  private _stage: AngularNode;
+  private _stage:
+    | Shape
+    | Arc
+    | Arrow
+    | Circle
+    | Ellipse
+    | Image
+    | Label
+    | Tag
+    | Line
+    | Path
+    | Rect
+    | RegularPolygon
+    | Ring
+    | Sprite
+    | Star
+    | Text
+    | TextPath
+    | Transformer
+    | Wedge
+    | Group
+    | Layer
+    | FastLayer;
   protected _config: ShapeConfigTypes;
 
-  public getStage(): AngularNode {
+  public getStage():
+    | Shape
+    | Arc
+    | Arrow
+    | Circle
+    | Ellipse
+    | Image
+    | Label
+    | Tag
+    | Line
+    | Path
+    | Rect
+    | RegularPolygon
+    | Ring
+    | Sprite
+    | Star
+    | Text
+    | TextPath
+    | Transformer
+    | Wedge
+    | Group
+    | Layer
+    | FastLayer {
     return this._stage;
   }
 
@@ -106,25 +166,24 @@ export class CoreShapeComponent
 
   private initKonva(): void {
     if (!this._stage) {
-      this._stage = { shape: new Shape() };
+      this._stage = new Shape();
     }
     if (this.nameNode === 'Shape') {
-      this._stage.shape = new Shape();
+      this._stage = new Shape();
     } else if (this.nameNode === 'Sprite') {
-      this._stage.shape = new Sprite(this.config as SpriteConfig);
+      this._stage = new Sprite(this.config as SpriteConfig);
     } else {
-      this._stage.shape = new Konva[this.nameNode](undefined);
+      this._stage = new Konva[this.nameNode](undefined);
     }
 
-    this._stage.AngularComponent = this;
-    const animationStage = this._stage.shape.to.bind(this._stage);
+    const animationStage = this._stage.to.bind(this._stage);
 
-    this._stage.shape.to = (newConfig: ShapeConfigTypes): void => {
+    this._stage.to = (newConfig: ShapeConfigTypes): void => {
       animationStage(newConfig);
       setTimeout(() => {
-        Object.keys(this._stage.shape.attrs).forEach((key) => {
-          if (typeof this._stage.shape.attrs[key] !== 'function') {
-            this.config[key] = this._stage.shape.attrs[key];
+        Object.keys(this._stage.attrs).forEach((key) => {
+          if (typeof this._stage.attrs[key] !== 'function') {
+            this.config[key] = this._stage.attrs[key];
           }
         });
       }, 200);
@@ -148,18 +207,15 @@ export class CoreShapeComponent
   ngAfterContentInit(): void {
     this.shapes.forEach((item: CoreShapeComponent) => {
       if (this !== item) {
-        if (
-          this._stage.shape instanceof Group ||
-          this._stage.shape instanceof Layer
-        ) {
-          this._stage.shape.add(item.getStage().shape);
+        if (this._stage instanceof Group || this._stage instanceof Layer) {
+          this._stage.add(item.getStage());
         }
-        updatePicture(this._stage.shape);
+        updatePicture(this._stage);
       }
     });
   }
 
   ngOnDestroy(): void {
-    this._stage.shape.destroy();
+    this._stage.destroy();
   }
 }
