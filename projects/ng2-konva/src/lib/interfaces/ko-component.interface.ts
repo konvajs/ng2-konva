@@ -9,17 +9,23 @@ export abstract class KonvaComponent extends Component {
   getConfig: () => ShapeConfigTypes;
   config: ShapeConfigTypes;
 
-  click?: EventEmitter<KonvaEventObject<unknown>>;
-  dblclick?: EventEmitter<KonvaEventObject<unknown>>;
-  mouseover?: EventEmitter<KonvaEventObject<unknown>>;
-  mouseout?: EventEmitter<KonvaEventObject<unknown>>;
+  mouseover?: EventEmitter<KonvaEventObject<MouseEvent>>;
   mousemove?: EventEmitter<KonvaEventObject<MouseEvent>>;
-  tap?: EventEmitter<KonvaEventObject<unknown>>;
-  dbltap?: EventEmitter<KonvaEventObject<unknown>>;
-  touchstart?: EventEmitter<KonvaEventObject<unknown>>;
-  scaleXChange?: EventEmitter<KonvaEventObject<unknown>>;
-  fillChange?: EventEmitter<KonvaEventObject<unknown>>;
-  dragstart?: EventEmitter<KonvaEventObject<unknown>>;
-  dragmove?: EventEmitter<KonvaEventObject<unknown>>;
-  dragend?: EventEmitter<KonvaEventObject<unknown>>;
+  mouseout?: EventEmitter<KonvaEventObject<MouseEvent>>;
+  mouseenter?: EventEmitter<KonvaEventObject<MouseEvent>>;
+  mouseleave?: EventEmitter<KonvaEventObject<MouseEvent>>;
+  mousedown?: EventEmitter<KonvaEventObject<MouseEvent>>;
+  mouseup?: EventEmitter<KonvaEventObject<MouseEvent>>;
+  wheel?: EventEmitter<KonvaEventObject<WheelEvent>>;
+  contextmenu?: EventEmitter<KonvaEventObject<PointerEvent>>;
+  click?: EventEmitter<KonvaEventObject<MouseEvent>>;
+  dblclick?: EventEmitter<KonvaEventObject<MouseEvent>>;
+  touchstart?: EventEmitter<KonvaEventObject<TouchEvent>>;
+  touchmove?: EventEmitter<KonvaEventObject<TouchEvent>>;
+  touchend?: EventEmitter<KonvaEventObject<TouchEvent>>;
+  tap?: EventEmitter<KonvaEventObject<TouchEvent>>;
+  dbltap?: EventEmitter<KonvaEventObject<TouchEvent>>;
+  dragstart?: EventEmitter<KonvaEventObject<MouseEvent>>;
+  dragmove?: EventEmitter<KonvaEventObject<MouseEvent>>;
+  dragend?: EventEmitter<KonvaEventObject<MouseEvent>>;
 }

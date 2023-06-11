@@ -43,30 +43,46 @@ export class StageComponent
       this.uploadKonva(config);
     }
   }
-  @Output() click: EventEmitter<KonvaEventObject<unknown>> = new EventEmitter();
-  @Output() dblclick: EventEmitter<KonvaEventObject<unknown>> =
-    new EventEmitter();
-  @Output() mouseover: EventEmitter<KonvaEventObject<unknown>> =
-    new EventEmitter();
-  @Output() mouseout: EventEmitter<KonvaEventObject<unknown>> =
-    new EventEmitter();
+
+  @Output() mouseover: EventEmitter<KonvaEventObject<MouseEvent>> =
+    new EventEmitter<KonvaEventObject<MouseEvent>>();
   @Output() mousemove: EventEmitter<KonvaEventObject<MouseEvent>> =
-    new EventEmitter();
-  @Output() tap: EventEmitter<KonvaEventObject<unknown>> = new EventEmitter();
-  @Output() dbltap: EventEmitter<KonvaEventObject<unknown>> =
-    new EventEmitter();
-  @Output() touchstart: EventEmitter<KonvaEventObject<unknown>> =
-    new EventEmitter();
-  @Output() scaleXChange: EventEmitter<KonvaEventObject<unknown>> =
-    new EventEmitter();
-  @Output() fillChange: EventEmitter<KonvaEventObject<unknown>> =
-    new EventEmitter();
-  @Output() dragstart: EventEmitter<KonvaEventObject<unknown>> =
-    new EventEmitter();
-  @Output() dragmove: EventEmitter<KonvaEventObject<unknown>> =
-    new EventEmitter();
-  @Output() dragend: EventEmitter<KonvaEventObject<unknown>> =
-    new EventEmitter();
+    new EventEmitter<KonvaEventObject<MouseEvent>>();
+  @Output() mouseout: EventEmitter<KonvaEventObject<MouseEvent>> =
+    new EventEmitter<KonvaEventObject<MouseEvent>>();
+  @Output() mouseenter: EventEmitter<KonvaEventObject<MouseEvent>> =
+    new EventEmitter<KonvaEventObject<MouseEvent>>();
+  @Output() mouseleave: EventEmitter<KonvaEventObject<MouseEvent>> =
+    new EventEmitter<KonvaEventObject<MouseEvent>>();
+  @Output() mousedown: EventEmitter<KonvaEventObject<MouseEvent>> =
+    new EventEmitter<KonvaEventObject<MouseEvent>>();
+  @Output() mouseup: EventEmitter<KonvaEventObject<MouseEvent>> =
+    new EventEmitter<KonvaEventObject<MouseEvent>>();
+  @Output() wheel: EventEmitter<KonvaEventObject<WheelEvent>> =
+    new EventEmitter<KonvaEventObject<WheelEvent>>();
+  @Output() contextmenu: EventEmitter<KonvaEventObject<PointerEvent>> =
+    new EventEmitter<KonvaEventObject<PointerEvent>>();
+  @Output() click: EventEmitter<KonvaEventObject<MouseEvent>> =
+    new EventEmitter<KonvaEventObject<MouseEvent>>();
+  @Output() dblclick: EventEmitter<KonvaEventObject<MouseEvent>> =
+    new EventEmitter<KonvaEventObject<MouseEvent>>();
+  @Output() touchstart: EventEmitter<KonvaEventObject<TouchEvent>> =
+    new EventEmitter<KonvaEventObject<TouchEvent>>();
+  @Output() touchmove: EventEmitter<KonvaEventObject<TouchEvent>> =
+    new EventEmitter<KonvaEventObject<TouchEvent>>();
+  @Output() touchend: EventEmitter<KonvaEventObject<TouchEvent>> =
+    new EventEmitter<KonvaEventObject<TouchEvent>>();
+  @Output() tap: EventEmitter<KonvaEventObject<TouchEvent>> = new EventEmitter<
+    KonvaEventObject<TouchEvent>
+  >();
+  @Output() dbltap: EventEmitter<KonvaEventObject<TouchEvent>> =
+    new EventEmitter<KonvaEventObject<TouchEvent>>();
+  @Output() dragstart: EventEmitter<KonvaEventObject<MouseEvent>> =
+    new EventEmitter<KonvaEventObject<MouseEvent>>();
+  @Output() dragmove: EventEmitter<KonvaEventObject<MouseEvent>> =
+    new EventEmitter<KonvaEventObject<MouseEvent>>();
+  @Output() dragend: EventEmitter<KonvaEventObject<MouseEvent>> =
+    new EventEmitter<KonvaEventObject<MouseEvent>>();
 
   private _stage: { shape: Stage };
   private _config: ContainerConfig;
