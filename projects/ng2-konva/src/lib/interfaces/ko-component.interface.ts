@@ -1,7 +1,6 @@
 import { Component, EventEmitter } from '@angular/core';
 import { ShapeConfigTypes } from '../utils/configTypes';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { AngularNode } from './angular-node.interface';
 import { Stage } from 'konva/lib/Stage';
 import { Shape } from 'konva/lib/Shape';
 import { Arc } from 'konva/lib/shapes/Arc';
