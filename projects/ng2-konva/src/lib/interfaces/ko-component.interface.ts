@@ -13,7 +13,7 @@ export abstract class KonvaComponent extends Component {
   dblclick?: EventEmitter<KonvaEventObject<unknown>>;
   mouseover?: EventEmitter<KonvaEventObject<unknown>>;
   mouseout?: EventEmitter<KonvaEventObject<unknown>>;
-  mousemove?: EventEmitter<KonvaEventObject<unknown>>;
+  mousemove?: EventEmitter<KonvaEventObject<MouseEvent>>;
   tap?: EventEmitter<KonvaEventObject<unknown>>;
   dbltap?: EventEmitter<KonvaEventObject<unknown>>;
   touchstart?: EventEmitter<KonvaEventObject<unknown>>;

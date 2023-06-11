@@ -50,7 +50,7 @@ export class StageComponent
     new EventEmitter();
   @Output() mouseout: EventEmitter<KonvaEventObject<unknown>> =
     new EventEmitter();
-  @Output() mousemove: EventEmitter<KonvaEventObject<unknown>> =
+  @Output() mousemove: EventEmitter<KonvaEventObject<MouseEvent>> =
     new EventEmitter();
   @Output() tap: EventEmitter<KonvaEventObject<unknown>> = new EventEmitter();
   @Output() dbltap: EventEmitter<KonvaEventObject<unknown>> =

@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { CoreShapeComponent, KonvaComponent, StageComponent } from 'ng2-konva';
+import { Component } from '@angular/core';
+import { CoreShapeComponent, StageComponent } from 'ng2-konva';
 import { StageConfig } from 'konva/lib/Stage';
 import { RegularPolygonConfig } from 'konva/lib/shapes/RegularPolygon';
 import { TextConfig } from 'konva/lib/shapes/Text';
@@ -10,15 +10,14 @@ import { KonvaEventObject } from 'konva/lib/Node';
   template: `
     <br />
     <section>
-      <ko-stage #stage [config]="configStage">
-        <ko-layer #layer>
+      <ko-stage [config]="configStage">
+        <ko-layer>
           <ko-regular-polygon
             [config]="configItem"
             (mouseout)="handleMouseOut()"
-            (blur)="handleMouseOut()"
             (mousemove)="handleMouseMove($event)"
           ></ko-regular-polygon>
-          <ko-text #text [config]="configText"></ko-text>
+          <ko-text [config]="configText"></ko-text>
         </ko-layer>
       </ko-stage>
       <br />
@@ -28,10 +27,6 @@ import { KonvaEventObject } from 'konva/lib/Node';
   imports: [StageComponent, CoreShapeComponent],
 })
 export class EventExampleComponent {
-  @ViewChild('stage') stage: KonvaComponent;
-  @ViewChild('layer') layer: KonvaComponent;
-  @ViewChild('text') text: KonvaComponent;
-
   public configStage: Partial<StageConfig> = {
     width: 300,
     height: 200,
@@ -64,9 +59,8 @@ export class EventExampleComponent {
     this.writeMessage('Mouseout triangle');
   }
 
-  handleMouseMove(event: KonvaEventObject<unknown>): void {
-    // @ts-ignore
-    const mousePos = this.stage.getStage().shape.getPointerPosition();
+  handleMouseMove(event: KonvaEventObject<MouseEvent>): void {
+    const mousePos = event.target.getRelativePointerPosition();
     const x = mousePos.x - 190;
     const y = mousePos.y - 40;
     this.writeMessage('x: ' + x + ', y: ' + y);
