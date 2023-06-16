@@ -21,5 +21,7 @@ export class AppComponent {
     { label: 'Circle', route: 'circle' },
     { label: 'Event', route: 'event' },
     { label: 'Shapes', route: 'shapes' },
+    { label: 'Star', route: 'star' },
+    { label: 'Styles', route: 'styles' },
   ];
 }

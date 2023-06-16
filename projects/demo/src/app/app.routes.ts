@@ -27,5 +27,17 @@ export const routes: Routes = [
         (c) => c.ShapesExampleComponent
       ),
   },
+  // {
+  //   path: 'star',
+  //   loadComponent: () =>
+  //     import('./examples/star.component').then((c) => c.StarExampleComponent),
+  // },
+  {
+    path: 'styles',
+    loadComponent: () =>
+      import('./examples/styles.component').then(
+        (c) => c.StylesExampleComponent
+      ),
+  },
   { path: '**', pathMatch: 'full', redirectTo: 'animation' },
 ];
