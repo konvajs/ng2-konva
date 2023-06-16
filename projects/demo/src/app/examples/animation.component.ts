@@ -45,15 +45,13 @@ export class AnimationExampleComponent implements AfterViewInit {
     const amplitude = 100;
     const period = 5000;
     // in ms
-    const centerX = this.stage.getStage().shape.width() / 2;
+    const centerX = this.stage.getStage().width() / 2;
 
     const anim = new Animation((frame?: IFrame) => {
       if (!frame) return;
       this.hexagon
         .getStage()
-        .shape.x(
-          amplitude * Math.sin((frame.time * 2 * Math.PI) / period) + centerX
-        );
+        .x(amplitude * Math.sin((frame.time * 2 * Math.PI) / period) + centerX);
     }, this.layer.getStage());
 
     anim.start();

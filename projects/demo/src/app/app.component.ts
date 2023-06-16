@@ -20,5 +20,6 @@ export class AppComponent {
     { label: 'Animation', route: 'animation' },
     { label: 'Circle', route: 'circle' },
     { label: 'Event', route: 'event' },
+    { label: 'Shapes', route: 'shapes' },
   ];
 }

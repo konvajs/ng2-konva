@@ -15,6 +15,7 @@ import { KonvaEventObject } from 'konva/lib/Node';
           <ko-regular-polygon
             [config]="configItem"
             (mouseout)="handleMouseOut()"
+            (blur)="handleMouseOut()"
             (mousemove)="handleMouseMove($event)"
           ></ko-regular-polygon>
           <ko-text [config]="configText"></ko-text>

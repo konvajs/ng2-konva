@@ -27,11 +27,11 @@ export default function applyNodeProps<T extends NodeConfig>(
         eventName =
           'content' + eventName.slice(7, 8).toUpperCase() + eventName.slice(8);
       }
-      instance.shape.off(eventName, oldProps[key]);
+      instance.off(eventName, oldProps[key]);
     }
     const toRemove = !Object.hasOwn(props, key);
     if (toRemove) {
-      instance.shape.setAttr(key, undefined);
+      instance.setAttr(key, undefined);
     }
   });
   Object.keys(props).forEach((key) => {
@@ -44,16 +44,15 @@ export default function applyNodeProps<T extends NodeConfig>(
           'content' + eventName.slice(7, 8).toUpperCase() + eventName.slice(8);
       }
       if (props[key]) {
-        instance.shape.off(eventName);
-        instance.shape.on(eventName, (evt: KonvaEventObject<unknown>) => {
+        instance.off(eventName);
+        instance.on(eventName, (evt: KonvaEventObject<unknown>) => {
           props[key](evt);
         });
       }
     }
     if (
       !isEvent &&
-      (props[key] !== oldProps[key] ||
-        props[key] !== instance.shape.getAttr(key))
+      (props[key] !== oldProps[key] || props[key] !== instance.getAttr(key))
     ) {
       hasUpdates = true;
       updatedProps[key] = props[key];
@@ -61,13 +60,13 @@ export default function applyNodeProps<T extends NodeConfig>(
   });
 
   if (hasUpdates) {
-    instance.shape.setAttrs(updatedProps);
-    updatePicture(instance.shape);
+    instance.setAttrs(updatedProps);
+    updatePicture(instance);
     let val;
     Object.keys(updatedProps).forEach((prop) => {
       val = updatedProps[prop];
       if (val instanceof Image && !val.complete) {
-        const node = instance.shape;
+        const node = instance;
         val.addEventListener('load', function () {
           const layer = node.getLayer();
           if (layer) {

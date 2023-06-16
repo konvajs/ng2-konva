@@ -20,5 +20,12 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./examples/event.component').then((c) => c.EventExampleComponent),
   },
+  {
+    path: 'shapes',
+    loadComponent: () =>
+      import('./examples/shapes.component').then(
+        (c) => c.ShapesExampleComponent
+      ),
+  },
   { path: '**', pathMatch: 'full', redirectTo: 'animation' },
 ];
