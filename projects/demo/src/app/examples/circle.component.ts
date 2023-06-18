@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { StageConfig } from 'konva/lib/Stage';
 import { CircleConfig } from 'konva/lib/shapes/Circle';
-import { KonvaEventObject } from 'konva/lib/Node';
-import { CoreShapeComponent, StageComponent } from 'ng2-konva';
+import {
+  CoreShapeComponent,
+  NgKonvaEventObject,
+  StageComponent,
+} from 'ng2-konva';
 
 @Component({
   selector: 'app-circle-example',
@@ -37,7 +40,7 @@ export class CircleExampleComponent implements OnInit {
     strokeWidth: 4,
   };
 
-  public handleClick(event: KonvaEventObject<unknown>): void {
+  public handleClick(event: NgKonvaEventObject<unknown>): void {
     console.log('Hello Circle', event);
   }
 

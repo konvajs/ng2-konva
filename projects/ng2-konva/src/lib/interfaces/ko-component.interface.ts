@@ -1,6 +1,5 @@
 import { Component, EventEmitter } from '@angular/core';
 import { ShapeConfigTypes } from '../utils/configTypes';
-import { KonvaEventObject } from 'konva/lib/Node';
 import { Stage } from 'konva/lib/Stage';
 import { Shape } from 'konva/lib/Shape';
 import { Arc } from 'konva/lib/shapes/Arc';
@@ -23,6 +22,7 @@ import { Wedge } from 'konva/lib/shapes/Wedge';
 import { Group } from 'konva/lib/Group';
 import { Layer } from 'konva/lib/Layer';
 import { FastLayer } from 'konva/lib/FastLayer';
+import { NgKonvaEventObject } from './ngKonvaEventObject';
 
 export abstract class KonvaComponent extends Component {
   getStage: () =>
@@ -52,23 +52,23 @@ export abstract class KonvaComponent extends Component {
   getConfig: () => ShapeConfigTypes;
   config: ShapeConfigTypes;
 
-  mouseover?: EventEmitter<KonvaEventObject<MouseEvent>>;
-  mousemove?: EventEmitter<KonvaEventObject<MouseEvent>>;
-  mouseout?: EventEmitter<KonvaEventObject<MouseEvent>>;
-  mouseenter?: EventEmitter<KonvaEventObject<MouseEvent>>;
-  mouseleave?: EventEmitter<KonvaEventObject<MouseEvent>>;
-  mousedown?: EventEmitter<KonvaEventObject<MouseEvent>>;
-  mouseup?: EventEmitter<KonvaEventObject<MouseEvent>>;
-  wheel?: EventEmitter<KonvaEventObject<WheelEvent>>;
-  contextmenu?: EventEmitter<KonvaEventObject<PointerEvent>>;
-  click?: EventEmitter<KonvaEventObject<MouseEvent>>;
-  dblclick?: EventEmitter<KonvaEventObject<MouseEvent>>;
-  touchstart?: EventEmitter<KonvaEventObject<TouchEvent>>;
-  touchmove?: EventEmitter<KonvaEventObject<TouchEvent>>;
-  touchend?: EventEmitter<KonvaEventObject<TouchEvent>>;
-  tap?: EventEmitter<KonvaEventObject<TouchEvent>>;
-  dbltap?: EventEmitter<KonvaEventObject<TouchEvent>>;
-  dragstart?: EventEmitter<KonvaEventObject<MouseEvent>>;
-  dragmove?: EventEmitter<KonvaEventObject<MouseEvent>>;
-  dragend?: EventEmitter<KonvaEventObject<MouseEvent>>;
+  mouseover?: EventEmitter<NgKonvaEventObject<MouseEvent>>;
+  mousemove?: EventEmitter<NgKonvaEventObject<MouseEvent>>;
+  mouseout?: EventEmitter<NgKonvaEventObject<MouseEvent>>;
+  mouseenter?: EventEmitter<NgKonvaEventObject<MouseEvent>>;
+  mouseleave?: EventEmitter<NgKonvaEventObject<MouseEvent>>;
+  mousedown?: EventEmitter<NgKonvaEventObject<MouseEvent>>;
+  mouseup?: EventEmitter<NgKonvaEventObject<MouseEvent>>;
+  wheel?: EventEmitter<NgKonvaEventObject<WheelEvent>>;
+  contextmenu?: EventEmitter<NgKonvaEventObject<PointerEvent>>;
+  click?: EventEmitter<NgKonvaEventObject<MouseEvent>>;
+  dblclick?: EventEmitter<NgKonvaEventObject<MouseEvent>>;
+  touchstart?: EventEmitter<NgKonvaEventObject<TouchEvent>>;
+  touchmove?: EventEmitter<NgKonvaEventObject<TouchEvent>>;
+  touchend?: EventEmitter<NgKonvaEventObject<TouchEvent>>;
+  tap?: EventEmitter<NgKonvaEventObject<TouchEvent>>;
+  dbltap?: EventEmitter<NgKonvaEventObject<TouchEvent>>;
+  dragstart?: EventEmitter<NgKonvaEventObject<MouseEvent>>;
+  dragmove?: EventEmitter<NgKonvaEventObject<MouseEvent>>;
+  dragend?: EventEmitter<NgKonvaEventObject<MouseEvent>>;
 }

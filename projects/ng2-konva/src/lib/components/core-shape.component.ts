@@ -15,7 +15,6 @@ import {
 import { getName, createListener, applyNodeProps } from '../utils/index';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
 import { ShapeConfigTypes } from '../utils/configTypes';
-import { KonvaEventObject } from 'konva/lib/Node';
 import { ShapeTypes } from '../utils/shapeTypes';
 import Konva from 'konva';
 import { updatePicture } from '../utils';
@@ -40,6 +39,7 @@ import { TextPath } from 'konva/lib/shapes/TextPath';
 import { Transformer } from 'konva/lib/shapes/Transformer';
 import { Wedge } from 'konva/lib/shapes/Wedge';
 import { FastLayer } from 'konva/lib/FastLayer';
+import { NgKonvaEventObject } from '../interfaces/ngKonvaEventObject';
 
 @Component({
   selector:
@@ -60,45 +60,44 @@ export class CoreShapeComponent
     return this._config;
   }
 
-  @Output() mouseover: EventEmitter<KonvaEventObject<MouseEvent>> =
-    new EventEmitter<KonvaEventObject<MouseEvent>>();
-  @Output() mousemove: EventEmitter<KonvaEventObject<MouseEvent>> =
-    new EventEmitter<KonvaEventObject<MouseEvent>>();
-  @Output() mouseout: EventEmitter<KonvaEventObject<MouseEvent>> =
-    new EventEmitter<KonvaEventObject<MouseEvent>>();
-  @Output() mouseenter: EventEmitter<KonvaEventObject<MouseEvent>> =
-    new EventEmitter<KonvaEventObject<MouseEvent>>();
-  @Output() mouseleave: EventEmitter<KonvaEventObject<MouseEvent>> =
-    new EventEmitter<KonvaEventObject<MouseEvent>>();
-  @Output() mousedown: EventEmitter<KonvaEventObject<MouseEvent>> =
-    new EventEmitter<KonvaEventObject<MouseEvent>>();
-  @Output() mouseup: EventEmitter<KonvaEventObject<MouseEvent>> =
-    new EventEmitter<KonvaEventObject<MouseEvent>>();
-  @Output() wheel: EventEmitter<KonvaEventObject<WheelEvent>> =
-    new EventEmitter<KonvaEventObject<WheelEvent>>();
-  @Output() contextmenu: EventEmitter<KonvaEventObject<PointerEvent>> =
-    new EventEmitter<KonvaEventObject<PointerEvent>>();
-  @Output() click: EventEmitter<KonvaEventObject<MouseEvent>> =
-    new EventEmitter<KonvaEventObject<MouseEvent>>();
-  @Output() dblclick: EventEmitter<KonvaEventObject<MouseEvent>> =
-    new EventEmitter<KonvaEventObject<MouseEvent>>();
-  @Output() touchstart: EventEmitter<KonvaEventObject<TouchEvent>> =
-    new EventEmitter<KonvaEventObject<TouchEvent>>();
-  @Output() touchmove: EventEmitter<KonvaEventObject<TouchEvent>> =
-    new EventEmitter<KonvaEventObject<TouchEvent>>();
-  @Output() touchend: EventEmitter<KonvaEventObject<TouchEvent>> =
-    new EventEmitter<KonvaEventObject<TouchEvent>>();
-  @Output() tap: EventEmitter<KonvaEventObject<TouchEvent>> = new EventEmitter<
-    KonvaEventObject<TouchEvent>
-  >();
-  @Output() dbltap: EventEmitter<KonvaEventObject<TouchEvent>> =
-    new EventEmitter<KonvaEventObject<TouchEvent>>();
-  @Output() dragstart: EventEmitter<KonvaEventObject<MouseEvent>> =
-    new EventEmitter<KonvaEventObject<MouseEvent>>();
-  @Output() dragmove: EventEmitter<KonvaEventObject<MouseEvent>> =
-    new EventEmitter<KonvaEventObject<MouseEvent>>();
-  @Output() dragend: EventEmitter<KonvaEventObject<MouseEvent>> =
-    new EventEmitter<KonvaEventObject<MouseEvent>>();
+  @Output() mouseover: EventEmitter<NgKonvaEventObject<MouseEvent>> =
+    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
+  @Output() mousemove: EventEmitter<NgKonvaEventObject<MouseEvent>> =
+    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
+  @Output() mouseout: EventEmitter<NgKonvaEventObject<MouseEvent>> =
+    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
+  @Output() mouseenter: EventEmitter<NgKonvaEventObject<MouseEvent>> =
+    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
+  @Output() mouseleave: EventEmitter<NgKonvaEventObject<MouseEvent>> =
+    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
+  @Output() mousedown: EventEmitter<NgKonvaEventObject<MouseEvent>> =
+    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
+  @Output() mouseup: EventEmitter<NgKonvaEventObject<MouseEvent>> =
+    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
+  @Output() wheel: EventEmitter<NgKonvaEventObject<WheelEvent>> =
+    new EventEmitter<NgKonvaEventObject<WheelEvent>>();
+  @Output() contextmenu: EventEmitter<NgKonvaEventObject<PointerEvent>> =
+    new EventEmitter<NgKonvaEventObject<PointerEvent>>();
+  @Output() click: EventEmitter<NgKonvaEventObject<MouseEvent>> =
+    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
+  @Output() dblclick: EventEmitter<NgKonvaEventObject<MouseEvent>> =
+    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
+  @Output() touchstart: EventEmitter<NgKonvaEventObject<TouchEvent>> =
+    new EventEmitter<NgKonvaEventObject<TouchEvent>>();
+  @Output() touchmove: EventEmitter<NgKonvaEventObject<TouchEvent>> =
+    new EventEmitter<NgKonvaEventObject<TouchEvent>>();
+  @Output() touchend: EventEmitter<NgKonvaEventObject<TouchEvent>> =
+    new EventEmitter<NgKonvaEventObject<TouchEvent>>();
+  @Output() tap: EventEmitter<NgKonvaEventObject<TouchEvent>> =
+    new EventEmitter<NgKonvaEventObject<TouchEvent>>();
+  @Output() dbltap: EventEmitter<NgKonvaEventObject<TouchEvent>> =
+    new EventEmitter<NgKonvaEventObject<TouchEvent>>();
+  @Output() dragstart: EventEmitter<NgKonvaEventObject<MouseEvent>> =
+    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
+  @Output() dragmove: EventEmitter<NgKonvaEventObject<MouseEvent>> =
+    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
+  @Output() dragend: EventEmitter<NgKonvaEventObject<MouseEvent>> =
+    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
 
   public nameNode: keyof typeof ShapeTypes | 'Shape' | 'Sprite' = getName(
     inject(ElementRef).nativeElement.localName

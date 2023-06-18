@@ -3,6 +3,7 @@
 import updatePicture from './updatePicture';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
 import { KonvaEventObject, NodeConfig } from 'konva/lib/Node';
+import { NgKonvaEventObject } from '../interfaces/ngKonvaEventObject';
 
 export default function applyNodeProps<T extends NodeConfig>(
   component: KonvaComponent,
@@ -45,8 +46,11 @@ export default function applyNodeProps<T extends NodeConfig>(
       }
       if (props[key]) {
         instance.off(eventName);
-        instance.on(eventName, (evt: KonvaEventObject<unknown>) => {
-          props[key](evt);
+        instance.on(eventName, (event: KonvaEventObject<unknown>) => {
+          props[key]({
+            angularComponent: component,
+            event,
+          } as NgKonvaEventObject<unknown>);
         });
       }
     }

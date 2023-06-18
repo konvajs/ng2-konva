@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
-import { CoreShapeComponent, StageComponent } from 'ng2-konva';
+import {
+  CoreShapeComponent,
+  NgKonvaEventObject,
+  StageComponent,
+} from 'ng2-konva';
 import { StageConfig } from 'konva/lib/Stage';
 import { RegularPolygonConfig } from 'konva/lib/shapes/RegularPolygon';
 import { TextConfig } from 'konva/lib/shapes/Text';
-import { KonvaEventObject } from 'konva/lib/Node';
 
 @Component({
   selector: 'app-event-example',
@@ -60,8 +63,8 @@ export class EventExampleComponent {
     this.writeMessage('Mouseout triangle');
   }
 
-  handleMouseMove(event: KonvaEventObject<MouseEvent>): void {
-    const mousePos = event.target.getRelativePointerPosition();
+  handleMouseMove(event: NgKonvaEventObject<MouseEvent>): void {
+    const mousePos = event.event.target.getRelativePointerPosition();
     const x = mousePos.x - 190;
     const y = mousePos.y - 40;
     this.writeMessage('x: ' + x + ', y: ' + y);
