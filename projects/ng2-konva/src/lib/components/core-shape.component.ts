@@ -10,7 +10,7 @@ import {
   OnDestroy,
   OnInit,
   inject,
-  AfterContentInit,
+  AfterContentChecked,
 } from '@angular/core';
 import { getName, createListener, applyNodeProps } from '../utils/index';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
@@ -48,7 +48,7 @@ import { FastLayer } from 'konva/lib/FastLayer';
   template: `<div><ng-content></ng-content></div>`,
 })
 export class CoreShapeComponent
-  implements KonvaComponent, AfterContentInit, OnDestroy, OnInit
+  implements KonvaComponent, AfterContentChecked, OnDestroy, OnInit
 {
   @ContentChildren(CoreShapeComponent)
   shapes = new QueryList<CoreShapeComponent>();
@@ -204,7 +204,7 @@ export class CoreShapeComponent
     this.cacheProps = props;
   }
 
-  ngAfterContentInit(): void {
+  ngAfterContentChecked(): void {
     this.shapes.forEach((item: CoreShapeComponent) => {
       if (this !== item) {
         if (this._stage instanceof Group || this._stage instanceof Layer) {
