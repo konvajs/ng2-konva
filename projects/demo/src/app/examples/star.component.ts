@@ -1,20 +1,27 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CoreShapeComponent, StageComponent } from 'ng2-konva';
+import {
+  CoreShapeComponent,
+  NgKonvaEventObject,
+  StageComponent,
+} from 'ng2-konva';
 import { StageConfig } from 'konva/lib/Stage';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { StarConfig } from 'konva/lib/shapes/Star';
-import { KonvaEventObject } from 'konva/lib/Node';
+import Konva from 'konva';
+
+type ExtStartConfig = StarConfig & { startScale: number };
 
 @Component({
   selector: 'app-star-example',
   template: `
     <br />
     <section>
-      <ko-stage #stage [config]="configStage">
+      <ko-stage [config]="configStage">
         <ko-layer #layer>
           <ko-star
-            *ngFor="let config of starConfigs"
+            *ngFor="let config of starConfigs; trackBy: trackConfig"
             (dragstart)="handleDragstart($event, config)"
+            (dragend)="handleDragend($event, config)"
             [config]="config"
           />
         </ko-layer>
@@ -24,16 +31,15 @@ import { KonvaEventObject } from 'konva/lib/Node';
     </section>
   `,
   standalone: true,
-  imports: [StageComponent, CoreShapeComponent, NgForOf],
+  imports: [StageComponent, CoreShapeComponent, NgForOf, NgIf],
 })
 export class StarExampleComponent implements OnInit {
-  @ViewChild('stage') stage: StageComponent;
   @ViewChild('layer') layer: CoreShapeComponent;
   @ViewChild('dragLayer') dragLayer: CoreShapeComponent;
 
   public width = 800;
   public height = 800;
-  public starConfigs: (StarConfig & { startScale: number })[] = [];
+  public starConfigs: ExtStartConfig[] = [];
 
   public configStage: Partial<StageConfig> = {
     width: this.width,
@@ -41,10 +47,10 @@ export class StarExampleComponent implements OnInit {
   };
 
   public handleDragstart(
-    event: KonvaEventObject<MouseEvent>,
-    config: StarConfig & { startScale: number }
+    event: NgKonvaEventObject<MouseEvent>,
+    config: ExtStartConfig
   ): void {
-    const shape = event.target;
+    const shape = event.angularComponent.getStage();
     const dragLayer = this.dragLayer.getStage();
 
     // moving to another layer will improve dragging performance
@@ -64,27 +70,32 @@ export class StarExampleComponent implements OnInit {
     });
   }
 
-  public handleDragend(shapeId: string): void {
-    console.log(shapeId);
-    // const shape = ngComponent.getStage();
-    // const layer = this.layer.getStage();
-    // const stage = this.stage.getStage();
-    //
-    // shape.moveTo(layer);
-    // stage.draw();
-    //
-    // shape.to({
-    //   duration: 0.5,
-    //   easing: Konva.Easings.ElasticEaseOut,
-    //   scaleX: ngComponent.getConfig().startScale,
-    //   scaleY: ngComponent.getConfig().startScale,
-    //   shadowOffsetX: 5,
-    //   shadowOffsetY: 5,
-    // });
+  public handleDragend(
+    event: NgKonvaEventObject<MouseEvent>,
+    config: ExtStartConfig
+  ): void {
+    const shape = event.angularComponent.getStage();
+    const layer = this.layer.getStage();
+
+    shape.moveTo(layer);
+
+    shape.to({
+      duration: 0.5,
+      easing: Konva.Easings.ElasticEaseOut,
+      scaleX: config.startScale,
+      scaleY: config.startScale,
+      shadowOffsetX: 5,
+      shadowOffsetY: 5,
+    });
+  }
+
+  // get unique identifier of a config to correctly update them instead of recreating them on every update
+  trackConfig(index: number, config: ExtStartConfig): string | undefined {
+    return config?.name;
   }
 
   public ngOnInit(): void {
-    for (let n = 0; n < 2; n++) {
+    for (let n = 0; n < 100; n++) {
       const scale = Math.random();
       this.starConfigs.push({
         x: Math.random() * this.width,
