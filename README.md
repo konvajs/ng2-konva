@@ -8,7 +8,7 @@
   </a>
   </span>
 
-![Ng2Konva Logo](https://raw.githubusercontent.com/rafaesc/ng2-konva/master/n2-konva.png)
+![Ng2Konva Logo](n2-konva.png)
 
 **ng2-konva** is a JavaScript library for drawing complex canvas graphics using Angular.
 
