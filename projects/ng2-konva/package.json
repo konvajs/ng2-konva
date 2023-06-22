@@ -1,9 +1,30 @@
 {
   "name": "ng2-konva",
-  "version": "0.0.1",
+  "version": "7.0.0",
+  "description": "Angular binding to canvas element via Konva framework",
+  "keywords": [
+    "angular",
+    "angular2",
+    "ng",
+    "konva",
+    "canvas"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rafaesc/ng2-konva.git"
+  },
+  "author": {
+    "name": "Rafael Escala",
+    "email": "rafaesc92@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rafaesc/ng2-konva.git/issues"
+  },
   "peerDependencies": {
     "@angular/common": "^16.0.0",
-    "@angular/core": "^16.0.0"
+    "@angular/core": "^16.0.0",
+    "konva": "^9.1.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
