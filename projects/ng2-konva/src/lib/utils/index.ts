@@ -2,6 +2,7 @@ import updatePicture from './updatePicture';
 import applyNodeProps from './applyNodeProps';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
 import { EventEmitter } from '@angular/core';
+import { ListenerRecord } from './types';
 
 function camelize(str: string): string {
   return str
@@ -21,10 +22,8 @@ export function getName(componentTag: string): string {
   );
 }
 
-export function createListener(
-  instance: KonvaComponent
-): Record<string, (value?: unknown) => void> {
-  const output: Record<string, (value?: unknown) => void> = {};
+export function createListener(instance: KonvaComponent): ListenerRecord {
+  const output: ListenerRecord = {};
   [
     'mouseover',
     'mousemove',

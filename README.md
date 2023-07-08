@@ -77,7 +77,7 @@ export class CircleExampleComponent {
     strokeWidth: 4,
   };
 
-  public handleClick(event: NgKonvaEventObject<unknown>): void {
+  public handleClick(event: NgKonvaEventObject<MouseEvent>): void {
     console.log('Hello Circle', event);
   }
 }

@@ -18,6 +18,7 @@ import { Stage } from 'konva/lib/Stage';
 import { Layer } from 'konva/lib/Layer';
 import { ContainerConfig } from 'konva/lib/Container';
 import { NgKonvaEventObject } from '../interfaces/ngKonvaEventObject';
+import { PropsType } from '../utils/types';
 
 @Component({
   selector: 'ko-stage',
@@ -83,7 +84,7 @@ export class StageComponent
 
   private _stage: Stage;
   private _config: ContainerConfig;
-  private cacheProps: any = {};
+  private cacheProps: PropsType = {};
 
   public getStage(): Stage {
     return this._stage;

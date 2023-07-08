@@ -40,6 +40,7 @@ import { Transformer } from 'konva/lib/shapes/Transformer';
 import { Wedge } from 'konva/lib/shapes/Wedge';
 import { FastLayer } from 'konva/lib/FastLayer';
 import { NgKonvaEventObject } from '../interfaces/ngKonvaEventObject';
+import { PropsType } from '../utils/types';
 
 @Component({
   selector:
@@ -103,7 +104,7 @@ export class CoreShapeComponent
     inject(ElementRef).nativeElement.localName
   ) as keyof typeof ShapeTypes | 'Shape' | 'Sprite';
 
-  private cacheProps: any = {};
+  private cacheProps: PropsType = {};
   private _stage:
     | Shape
     | Arc

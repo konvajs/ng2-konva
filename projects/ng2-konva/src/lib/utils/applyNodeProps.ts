@@ -2,13 +2,14 @@
 
 import updatePicture from './updatePicture';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
-import { KonvaEventObject, NodeConfig } from 'konva/lib/Node';
+import { KonvaEventObject } from 'konva/lib/Node';
 import { NgKonvaEventObject } from '../interfaces/ngKonvaEventObject';
+import { PropsType } from './types';
 
-export default function applyNodeProps<T extends NodeConfig>(
+export default function applyNodeProps(
   component: KonvaComponent,
-  props: T | Record<string, never> = {},
-  oldProps: T | Record<string, never> = {}
+  props: PropsType = {},
+  oldProps: PropsType = {}
 ): void {
   if ('id' in props) {
     const message = `ng2-konva: You are using "id" attribute for Konva node. In some very rare cases it may produce bugs. Currently we recommend not to use it and use "name" attribute instead.`;
@@ -16,7 +17,7 @@ export default function applyNodeProps<T extends NodeConfig>(
   }
 
   const instance = component.getStage();
-  const updatedProps: T | Record<string, unknown> = {};
+  const updatedProps: PropsType = {};
   let hasUpdates = false;
 
   Object.keys(oldProps).forEach((key) => {
