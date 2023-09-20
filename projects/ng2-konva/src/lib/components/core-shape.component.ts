@@ -99,6 +99,12 @@ export class CoreShapeComponent
     new EventEmitter<NgKonvaEventObject<MouseEvent>>();
   @Output() dragend: EventEmitter<NgKonvaEventObject<MouseEvent>> =
     new EventEmitter<NgKonvaEventObject<MouseEvent>>();
+  @Output() transformstart: EventEmitter<NgKonvaEventObject<MouseEvent>> =
+    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
+  @Output() transform: EventEmitter<NgKonvaEventObject<MouseEvent>> =
+    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
+  @Output() transformend: EventEmitter<NgKonvaEventObject<MouseEvent>> =
+    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
 
   public nameNode: keyof typeof ShapeTypes | 'Shape' | 'Sprite' = getName(
     inject(ElementRef).nativeElement.localName

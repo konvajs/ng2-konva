@@ -71,4 +71,7 @@ export abstract class KonvaComponent extends Component {
   dragstart?: EventEmitter<NgKonvaEventObject<MouseEvent>>;
   dragmove?: EventEmitter<NgKonvaEventObject<MouseEvent>>;
   dragend?: EventEmitter<NgKonvaEventObject<MouseEvent>>;
+  transformstart?: EventEmitter<NgKonvaEventObject<MouseEvent>>;
+  transform?: EventEmitter<NgKonvaEventObject<MouseEvent>>;
+  transformend?: EventEmitter<NgKonvaEventObject<MouseEvent>>;
 }
