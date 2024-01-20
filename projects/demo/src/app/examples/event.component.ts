@@ -11,7 +11,6 @@ import { TextConfig } from 'konva/lib/shapes/Text';
 @Component({
   selector: 'app-event-example',
   template: `
-    <br />
     <section>
       <ko-stage [config]="configStage">
         <ko-layer>
@@ -24,7 +23,6 @@ import { TextConfig } from 'konva/lib/shapes/Text';
           <ko-text [config]="configText"></ko-text>
         </ko-layer>
       </ko-stage>
-      <br />
     </section>
   `,
   standalone: true,
@@ -65,6 +63,7 @@ export class EventExampleComponent {
 
   handleMouseMove(event: NgKonvaEventObject<MouseEvent>): void {
     const mousePos = event.event.target.getRelativePointerPosition();
+    if (mousePos === null) return;
     const x = mousePos.x - 190;
     const y = mousePos.y - 40;
     this.writeMessage('x: ' + x + ', y: ' + y);
