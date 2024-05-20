@@ -8,13 +8,13 @@
   </a>
   </span>
 
-![Ng2Konva Logo](https://raw.githubusercontent.com/rafaesc/ng2-konva/master/n2-konva.png)
+![Ng2Konva Logo](n2-konva.png)
 
 **ng2-konva** is a JavaScript library for drawing complex canvas graphics using Angular.
 
 It provides declarative and reactive bindings to the [Konva Framework](http://konvajs.github.io/).
 
-All `ng2-konva` components correspond to `Konva` components of the same name with the prefix 'ko-'. All the parameters available for `Konva` objects can add as `config` in the prop as Observable for corresponding `ng2-konva` components.
+All `ng2-konva` components correspond to `Konva` components of the same name with the prefix 'ko-'. All the parameters available for `Konva` objects can be passed as `config` to the corresponding `ng2-konva` components.
 
 Core shapes are: ko-stage, ko-layer, ko-rect, ko-circle, ko-ellipse, ko-line, ko-image, ko-text, ko-text-path, ko-star, ko-label, SVG Path, ko-regular-polygon.
 Also you can create custom shape.
@@ -30,67 +30,61 @@ To get more info about `Konva` you can read [Konva Overview](http://konvajs.gith
 To install this library, run:
 
 ```bash
-$ npm install konva ng2-konva --save
+$ npm install ng2-konva --save
 ```
 
-and then from your Angular `AppModule`:
+`ng2-konva` components are all standalone. There are two components you will need to import: `CoreShapeComponent` and `StageComponent`
 
 ```typescript
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-
-import { AppComponent } from './app.component';
-
-// Import KonvaModule
-import { KonvaModule } from 'ng2-konva';
-
-@NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    KonvaModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
-export class AppModule { }
-```
-
-Once `KonvaModule` is imported, you can use its components in your Angular application:
-
-```typescript
-import { of } from 'rxjs/Observable';
+import { Component } from '@angular/core';
+import { StageConfig } from 'konva/lib/Stage';
+import { CircleConfig } from 'konva/lib/shapes/Circle';
+import {
+  CoreShapeComponent,
+  NgKonvaEventObject,
+  StageComponent,
+} from 'ng2-konva';
 
 @Component({
-  selector: 'app',
+  selector: 'app-circle-example',
   template: `
-    <ko-stage [config]="configStage">
-      <ko-layer>
-        <ko-circle [config]="configCircle" (click)="handleClick($event)"></ko-circle>
-      </ko-layer>
-    </ko-stage>`
+    <br />
+    <section>
+      <ko-stage [config]="configStage">
+        <ko-layer>
+          <ko-circle
+            [config]="configCircle"
+            (click)="handleClick($event)"
+          ></ko-circle>
+        </ko-layer>
+      </ko-stage>
+    </section>
+  `,
+  standalone: true,
+  imports: [StageComponent, CoreShapeComponent],
 })
-class AppComponent implements OnInit {
-  public configStage: Observable<any> = of({
+export class CircleExampleComponent {
+  public configStage: Partial<StageConfig> = {
     width: 200,
-    height: 200
-  });
-  public configCircle: Observable<any> = of({
+    height: 500,
+  };
+  public configCircle: CircleConfig = {
     x: 100,
     y: 100,
     radius: 70,
     fill: 'red',
     stroke: 'black',
-    strokeWidth: 4
-  });
+    strokeWidth: 4,
+  };
 
-  public handleClick(component) {
-    console.log('Hello Circle', component);
+  public handleClick(event: NgKonvaEventObject<MouseEvent>): void {
+    console.log('Hello Circle', event);
   }
 }
 ```
+
+## Demo
+You can find more examples in the demo project located in `projects/demo`.
 
 ## Related repositories
 
