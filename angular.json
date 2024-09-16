@@ -64,11 +64,12 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/demo",
+            "outputPath": {
+              "base": "dist/demo"
+            },
             "index": "projects/demo/src/index.html",
-            "main": "projects/demo/src/main.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -84,7 +85,8 @@
             "scripts": [],
             "allowedCommonJsDependencies": [
               "konva"
-            ]
+            ],
+            "browser": "projects/demo/src/main.ts"
           },
           "configurations": {
             "production": {
@@ -103,9 +105,7 @@
               "outputHashing": "all"
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
