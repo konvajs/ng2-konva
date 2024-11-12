@@ -23,5 +23,6 @@ export class AppComponent {
     { label: 'Shapes', route: 'shapes' },
     { label: 'Star', route: 'star' },
     { label: 'Styles', route: 'styles' },
+    { label: 'Transform', route: 'transform' },
   ];
 }

@@ -39,5 +39,12 @@ export const routes: Routes = [
         (c) => c.StylesExampleComponent
       ),
   },
+  {
+    path: 'transform',
+    loadComponent: () =>
+      import('./examples/transform.component').then(
+        (c) => c.TransformExampleComponent
+      ),
+  },
   { path: '**', pathMatch: 'full', redirectTo: 'animation' },
 ];
