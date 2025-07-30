@@ -30,8 +30,7 @@ type ExtStartConfig = StarConfig & { startScale: number };
       <br />
     </section>
   `,
-  standalone: true,
-  imports: [StageComponent, CoreShapeComponent, NgForOf, NgIf],
+    imports: [StageComponent, CoreShapeComponent]
 })
 export class StarExampleComponent implements OnInit {
   @ViewChild('layer') layer: CoreShapeComponent;

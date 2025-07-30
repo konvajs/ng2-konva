@@ -4,8 +4,7 @@ import { NgForOf } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, NgForOf, RouterLink],
+    imports: [RouterOutlet, RouterLink],
   template: `
     <ul>
       <li *ngFor="let link of links">

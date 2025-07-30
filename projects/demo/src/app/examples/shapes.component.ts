@@ -7,8 +7,8 @@ import { map, timer } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
-  selector: 'app-shapes-example',
-  template: `
+    selector: 'app-shapes-example',
+    template: `
     <br />
     <section>
       <ko-stage [config]="configStage">
@@ -19,8 +19,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
       <br />
     </section>
   `,
-  standalone: true,
-  imports: [StageComponent, CoreShapeComponent],
+    imports: [StageComponent, CoreShapeComponent]
 })
 export class ShapesExampleComponent {
   sub = timer(0, 1000)

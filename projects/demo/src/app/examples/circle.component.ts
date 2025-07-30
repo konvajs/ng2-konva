@@ -8,8 +8,8 @@ import {
 } from 'ng2-konva';
 
 @Component({
-  selector: 'app-circle-example',
-  template: `
+    selector: 'app-circle-example',
+    template: `
     <br />
     <section>
       <ko-stage [config]="configStage">
@@ -23,8 +23,7 @@ import {
       <br />
     </section>
   `,
-  standalone: true,
-  imports: [StageComponent, CoreShapeComponent],
+    imports: [StageComponent, CoreShapeComponent]
 })
 export class CircleExampleComponent implements OnInit {
   public configStage: Partial<StageConfig> = {

@@ -6,8 +6,8 @@ import { IFrame } from 'konva/lib/types';
 import { Animation } from 'konva/lib/Animation';
 
 @Component({
-  selector: 'app-animation-example',
-  template: `
+    selector: 'app-animation-example',
+    template: `
     <section>
       <ko-stage #stage [config]="configStage">
         <ko-layer #layer>
@@ -19,8 +19,7 @@ import { Animation } from 'konva/lib/Animation';
       </ko-stage>
     </section>
   `,
-  standalone: true,
-  imports: [StageComponent, CoreShapeComponent],
+    imports: [StageComponent, CoreShapeComponent]
 })
 export class AnimationExampleComponent implements AfterViewInit {
   @ViewChild('stage') stage: StageComponent;

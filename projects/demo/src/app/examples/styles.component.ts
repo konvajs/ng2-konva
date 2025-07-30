@@ -4,8 +4,8 @@ import { StageConfig } from 'konva/lib/Stage';
 import { RegularPolygonConfig } from 'konva/lib/shapes/RegularPolygon';
 
 @Component({
-  selector: 'app-styles-example',
-  template: `
+    selector: 'app-styles-example',
+    template: `
     <br />
     <section>
       <ko-stage [config]="configStage">
@@ -18,8 +18,7 @@ import { RegularPolygonConfig } from 'konva/lib/shapes/RegularPolygon';
       <br />
     </section>
   `,
-  standalone: true,
-  imports: [StageComponent, CoreShapeComponent],
+    imports: [StageComponent, CoreShapeComponent]
 })
 export class StylesExampleComponent {
   public configStage: Partial<StageConfig> = {

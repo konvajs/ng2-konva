@@ -9,8 +9,8 @@ import { RegularPolygonConfig } from 'konva/lib/shapes/RegularPolygon';
 import { TextConfig } from 'konva/lib/shapes/Text';
 
 @Component({
-  selector: 'app-event-example',
-  template: `
+    selector: 'app-event-example',
+    template: `
     <section>
       <ko-stage [config]="configStage">
         <ko-layer>
@@ -25,8 +25,7 @@ import { TextConfig } from 'konva/lib/shapes/Text';
       </ko-stage>
     </section>
   `,
-  standalone: true,
-  imports: [StageComponent, CoreShapeComponent],
+    imports: [StageComponent, CoreShapeComponent]
 })
 export class EventExampleComponent {
   public configStage: Partial<StageConfig> = {
