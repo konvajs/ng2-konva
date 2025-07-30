@@ -1,27 +1,23 @@
 /* eslint-disable @angular-eslint/no-output-native */
 import {
+  AfterContentChecked,
   Component,
-  Input,
-  Output,
-  EventEmitter,
-  ElementRef,
   ContentChildren,
-  QueryList,
+  ElementRef,
   OnDestroy,
   OnInit,
+  QueryList,
+  effect,
   inject,
-  AfterContentChecked,
+  input,
+  model,
+  output
 } from '@angular/core';
-import { getName, createListener, applyNodeProps } from '../utils/index';
-import { KonvaComponent } from '../interfaces/ko-component.interface';
-import { ShapeConfigTypes } from '../utils/configTypes';
-import { ShapeTypes } from '../utils/shapeTypes';
 import Konva from 'konva';
-import { updatePicture } from '../utils';
+import { FastLayer } from 'konva/lib/FastLayer';
 import { Group } from 'konva/lib/Group';
 import { Layer } from 'konva/lib/Layer';
 import { Shape } from 'konva/lib/Shape';
-import { Sprite, SpriteConfig } from 'konva/lib/shapes/Sprite';
 import { Arc } from 'konva/lib/shapes/Arc';
 import { Arrow } from 'konva/lib/shapes/Arrow';
 import { Circle } from 'konva/lib/shapes/Circle';
@@ -33,13 +29,18 @@ import { Path } from 'konva/lib/shapes/Path';
 import { Rect } from 'konva/lib/shapes/Rect';
 import { RegularPolygon } from 'konva/lib/shapes/RegularPolygon';
 import { Ring } from 'konva/lib/shapes/Ring';
+import { Sprite, SpriteConfig } from 'konva/lib/shapes/Sprite';
 import { Star } from 'konva/lib/shapes/Star';
 import { Text } from 'konva/lib/shapes/Text';
 import { TextPath } from 'konva/lib/shapes/TextPath';
 import { Transformer } from 'konva/lib/shapes/Transformer';
 import { Wedge } from 'konva/lib/shapes/Wedge';
-import { FastLayer } from 'konva/lib/FastLayer';
+import { KonvaComponent } from '../interfaces/ko-component.interface';
 import { NgKonvaEventObject } from '../interfaces/ngKonvaEventObject';
+import { updatePicture } from '../utils';
+import { ShapeConfigTypes } from '../utils/configTypes';
+import { applyNodeProps, createListener, getName } from '../utils/index';
+import { ShapeTypes } from '../utils/shapeTypes';
 import { PropsType } from '../utils/types';
 
 @Component({
@@ -53,52 +54,33 @@ export class CoreShapeComponent
 {
   @ContentChildren(CoreShapeComponent)
   shapes = new QueryList<CoreShapeComponent>();
-  @Input() set config(config: ShapeConfigTypes) {
-    this._config = config;
-    this.uploadKonva(config);
-  }
-  get config(): ShapeConfigTypes {
-    return this._config;
-  }
 
-  @Output() mouseover: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() mousemove: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() mouseout: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() mouseenter: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() mouseleave: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() mousedown: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() mouseup: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() wheel: EventEmitter<NgKonvaEventObject<WheelEvent>> =
-    new EventEmitter<NgKonvaEventObject<WheelEvent>>();
-  @Output() contextmenu: EventEmitter<NgKonvaEventObject<PointerEvent>> =
-    new EventEmitter<NgKonvaEventObject<PointerEvent>>();
-  @Output() click: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() dblclick: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() touchstart: EventEmitter<NgKonvaEventObject<TouchEvent>> =
-    new EventEmitter<NgKonvaEventObject<TouchEvent>>();
-  @Output() touchmove: EventEmitter<NgKonvaEventObject<TouchEvent>> =
-    new EventEmitter<NgKonvaEventObject<TouchEvent>>();
-  @Output() touchend: EventEmitter<NgKonvaEventObject<TouchEvent>> =
-    new EventEmitter<NgKonvaEventObject<TouchEvent>>();
-  @Output() tap: EventEmitter<NgKonvaEventObject<TouchEvent>> =
-    new EventEmitter<NgKonvaEventObject<TouchEvent>>();
-  @Output() dbltap: EventEmitter<NgKonvaEventObject<TouchEvent>> =
-    new EventEmitter<NgKonvaEventObject<TouchEvent>>();
-  @Output() dragstart: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() dragmove: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() dragend: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
+  public readonly config = model<ShapeConfigTypes>();
+  #onConfigChange = effect(() => {
+    const config = this.config();
+    if (!config) return;
+    this.uploadKonva(config)
+  });
+
+  readonly mouseover = output<NgKonvaEventObject<MouseEvent>>();
+  readonly mousemove = output<NgKonvaEventObject<MouseEvent>>();
+  readonly mouseout = output<NgKonvaEventObject<MouseEvent>>();
+  readonly mouseenter = output<NgKonvaEventObject<MouseEvent>>();
+  readonly mouseleave = output<NgKonvaEventObject<MouseEvent>>();
+  readonly mousedown = output<NgKonvaEventObject<MouseEvent>>();
+  readonly mouseup = output<NgKonvaEventObject<MouseEvent>>();
+  readonly wheel = output<NgKonvaEventObject<WheelEvent>>();
+  readonly contextmenu = output<NgKonvaEventObject<PointerEvent>>();
+  readonly click = output<NgKonvaEventObject<MouseEvent>>();
+  readonly dblclick = output<NgKonvaEventObject<MouseEvent>>();
+  readonly touchstart = output<NgKonvaEventObject<TouchEvent>>();
+  readonly touchmove = output<NgKonvaEventObject<TouchEvent>>();
+  readonly touchend = output<NgKonvaEventObject<TouchEvent>>();
+  readonly tap = output<NgKonvaEventObject<TouchEvent>>();
+  readonly dbltap = output<NgKonvaEventObject<TouchEvent>>();
+  readonly dragstart = output<NgKonvaEventObject<MouseEvent>>();
+  readonly dragmove = output<NgKonvaEventObject<MouseEvent>>();
+  readonly dragend = output<NgKonvaEventObject<MouseEvent>>();
 
   public nameNode: keyof typeof ShapeTypes | 'Shape' | 'Sprite' = getName(
     inject(ElementRef).nativeElement.localName
@@ -128,7 +110,6 @@ export class CoreShapeComponent
     | Group
     | Layer
     | FastLayer;
-  protected _config: ShapeConfigTypes;
 
   public getStage():
     | Shape
@@ -157,7 +138,7 @@ export class CoreShapeComponent
   }
 
   public getConfig(): ShapeConfigTypes {
-    return this._config || {};
+    return this.config() || {};
   }
 
   ngOnInit(): void {
@@ -171,7 +152,7 @@ export class CoreShapeComponent
     if (this.nameNode === 'Shape') {
       this._stage = new Shape();
     } else if (this.nameNode === 'Sprite') {
-      this._stage = new Sprite(this.config as SpriteConfig);
+      this._stage = new Sprite(this.config() as SpriteConfig);
     } else {
       this._stage = new Konva[this.nameNode](undefined);
     }
@@ -182,15 +163,19 @@ export class CoreShapeComponent
       animationStage(newConfig);
       setTimeout(() => {
         Object.keys(this._stage.attrs).forEach((key) => {
-          if (typeof this._stage.attrs[key] !== 'function') {
-            this.config[key] = this._stage.attrs[key];
+          if (typeof this._stage.attrs[key] !== 'function' && this.config()) {
+            this.config.update((config) => ({
+              ...config,
+              [key]: this._stage.attrs[key],
+            }));
           }
         });
       }, 200);
     };
 
-    if (this._config) {
-      this.uploadKonva(this.config);
+    const config = this.config();
+    if (config) {
+      this.uploadKonva(config);
     }
   }
 

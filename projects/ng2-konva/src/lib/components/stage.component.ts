@@ -1,24 +1,24 @@
 /* eslint-disable @angular-eslint/no-output-native */
 import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
   AfterContentInit,
-  ElementRef,
+  Component,
   ContentChildren,
-  QueryList,
+  ElementRef,
   OnDestroy,
+  QueryList,
+  effect,
   inject,
+  input,
+  output
 } from '@angular/core';
-import { CoreShapeComponent as CoreShape } from './core-shape.component';
-import { updatePicture, createListener, applyNodeProps } from '../utils/index';
-import { KonvaComponent } from '../interfaces/ko-component.interface';
-import { Stage } from 'konva/lib/Stage';
-import { Layer } from 'konva/lib/Layer';
 import { ContainerConfig } from 'konva/lib/Container';
+import { Layer } from 'konva/lib/Layer';
+import { Stage } from 'konva/lib/Stage';
+import { KonvaComponent } from '../interfaces/ko-component.interface';
 import { NgKonvaEventObject } from '../interfaces/ngKonvaEventObject';
+import { applyNodeProps, createListener, updatePicture } from '../utils/index';
 import { PropsType } from '../utils/types';
+import { CoreShapeComponent as CoreShape } from './core-shape.component';
 
 @Component({
   selector: 'ko-stage',
@@ -30,8 +30,11 @@ export class StageComponent
 {
   private nodeContainer = inject(ElementRef).nativeElement;
   @ContentChildren(CoreShape) shapes = new QueryList<CoreShape>();
-  @Input() set config(config: ContainerConfig) {
-    this._config = config;
+
+  public readonly config = input<ContainerConfig>();
+  #onConfigChange = effect(() => {
+    const config = this.config();
+    if (!config) return;
     if (!this._stage) {
       this._stage = new Stage({
         ...config,
@@ -41,49 +44,29 @@ export class StageComponent
     } else {
       this.uploadKonva(config);
     }
-  }
+  });
 
-  @Output() mouseover: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() mousemove: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() mouseout: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() mouseenter: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() mouseleave: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() mousedown: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() mouseup: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() wheel: EventEmitter<NgKonvaEventObject<WheelEvent>> =
-    new EventEmitter<NgKonvaEventObject<WheelEvent>>();
-  @Output() contextmenu: EventEmitter<NgKonvaEventObject<PointerEvent>> =
-    new EventEmitter<NgKonvaEventObject<PointerEvent>>();
-  @Output() click: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() dblclick: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() touchstart: EventEmitter<NgKonvaEventObject<TouchEvent>> =
-    new EventEmitter<NgKonvaEventObject<TouchEvent>>();
-  @Output() touchmove: EventEmitter<NgKonvaEventObject<TouchEvent>> =
-    new EventEmitter<NgKonvaEventObject<TouchEvent>>();
-  @Output() touchend: EventEmitter<NgKonvaEventObject<TouchEvent>> =
-    new EventEmitter<NgKonvaEventObject<TouchEvent>>();
-  @Output() tap: EventEmitter<NgKonvaEventObject<TouchEvent>> =
-    new EventEmitter<NgKonvaEventObject<TouchEvent>>();
-  @Output() dbltap: EventEmitter<NgKonvaEventObject<TouchEvent>> =
-    new EventEmitter<NgKonvaEventObject<TouchEvent>>();
-  @Output() dragstart: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() dragmove: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
-  @Output() dragend: EventEmitter<NgKonvaEventObject<MouseEvent>> =
-    new EventEmitter<NgKonvaEventObject<MouseEvent>>();
+  readonly mouseover = output<NgKonvaEventObject<MouseEvent>>();
+  readonly mousemove = output<NgKonvaEventObject<MouseEvent>>();
+  readonly mouseout = output<NgKonvaEventObject<MouseEvent>>();
+  readonly mouseenter = output<NgKonvaEventObject<MouseEvent>>();
+  readonly mouseleave = output<NgKonvaEventObject<MouseEvent>>();
+  readonly mousedown = output<NgKonvaEventObject<MouseEvent>>();
+  readonly mouseup = output<NgKonvaEventObject<MouseEvent>>();
+  readonly wheel = output<NgKonvaEventObject<WheelEvent>>();
+  readonly contextmenu = output<NgKonvaEventObject<PointerEvent>>();
+  readonly click = output<NgKonvaEventObject<MouseEvent>>();
+  readonly dblclick = output<NgKonvaEventObject<MouseEvent>>();
+  readonly touchstart = output<NgKonvaEventObject<TouchEvent>>();
+  readonly touchmove = output<NgKonvaEventObject<TouchEvent>>();
+  readonly touchend = output<NgKonvaEventObject<TouchEvent>>();
+  readonly tap = output<NgKonvaEventObject<TouchEvent>>();
+  readonly dbltap = output<NgKonvaEventObject<TouchEvent>>();
+  readonly dragstart = output<NgKonvaEventObject<MouseEvent>>();
+  readonly dragmove = output<NgKonvaEventObject<MouseEvent>>();
+  readonly dragend = output<NgKonvaEventObject<MouseEvent>>();
 
   private _stage: Stage;
-  private _config: ContainerConfig;
   private cacheProps: PropsType = {};
 
   public getStage(): Stage {
@@ -91,7 +74,7 @@ export class StageComponent
   }
 
   public getConfig(): ContainerConfig {
-    return this._config;
+    return this.config() || {};
   }
 
   private uploadKonva(config: ContainerConfig): void {
