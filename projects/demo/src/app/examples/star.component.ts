@@ -1,5 +1,5 @@
 
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, viewChild } from '@angular/core';
 import Konva from 'konva';
 import { StarConfig } from 'konva/lib/shapes/Star';
 import { StageConfig } from 'konva/lib/Stage';
@@ -34,8 +34,8 @@ type ExtStartConfig = StarConfig & { startScale: number };
     imports: [StageComponent, CoreShapeComponent]
 })
 export class StarExampleComponent implements OnInit {
-  @ViewChild('layer') layer: CoreShapeComponent;
-  @ViewChild('dragLayer') dragLayer: CoreShapeComponent;
+  readonly layer = viewChild.required<CoreShapeComponent>('layer');
+  readonly dragLayer = viewChild.required<CoreShapeComponent>('dragLayer');
 
   public width = 800;
   public height = 800;
@@ -51,7 +51,7 @@ export class StarExampleComponent implements OnInit {
     config: ExtStartConfig
   ): void {
     const shape = event.angularComponent.getStage();
-    const dragLayer = this.dragLayer.getStage();
+    const dragLayer = this.dragLayer().getStage();
 
     // moving to another layer will improve dragging performance
     shape.moveTo(dragLayer);
@@ -75,7 +75,7 @@ export class StarExampleComponent implements OnInit {
     config: ExtStartConfig
   ): void {
     const shape = event.angularComponent.getStage();
-    const layer = this.layer.getStage();
+    const layer = this.layer().getStage();
 
     shape.moveTo(layer);
 

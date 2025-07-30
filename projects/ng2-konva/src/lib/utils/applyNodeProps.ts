@@ -1,10 +1,10 @@
 // adapted FROM: https://github.com/lavrton/react-konva/blob/master/src/react-konva-fiber.js
 
-import updatePicture from './updatePicture';
-import { KonvaComponent } from '../interfaces/ko-component.interface';
 import { KonvaEventObject } from 'konva/lib/Node';
+import { KonvaComponent } from '../interfaces/ko-component.interface';
 import { NgKonvaEventObject } from '../interfaces/ngKonvaEventObject';
 import { PropsType } from './types';
+import updatePicture from './updatePicture';
 
 export default function applyNodeProps(
   component: KonvaComponent,

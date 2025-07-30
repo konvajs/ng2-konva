@@ -1,15 +1,11 @@
 /* eslint-disable @angular-eslint/no-output-native */
 import {
-  AfterContentChecked,
   Component,
-  ContentChildren,
   ElementRef,
   OnDestroy,
-  OnInit,
-  QueryList,
+  contentChildren,
   effect,
   inject,
-  input,
   model,
   output
 } from '@angular/core';
@@ -46,14 +42,12 @@ import { PropsType } from '../utils/types';
 @Component({
   selector:
     'ko-shape, ko-layer, ko-circle, ko-fastlayer, ko-group, ko-label, ko-rect, ko-ellipse, ko-wedge, ko-line, ko-sprite, ko-image, ko-text, ko-text-path, ko-star, ko-ring, ko-arc, ko-tag, ko-path, ko-regular-polygon, ko-arrow, ko-transformer',
-  standalone: true,
   template: `<div><ng-content></ng-content></div>`,
 })
 export class CoreShapeComponent
-  implements KonvaComponent, AfterContentChecked, OnDestroy, OnInit
+  implements KonvaComponent, OnDestroy
 {
-  @ContentChildren(CoreShapeComponent)
-  shapes = new QueryList<CoreShapeComponent>();
+  readonly shapes = contentChildren(CoreShapeComponent);
 
   public readonly config = model<ShapeConfigTypes>();
   #onConfigChange = effect(() => {
@@ -141,7 +135,7 @@ export class CoreShapeComponent
     return this.config() || {};
   }
 
-  ngOnInit(): void {
+  constructor() {
     this.initKonva();
   }
 
@@ -189,16 +183,16 @@ export class CoreShapeComponent
     this.cacheProps = props;
   }
 
-  ngAfterContentChecked(): void {
-    this.shapes.forEach((item: CoreShapeComponent) => {
-      if (this !== item) {
+  #onShapesChange = effect(() => {
+    this.shapes().forEach((item: CoreShapeComponent) => {
+      if (this !== item ) {
         if (this._stage instanceof Group || this._stage instanceof Layer) {
           this._stage.add(item.getStage());
         }
         updatePicture(this._stage);
       }
     });
-  }
+  });
 
   ngOnDestroy(): void {
     this._stage.destroy();

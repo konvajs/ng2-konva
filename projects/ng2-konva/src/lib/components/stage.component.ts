@@ -1,11 +1,9 @@
 /* eslint-disable @angular-eslint/no-output-native */
 import {
-  AfterContentInit,
   Component,
-  ContentChildren,
   ElementRef,
   OnDestroy,
-  QueryList,
+  contentChildren,
   effect,
   inject,
   input,
@@ -22,14 +20,13 @@ import { CoreShapeComponent as CoreShape } from './core-shape.component';
 
 @Component({
   selector: 'ko-stage',
-  standalone: true,
   template: `<div><ng-content></ng-content></div>`,
 })
 export class StageComponent
-  implements KonvaComponent, AfterContentInit, OnDestroy
+  implements KonvaComponent, OnDestroy
 {
   private nodeContainer = inject(ElementRef).nativeElement;
-  @ContentChildren(CoreShape) shapes = new QueryList<CoreShape>();
+  readonly shapes = contentChildren(CoreShape);
 
   public readonly config = input<ContainerConfig>();
   #onConfigChange = effect(() => {
@@ -86,15 +83,15 @@ export class StageComponent
     this.cacheProps = props;
   }
 
-  ngAfterContentInit(): void {
-    this.shapes.forEach((item: CoreShape) => {
+  #onShapesChange = effect(() => {
+    this.shapes().forEach((item: CoreShape) => {
       if (!(item.getStage() instanceof Layer)) {
         throw 'You can only add Layer Nodes to Stage Nodes!';
       }
       this._stage.add(<Layer>item.getStage());
       updatePicture(this._stage);
     });
-  }
+  });
 
   ngOnDestroy(): void {
     this._stage.destroy();

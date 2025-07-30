@@ -1,8 +1,8 @@
-import updatePicture from './updatePicture';
-import applyNodeProps from './applyNodeProps';
-import { KonvaComponent } from '../interfaces/ko-component.interface';
 import { EventEmitter } from '@angular/core';
+import { KonvaComponent } from '../interfaces/ko-component.interface';
+import applyNodeProps from './applyNodeProps';
 import { ListenerRecord } from './types';
+import updatePicture from './updatePicture';
 
 function camelize(str: string): string {
   return str
@@ -50,11 +50,10 @@ export function createListener(instance: KonvaComponent): ListenerRecord {
     const eventEmitter: EventEmitter<unknown> = <EventEmitter<unknown>>(
       instance[name]
     );
-    if (eventEmitter.observed) {
-      output['on' + eventName] = eventEmitter.emit.bind(eventEmitter);
-    }
+    output['on' + eventName] = eventEmitter.emit.bind(eventEmitter);
   });
   return output;
 }
 
-export { updatePicture, applyNodeProps };
+export { applyNodeProps, updatePicture };
+

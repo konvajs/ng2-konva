@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
+import { StageConfig } from 'konva/lib/Stage';
+import { RegularPolygonConfig } from 'konva/lib/shapes/RegularPolygon';
+import { TextConfig } from 'konva/lib/shapes/Text';
 import {
   CoreShapeComponent,
   NgKonvaEventObject,
   StageComponent,
 } from 'ng2-konva';
-import { StageConfig } from 'konva/lib/Stage';
-import { RegularPolygonConfig } from 'konva/lib/shapes/RegularPolygon';
-import { TextConfig } from 'konva/lib/shapes/Text';
 
 @Component({
     selector: 'app-event-example',
