@@ -1,18 +1,20 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { NgForOf } from '@angular/common';
+
 
 @Component({
-  selector: 'app-root',
+    selector: 'app-root',
     imports: [RouterOutlet, RouterLink],
-  template: `
+    template: `
     <ul>
-      <li *ngFor="let link of links">
-        <a [routerLink]="link.route">{{ link.label }}</a>
-      </li>
+      @for (link of links; track link) {
+        <li>
+          <a [routerLink]="link.route">{{ link.label }}</a>
+        </li>
+      }
     </ul>
     <router-outlet />
-  `,
+    `
 })
 export class AppComponent {
   links = [

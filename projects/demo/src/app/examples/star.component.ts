@@ -1,35 +1,36 @@
+
 import { Component, OnInit, ViewChild } from '@angular/core';
+import Konva from 'konva';
+import { StarConfig } from 'konva/lib/shapes/Star';
+import { StageConfig } from 'konva/lib/Stage';
 import {
   CoreShapeComponent,
   NgKonvaEventObject,
   StageComponent,
 } from 'ng2-konva';
-import { StageConfig } from 'konva/lib/Stage';
-import { NgForOf, NgIf } from '@angular/common';
-import { StarConfig } from 'konva/lib/shapes/Star';
-import Konva from 'konva';
 
 type ExtStartConfig = StarConfig & { startScale: number };
 
 @Component({
-  selector: 'app-star-example',
-  template: `
+    selector: 'app-star-example',
+    template: `
     <br />
     <section>
       <ko-stage [config]="configStage">
         <ko-layer #layer>
-          <ko-star
-            *ngFor="let config of starConfigs; trackBy: trackConfig"
-            (dragstart)="handleDragstart($event, config)"
-            (dragend)="handleDragend($event, config)"
-            [config]="config"
-          />
+          @for (config of starConfigs; track trackConfig($index, config)) {
+            <ko-star
+              (dragstart)="handleDragstart($event, config)"
+              (dragend)="handleDragend($event, config)"
+              [config]="config"
+              />
+          }
         </ko-layer>
         <ko-layer #dragLayer></ko-layer>
       </ko-stage>
       <br />
     </section>
-  `,
+    `,
     imports: [StageComponent, CoreShapeComponent]
 })
 export class StarExampleComponent implements OnInit {
