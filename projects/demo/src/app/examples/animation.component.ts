@@ -6,8 +6,8 @@ import { IFrame } from 'konva/lib/types';
 import { CoreShapeComponent, StageComponent } from 'ng2-konva';
 
 @Component({
-    selector: 'app-animation-example',
-    template: `
+  selector: 'app-animation-example',
+  template: `
     <section>
       <ko-stage #stage [config]="configStage">
         <ko-layer #layer>
@@ -19,7 +19,7 @@ import { CoreShapeComponent, StageComponent } from 'ng2-konva';
       </ko-stage>
     </section>
   `,
-    imports: [StageComponent, CoreShapeComponent]
+  imports: [StageComponent, CoreShapeComponent],
 })
 export class AnimationExampleComponent implements AfterViewInit {
   readonly stage = viewChild.required<StageComponent>('stage');

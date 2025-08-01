@@ -7,7 +7,7 @@ import {
   effect,
   inject,
   model,
-  output
+  output,
 } from '@angular/core';
 import Konva from 'konva';
 import { FastLayer } from 'konva/lib/FastLayer';
@@ -44,16 +44,14 @@ import { PropsType } from '../utils/types';
     'ko-shape, ko-layer, ko-circle, ko-fastlayer, ko-group, ko-label, ko-rect, ko-ellipse, ko-wedge, ko-line, ko-sprite, ko-image, ko-text, ko-text-path, ko-star, ko-ring, ko-arc, ko-tag, ko-path, ko-regular-polygon, ko-arrow, ko-transformer',
   template: `<div><ng-content></ng-content></div>`,
 })
-export class CoreShapeComponent
-  implements KonvaComponent, OnDestroy
-{
+export class CoreShapeComponent implements KonvaComponent, OnDestroy {
   readonly shapes = contentChildren(CoreShapeComponent);
 
   public readonly config = model<ShapeConfigTypes>();
   #onConfigChange = effect(() => {
     const config = this.config();
     if (!config) return;
-    this.uploadKonva(config)
+    this.uploadKonva(config);
   });
 
   readonly mouseover = output<NgKonvaEventObject<MouseEvent>>();
@@ -77,7 +75,7 @@ export class CoreShapeComponent
   readonly dragend = output<NgKonvaEventObject<MouseEvent>>();
 
   public nameNode: keyof typeof ShapeTypes | 'Shape' | 'Sprite' = getName(
-    inject(ElementRef).nativeElement.localName
+    inject(ElementRef).nativeElement.localName,
   ) as keyof typeof ShapeTypes | 'Shape' | 'Sprite';
 
   private cacheProps: PropsType = {};
@@ -185,7 +183,7 @@ export class CoreShapeComponent
 
   #onShapesChange = effect(() => {
     this.shapes().forEach((item: CoreShapeComponent) => {
-      if (this !== item ) {
+      if (this !== item) {
         if (this._stage instanceof Group || this._stage instanceof Layer) {
           this._stage.add(item.getStage());
         }

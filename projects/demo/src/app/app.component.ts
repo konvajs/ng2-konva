@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 
-
 @Component({
-    selector: 'app-root',
-    imports: [RouterOutlet, RouterLink],
-    template: `
+  selector: 'app-root',
+  imports: [RouterOutlet, RouterLink],
+  template: `
     <ul>
       @for (link of links; track link) {
         <li>
@@ -14,7 +13,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
       }
     </ul>
     <router-outlet />
-    `
+  `,
 })
 export class AppComponent {
   links = [

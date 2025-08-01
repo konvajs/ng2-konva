@@ -9,7 +9,7 @@ import updatePicture from './updatePicture';
 export default function applyNodeProps(
   component: KonvaComponent,
   props: PropsType = {},
-  oldProps: PropsType = {}
+  oldProps: PropsType = {},
 ): void {
   if ('id' in props) {
     const message = `ng2-konva: You are using "id" attribute for Konva node. In some very rare cases it may produce bugs. Currently we recommend not to use it and use "name" attribute instead.`;

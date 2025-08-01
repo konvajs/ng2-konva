@@ -5,14 +5,14 @@ export const routes: Routes = [
     path: 'animation',
     loadComponent: () =>
       import('./examples/animation.component').then(
-        (c) => c.AnimationExampleComponent
+        (c) => c.AnimationExampleComponent,
       ),
   },
   {
     path: 'circle',
     loadComponent: () =>
       import('./examples/circle.component').then(
-        (c) => c.CircleExampleComponent
+        (c) => c.CircleExampleComponent,
       ),
   },
   {
@@ -24,7 +24,7 @@ export const routes: Routes = [
     path: 'shapes',
     loadComponent: () =>
       import('./examples/shapes.component').then(
-        (c) => c.ShapesExampleComponent
+        (c) => c.ShapesExampleComponent,
       ),
   },
   {
@@ -36,7 +36,7 @@ export const routes: Routes = [
     path: 'styles',
     loadComponent: () =>
       import('./examples/styles.component').then(
-        (c) => c.StylesExampleComponent
+        (c) => c.StylesExampleComponent,
       ),
   },
   { path: '**', pathMatch: 'full', redirectTo: 'animation' },

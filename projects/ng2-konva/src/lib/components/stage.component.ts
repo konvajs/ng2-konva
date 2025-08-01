@@ -7,7 +7,7 @@ import {
   effect,
   inject,
   input,
-  output
+  output,
 } from '@angular/core';
 import { ContainerConfig } from 'konva/lib/Container';
 import { Layer } from 'konva/lib/Layer';
@@ -22,9 +22,7 @@ import { CoreShapeComponent as CoreShape } from './core-shape.component';
   selector: 'ko-stage',
   template: `<div><ng-content></ng-content></div>`,
 })
-export class StageComponent
-  implements KonvaComponent, OnDestroy
-{
+export class StageComponent implements KonvaComponent, OnDestroy {
   private nodeContainer = inject(ElementRef).nativeElement;
   readonly shapes = contentChildren(CoreShape);
 

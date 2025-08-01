@@ -13,9 +13,7 @@
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "paths": {
-      "ng2-konva": [
-        "./projects/ng2-konva/src/public-api.ts"
-      ]
+      "ng2-konva": ["./projects/ng2-konva/src/public-api.ts"],
     },
     "declaration": false,
     "experimentalDecorators": true,
@@ -24,16 +22,13 @@
     "target": "ES2022",
     "module": "ES2022",
     "useDefineForClassFields": true,
-    "lib": [
-      "ES2022",
-      "dom"
-    ],
-    "strictPropertyInitialization": false
+    "lib": ["ES2022", "dom"],
+    "strictPropertyInitialization": false,
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": true
-  }
+    "strictTemplates": true,
+  },
 }

@@ -9,8 +9,8 @@ import {
 } from 'ng2-konva';
 
 @Component({
-    selector: 'app-event-example',
-    template: `
+  selector: 'app-event-example',
+  template: `
     <section>
       <ko-stage [config]="configStage">
         <ko-layer>
@@ -25,7 +25,7 @@ import {
       </ko-stage>
     </section>
   `,
-    imports: [StageComponent, CoreShapeComponent]
+  imports: [StageComponent, CoreShapeComponent],
 })
 export class EventExampleComponent {
   public configStage: Partial<StageConfig> = {

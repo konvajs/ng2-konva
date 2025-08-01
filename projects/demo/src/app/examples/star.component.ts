@@ -1,4 +1,3 @@
-
 import { Component, OnInit, viewChild } from '@angular/core';
 import Konva from 'konva';
 import { StarConfig } from 'konva/lib/shapes/Star';
@@ -12,8 +11,8 @@ import {
 type ExtStartConfig = StarConfig & { startScale: number };
 
 @Component({
-    selector: 'app-star-example',
-    template: `
+  selector: 'app-star-example',
+  template: `
     <br />
     <section>
       <ko-stage [config]="configStage">
@@ -23,15 +22,15 @@ type ExtStartConfig = StarConfig & { startScale: number };
               (dragstart)="handleDragstart($event, config)"
               (dragend)="handleDragend($event, config)"
               [config]="config"
-              />
+            />
           }
         </ko-layer>
         <ko-layer #dragLayer></ko-layer>
       </ko-stage>
       <br />
     </section>
-    `,
-    imports: [StageComponent, CoreShapeComponent]
+  `,
+  imports: [StageComponent, CoreShapeComponent],
 })
 export class StarExampleComponent implements OnInit {
   readonly layer = viewChild.required<CoreShapeComponent>('layer');
@@ -48,7 +47,7 @@ export class StarExampleComponent implements OnInit {
 
   public handleDragstart(
     event: NgKonvaEventObject<MouseEvent>,
-    config: ExtStartConfig
+    config: ExtStartConfig,
   ): void {
     const shape = event.angularComponent.getStage();
     const dragLayer = this.dragLayer().getStage();
@@ -72,7 +71,7 @@ export class StarExampleComponent implements OnInit {
 
   public handleDragend(
     event: NgKonvaEventObject<MouseEvent>,
-    config: ExtStartConfig
+    config: ExtStartConfig,
   ): void {
     const shape = event.angularComponent.getStage();
     const layer = this.layer().getStage();
