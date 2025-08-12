@@ -1,8 +1,8 @@
-import updatePicture from './updatePicture';
-import applyNodeProps from './applyNodeProps';
+import { OutputEmitterRef } from '@angular/core';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
-import { EventEmitter } from '@angular/core';
+import applyNodeProps from './applyNodeProps';
 import { ListenerRecord } from './types';
+import updatePicture from './updatePicture';
 
 function camelize(str: string): string {
   return str
@@ -18,7 +18,7 @@ function capitalizeFirstLetter(string: string): string {
 
 export function getName(componentTag: string): string {
   return capitalizeFirstLetter(
-    camelize(componentTag.slice(3).replace('-', ' '))
+    camelize(componentTag.slice(3).replace('-', ' ')),
   );
 }
 
@@ -47,14 +47,14 @@ export function createListener(instance: KonvaComponent): ListenerRecord {
   ].forEach((eventName) => {
     const name: keyof KonvaComponent = <keyof KonvaComponent>eventName;
 
-    const eventEmitter: EventEmitter<unknown> = <EventEmitter<unknown>>(
-      instance[name]
-    );
-    if (eventEmitter.observed) {
-      output['on' + eventName] = eventEmitter.emit.bind(eventEmitter);
+    const outputEmitter: OutputEmitterRef<unknown> = <
+      OutputEmitterRef<unknown>
+    >instance[name];
+    if (outputEmitter['listeners']?.length > 0) {
+      output['on' + eventName] = outputEmitter.emit.bind(outputEmitter);
     }
   });
   return output;
 }
 
-export { updatePicture, applyNodeProps };
+export { applyNodeProps, updatePicture };

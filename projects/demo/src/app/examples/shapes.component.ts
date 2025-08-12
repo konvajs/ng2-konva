@@ -19,7 +19,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
       <br />
     </section>
   `,
-  standalone: true,
   imports: [StageComponent, CoreShapeComponent],
 })
 export class ShapesExampleComponent {
@@ -27,10 +26,10 @@ export class ShapesExampleComponent {
     .pipe(
       takeUntilDestroyed(),
       map((c) => c % this.colors.length),
-      map((c) => this.colors[c])
+      map((c) => this.colors[c]),
     )
     .subscribe(
-      (color) => (this.configShape = { ...this.configShape, fill: color })
+      (color) => (this.configShape = { ...this.configShape, fill: color }),
     );
 
   colors = ['#00D2FF', '#00D200', '#FFD200'];

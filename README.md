@@ -1,4 +1,5 @@
 # ng2-konva
+
 <span class="badge-npmdownloads">
   <a href="https://www.npmjs.com/package/ng2-konva">
     <img src="https://img.shields.io/npm/v/ng2-konva.svg" alt="Version">
@@ -84,13 +85,13 @@ export class CircleExampleComponent {
 ```
 
 ## Demo
+
 You can find more examples in the demo project located in `projects/demo`.
 
 ## Related repositories
 
-* [react-konva](https://github.com/lavrton/react-konva) - React + Konva
-* [vue-konva](http://rafaelescala.com/vue-konva-doc/) - Vue + Konva
-
+- [react-konva](https://github.com/lavrton/react-konva) - React + Konva
+- [vue-konva](http://rafaelescala.com/vue-konva-doc/) - Vue + Konva
 
 ## License
 

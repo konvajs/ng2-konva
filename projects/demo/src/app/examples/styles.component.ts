@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { CoreShapeComponent, StageComponent } from 'ng2-konva';
 import { StageConfig } from 'konva/lib/Stage';
 import { RegularPolygonConfig } from 'konva/lib/shapes/RegularPolygon';
+import { CoreShapeComponent, StageComponent } from 'ng2-konva';
 
 @Component({
   selector: 'app-styles-example',
@@ -9,7 +9,7 @@ import { RegularPolygonConfig } from 'konva/lib/shapes/RegularPolygon';
     <br />
     <section>
       <ko-stage [config]="configStage">
-        <ko-layer>
+        <ko-layer [config]="{ id: 'layer1' }">
           <ko-regular-polygon
             [config]="configRegularPolygon"
           ></ko-regular-polygon>
@@ -18,7 +18,6 @@ import { RegularPolygonConfig } from 'konva/lib/shapes/RegularPolygon';
       <br />
     </section>
   `,
-  standalone: true,
   imports: [StageComponent, CoreShapeComponent],
 })
 export class StylesExampleComponent {

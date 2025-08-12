@@ -23,7 +23,6 @@ import {
       <br />
     </section>
   `,
-  standalone: true,
   imports: [StageComponent, CoreShapeComponent],
 })
 export class CircleExampleComponent implements OnInit {
