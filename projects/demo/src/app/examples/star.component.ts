@@ -53,7 +53,7 @@ export class StarExampleComponent implements OnInit {
     const dragLayer = this.dragLayer().getStage();
 
     // moving to another layer will improve dragging performance
-    shape.moveTo(dragLayer);
+    // shape.moveTo(dragLayer);
 
     this.starConfigs = this.starConfigs.map((conf) => {
       if (config.name === undefined || conf.name !== config.name) {
@@ -67,6 +67,10 @@ export class StarExampleComponent implements OnInit {
         scaleY: conf.startScale * 1.2,
       };
     });
+    this.starConfigs = [
+      ...this.starConfigs.filter((conf) => conf.name !== config.name),
+      this.starConfigs.find((conf) => conf.name === config.name)!,
+    ];
   }
 
   public handleDragend(

@@ -129,6 +129,32 @@ export class CoreShapeComponent implements KonvaComponent, OnDestroy {
     return this._stage;
   }
 
+  public getNode():
+    | Shape
+    | Arc
+    | Arrow
+    | Circle
+    | Ellipse
+    | Image
+    | Label
+    | Tag
+    | Line
+    | Path
+    | Rect
+    | RegularPolygon
+    | Ring
+    | Sprite
+    | Star
+    | Text
+    | TextPath
+    | Transformer
+    | Wedge
+    | Group
+    | Layer
+    | FastLayer {
+    return this._stage;
+  }
+
   public getConfig(): ShapeConfigTypes {
     return this.config() || {};
   }
@@ -182,11 +208,12 @@ export class CoreShapeComponent implements KonvaComponent, OnDestroy {
   }
 
   #onShapesChange = effect(() => {
-    this.shapes().forEach((item: CoreShapeComponent) => {
+    this.shapes().forEach((item: CoreShapeComponent, index: number) => {
       if (this !== item) {
         if (this._stage instanceof Group || this._stage instanceof Layer) {
           this._stage.add(item.getStage());
         }
+        item.getStage().zIndex(index);
         updatePicture(this._stage);
       }
     });

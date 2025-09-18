@@ -68,6 +68,10 @@ export class StageComponent implements KonvaComponent, OnDestroy {
     return this._stage;
   }
 
+  public getNode(): Stage {
+    return this._stage;
+  }
+
   public getConfig(): ContainerConfig {
     return this.config() || {};
   }
@@ -82,11 +86,12 @@ export class StageComponent implements KonvaComponent, OnDestroy {
   }
 
   #onShapesChange = effect(() => {
-    this.shapes().forEach((item: CoreShape) => {
+    this.shapes().forEach((item: CoreShape, index: number) => {
       if (!(item.getStage() instanceof Layer)) {
         throw 'You can only add Layer Nodes to Stage Nodes!';
       }
       this._stage.add(<Layer>item.getStage());
+      item.getStage().zIndex(index);
       updatePicture(this._stage);
     });
   });

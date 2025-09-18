@@ -49,6 +49,30 @@ export abstract class KonvaComponent extends Component {
     | Group
     | Layer
     | FastLayer;
+  getNode: () =>
+    | Stage
+    | Shape
+    | Arc
+    | Arrow
+    | Circle
+    | Ellipse
+    | Image
+    | Label
+    | Tag
+    | Line
+    | Path
+    | Rect
+    | RegularPolygon
+    | Ring
+    | Sprite
+    | Star
+    | Text
+    | TextPath
+    | Transformer
+    | Wedge
+    | Group
+    | Layer
+    | FastLayer;
   getConfig: () => ShapeConfigTypes;
   config: ShapeConfigTypes;
 
