@@ -24,7 +24,7 @@ To get more info about `Konva` you can read [Konva Overview](http://konvajs.gith
 
 ## Documentation
 
-[http://rafaelescala.com/ng2-konva/](http://rafaelescala.com/ng2-konva/)
+[https://konvajs.org/docs/angular/index.html](https://konvajs.org/docs/angular/index.html)
 
 ## Installation
 
