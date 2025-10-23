@@ -60,6 +60,9 @@ export class StageComponent implements KonvaComponent, OnDestroy {
   readonly dragstart = output<NgKonvaEventObject<MouseEvent>>();
   readonly dragmove = output<NgKonvaEventObject<MouseEvent>>();
   readonly dragend = output<NgKonvaEventObject<MouseEvent>>();
+  readonly transformstart = output<NgKonvaEventObject<MouseEvent>>();
+  readonly transform = output<NgKonvaEventObject<MouseEvent>>();
+  readonly transformend = output<NgKonvaEventObject<MouseEvent>>();
 
   private _stage: Stage;
   private cacheProps: PropsType = {};

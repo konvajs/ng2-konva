@@ -44,6 +44,9 @@ export function createListener(instance: KonvaComponent): ListenerRecord {
     'dragstart',
     'dragmove',
     'dragend',
+    'transformstart',
+    'transform',
+    'transformend',
   ].forEach((eventName) => {
     const name: keyof KonvaComponent = <keyof KonvaComponent>eventName;
 
