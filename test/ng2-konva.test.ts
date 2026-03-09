@@ -654,6 +654,82 @@ describe('List rendering and reordering', () => {
 });
 
 describe('Multiple stages', () => {
+  it('updates ko-image when config.image is assigned after initial render (signal)', async () => {
+    @KoTest(`<ko-image [config]="imageConfig()"></ko-image>`)
+    class TestComponent {
+      imageConfig = signal<Record<string, any>>({
+        x: 10,
+        y: 10,
+        width: 100,
+        height: 100,
+      });
+    }
+
+    const { fixture, stage } = await render(TestComponent);
+    const imageNode = stage.getLayers()[0].children[0];
+    expect(imageNode).toBeInstanceOf(Konva.Image);
+    expect(imageNode.getAttr('image')).toBeFalsy();
+
+    const img = new Image();
+    img.src =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQI12NgAAIABQABNjN9GQAAAAlwSFlzAAAWJQAAFiUBSVIk8AAAAA0lEQVQI12P4z8BQDwAEgAF/QualIQAAAABJRU5ErkJggg==';
+
+    fixture.componentInstance.imageConfig.set({
+      x: 10,
+      y: 10,
+      width: 100,
+      height: 100,
+      image: img,
+    });
+    await update(fixture);
+    expect(imageNode.getAttr('image')).toBe(img);
+    fixture.destroy();
+  });
+
+  it('updates ko-image when config is reassigned as plain property', async () => {
+    @Component({
+      selector: 'ko-test',
+      standalone: true,
+      template: `
+        <ko-stage [config]="{ width: 300, height: 300 }">
+          <ko-layer [config]="{}">
+            <ko-image [config]="imageConfig"></ko-image>
+          </ko-layer>
+        </ko-stage>
+      `,
+      imports: [StageComponent, CoreShapeComponent],
+    })
+    class TestComponent {
+      imageConfig: Record<string, any> = {
+        x: 10,
+        y: 10,
+        width: 100,
+        height: 100,
+      };
+    }
+
+    const { fixture, stage } = await render(TestComponent);
+    const imageNode = stage.getLayers()[0].children[0];
+    expect(imageNode).toBeInstanceOf(Konva.Image);
+    expect(imageNode.getAttr('image')).toBeFalsy();
+
+    const img = new Image();
+    img.src =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQI12NgAAIABQABNjN9GQAAAAlwSFlzAAAWJQAAFiUBSVIk8AAAAA0lEQVQI12P4z8BQDwAEgAF/QualIQAAAABJRU5ErkJggg==';
+
+    fixture.componentInstance.imageConfig = {
+      x: 10,
+      y: 10,
+      width: 100,
+      height: 100,
+      image: img,
+    };
+    fixture.changeDetectorRef.markForCheck();
+    await update(fixture);
+    expect(imageNode.getAttr('image')).toBe(img);
+    fixture.destroy();
+  });
+
   it('renders two stages simultaneously', async () => {
     @Component({
       selector: 'ko-test',

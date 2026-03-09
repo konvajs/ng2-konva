@@ -33,7 +33,7 @@
     "test:debug": "HEADLESS=false vitest",
     "preversion": "npm test",
     "version": "npm run build",
-    "postversion": "git push && git push --tags && npm publish"
+    "postversion": "git push && git push --tags"
   },
   "peerDependencies": {
     "@angular/core": "^21.0.0",
