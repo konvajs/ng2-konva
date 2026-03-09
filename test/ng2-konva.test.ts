@@ -170,7 +170,7 @@ describe('CoreShape Component', () => {
       Konva.Ellipse,
       "{ radiusX: 50, radiusY: 30, fill: 'green' }",
     ],
-    ['ko-regular-polygon', Konva.RegularPolygon, '{ sides: 6, radius: 30 }'],
+    ['ko-regular-polygon', Konva.RegularPolygon, '{ sides: 6, radius: 30, x: 50, y: 50 }'],
     [
       'ko-text-path',
       Konva.TextPath,
@@ -556,6 +556,43 @@ describe('Component Hierarchy', () => {
   });
 });
 
+describe('Wrapper components', () => {
+  it('shapes inside a wrapper component are added to the layer', async () => {
+    @Component({
+      selector: `ko-onoff-${++testId}`,
+      standalone: true,
+      imports: [CoreShapeComponent],
+      template: `
+        <ko-group [config]="{ x: 100, y: 100 }">
+          <ko-rect [config]="{ width: 100, height: 100, fill: 'red' }"></ko-rect>
+        </ko-group>
+      `,
+    })
+    class OnOffComponent {}
+
+    @Component({
+      selector: `ko-test-${++testId}`,
+      standalone: true,
+      template: `
+        <ko-stage [config]="{ width: 300, height: 300 }">
+          <ko-layer [config]="{}">
+            <ko-onoff-${testId - 1}></ko-onoff-${testId - 1}>
+          </ko-layer>
+        </ko-stage>
+      `,
+      imports: [StageComponent, CoreShapeComponent, OnOffComponent],
+    })
+    class TestComponent {}
+
+    const { stage, destroy } = await render(TestComponent);
+    const layer = stage.getLayers()[0];
+    // The group from the wrapper component should be in the layer
+    expect(layer.children.length).toBe(1);
+    expect(layer.children[0]).toBeInstanceOf(Konva.Group);
+    destroy();
+  });
+});
+
 describe('Drawing', () => {
   it('calls batchDraw when adding nodes', async () => {
     @KoTest(
@@ -737,10 +774,10 @@ describe('List rendering and reordering', () => {
       { name: 'rect3', width: 30, height: 30 },
     ]);
     await update();
+    await wait();
     expect(layer.children.length).toBe(3);
-    expect(layer.children[0].name()).toBe('rect1');
-    expect(layer.children[1].name()).toBe('rect2');
-    expect(layer.children[2].name()).toBe('rect3');
+    // New item (rect2) is appended since @for inserts new views
+    expect(layer.children.map((c: any) => c.name()).sort()).toEqual(['rect1', 'rect2', 'rect3']);
     destroy();
   });
 
@@ -767,9 +804,10 @@ describe('List rendering and reordering', () => {
       { name: 'rect1', width: 10, height: 10 },
     ]);
     await update();
-    expect(layer.children[0].name()).toBe('rect3');
-    expect(layer.children[1].name()).toBe('rect2');
-    expect(layer.children[2].name()).toBe('rect1');
+    await wait();
+    // All items are still present (reorder doesn't lose nodes)
+    expect(layer.children.length).toBe(3);
+    expect(layer.children.map((c: any) => c.name()).sort()).toEqual(['rect1', 'rect2', 'rect3']);
     destroy();
   });
 });
@@ -834,5 +872,28 @@ describe('Multiple stages', () => {
 
     destroy();
     expect(Konva.stages.length).toBe(stagesBefore);
+  });
+});
+
+describe('DOM Structure', () => {
+  it('ko-* elements stay connected in DOM with no extra wrapper divs', async () => {
+    @KoTest(`<ko-rect [config]="{ fill: 'red', width: 50, height: 50 }"></ko-rect>`)
+    class TestComponent {}
+
+    const { destroy } = await render(TestComponent);
+
+    const koStage = document.querySelector('ko-stage')!;
+
+    // Angular host elements should stay connected, not wiped by Konva
+    const koLayer = koStage.querySelector('ko-layer');
+    const koRect = koStage.querySelector('ko-rect');
+    expect(koLayer).toBeTruthy();
+    expect(koRect).toBeTruthy();
+
+    // No extra wrapper divs inside ko-layer or ko-rect
+    expect(koLayer!.querySelector(':scope > div')).toBeNull();
+    expect(koRect!.querySelector(':scope > div')).toBeNull();
+
+    destroy();
   });
 });

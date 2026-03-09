@@ -2,12 +2,10 @@ import {
   Component,
   ElementRef,
   OnDestroy,
-  contentChildren,
   effect,
   inject,
   input,
   output,
-  viewChild,
 } from '@angular/core';
 import { NodeConfig } from 'konva/lib/Node';
 import { ContainerConfig } from 'konva/lib/Container';
@@ -21,7 +19,7 @@ import {
   updatePicture,
   PropsType,
 } from '../utils';
-import { CoreShapeComponent as CoreShape } from './core-shape.component';
+import { CoreShapeComponent, KonvaContainer, KONVA_CONTAINER } from './core-shape.component';
 
 // Native DOM events that collide with our output() names.
 // Angular binds (click)="handler()" to BOTH the output AND the native
@@ -37,11 +35,14 @@ const NATIVE_EVENTS = [
 @Component({
   standalone: true,
   selector: 'ko-stage',
-  template: `<div #container><ng-content></ng-content></div>`,
+  template: `<ng-content></ng-content>`,
+  providers: [
+    { provide: KONVA_CONTAINER, useFactory: () => inject(StageComponent) },
+  ],
 })
-export class StageComponent implements KonvaComponent, OnDestroy {
-  private container = viewChild.required<ElementRef>('container');
-  readonly shapes = contentChildren(CoreShape);
+export class StageComponent implements KonvaComponent, KonvaContainer, OnDestroy {
+  private konvaContainer: HTMLDivElement;
+  private children: CoreShapeComponent[] = [];
 
   constructor() {
     // Prevent Angular's DomEventsPlugin from adding native DOM event
@@ -54,6 +55,11 @@ export class StageComponent implements KonvaComponent, OnDestroy {
       if (NATIVE_EVENTS.includes(type)) return;
       original(type, listener, options);
     };
+
+    // Create a separate div for Konva's stage container so it doesn't
+    // wipe Angular's projected content (<ng-content>).
+    this.konvaContainer = document.createElement('div');
+    el.prepend(this.konvaContainer);
   }
 
   public readonly config = input<ContainerConfig>();
@@ -63,10 +69,12 @@ export class StageComponent implements KonvaComponent, OnDestroy {
     if (!this._stage) {
       this._stage = new Stage({
         ...config,
-        container: this.container().nativeElement,
+        container: this.konvaContainer,
       });
 
       this.uploadKonva(config);
+      // Add any children that registered before the stage was created
+      this.flushPendingChildren();
     } else {
       this.uploadKonva(config);
     }
@@ -110,6 +118,45 @@ export class StageComponent implements KonvaComponent, OnDestroy {
     return this.config() || {};
   }
 
+  addChild(child: CoreShapeComponent): void {
+    if (!(child.getStage() instanceof Layer)) {
+      throw 'You can only add Layer Nodes to Stage Nodes!';
+    }
+    this.children.push(child);
+    if (this._stage) {
+      this._stage.add(child.getStage() as Layer);
+      this.syncZIndices();
+      updatePicture(this._stage);
+    }
+  }
+
+  removeChild(child: CoreShapeComponent): void {
+    const idx = this.children.indexOf(child);
+    if (idx !== -1) {
+      this.children.splice(idx, 1);
+      child.getStage().remove();
+      this.syncZIndices();
+      if (this._stage) {
+        updatePicture(this._stage);
+      }
+    }
+  }
+
+  private syncZIndices(): void {
+    this.children.forEach((child, index) => {
+      if (child.getStage().getParent()) {
+        child.getStage().zIndex(index);
+      }
+    });
+  }
+
+  private flushPendingChildren(): void {
+    this.children.forEach((child) => {
+      this._stage.add(child.getStage() as Layer);
+    });
+    this.syncZIndices();
+  }
+
   private uploadKonva(config: ContainerConfig): void {
     const props = {
       ...config,
@@ -118,17 +165,6 @@ export class StageComponent implements KonvaComponent, OnDestroy {
     applyNodeProps(this, props, this.cacheProps);
     this.cacheProps = props;
   }
-
-  #onShapesChange = effect(() => {
-    this.shapes().forEach((item: CoreShape, index: number) => {
-      if (!(item.getStage() instanceof Layer)) {
-        throw 'You can only add Layer Nodes to Stage Nodes!';
-      }
-      this._stage.add(item.getStage() as Layer);
-      item.getStage().zIndex(index);
-      updatePicture(this._stage);
-    });
-  });
 
   ngOnDestroy(): void {
     this._stage.destroy();
