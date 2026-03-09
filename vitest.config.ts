@@ -6,7 +6,7 @@ import angular from '@analogjs/vite-plugin-angular';
 export default defineConfig({
   plugins: [angular()],
   optimizeDeps: {
-    include: ['@angular/platform-browser/testing'],
+    include: ['@angular/platform-browser', '@angular/platform-browser/testing'],
   },
   test: {
     browser: {

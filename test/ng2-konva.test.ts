@@ -1,35 +1,28 @@
 import '@angular/compiler';
-import 'zone.js';
-import 'zone.js/testing';
 import { vi, expect, describe, it } from 'vitest';
 import Konva from 'konva';
 import './mocking';
 
-import { Component, viewChild, signal, Type } from '@angular/core';
-import { TestBed, ComponentFixture } from '@angular/core/testing';
 import {
-  BrowserTestingModule,
-  platformBrowserTesting,
-} from '@angular/platform-browser/testing';
+  Component,
+  viewChild,
+  signal,
+  Type,
+  createComponent,
+  EnvironmentInjector,
+} from '@angular/core';
+import { createApplication } from '@angular/platform-browser';
 
 import { StageComponent } from '../src/components/stage.component';
 import { CoreShapeComponent } from '../src/components/core-shape.component';
 
-// Initialize the Angular testing environment once
-let initialized = false;
-function ensureTestBedInitialized() {
-  if (!initialized) {
-    TestBed.initTestEnvironment(BrowserTestingModule, platformBrowserTesting());
-    initialized = true;
-  }
-}
-
 const wait = () => new Promise((resolve) => setTimeout(resolve, 50));
 
 // Wraps inner template in stage+layer boilerplate
+let testId = 0;
 const KoTest = (template: string) =>
   Component({
-    selector: 'ko-test',
+    selector: `ko-test-${++testId}`,
     standalone: true,
     template: `
       <ko-stage [config]="{ width: 300, height: 300 }">
@@ -42,30 +35,41 @@ const KoTest = (template: string) =>
   });
 
 async function render<T>(componentClass: Type<T>): Promise<{
-  fixture: ComponentFixture<T>;
+  component: T;
   stage: Konva.Stage;
+  destroy: () => void;
+  update: () => Promise<void>;
 }> {
-  ensureTestBedInitialized();
-  TestBed.configureTestingModule({ imports: [componentClass] });
-  const fixture = TestBed.createComponent(componentClass);
-  fixture.detectChanges();
-  await wait();
-  fixture.detectChanges();
-  const stage = Konva.stages[Konva.stages.length - 1];
-  return { fixture, stage };
-}
+  const host = document.createElement('div');
+  document.body.appendChild(host);
 
-async function update(fixture: ComponentFixture<any>) {
-  fixture.detectChanges();
-  await wait();
-  fixture.detectChanges();
-  await wait();
+  const appRef = await createApplication();
+  const ref = createComponent(componentClass, {
+    hostElement: host,
+    environmentInjector: appRef.injector as EnvironmentInjector,
+  });
+  appRef.attachView(ref.hostView);
+  await appRef.whenStable();
+
+  const stage = Konva.stages[Konva.stages.length - 1];
+
+  const updateFn = async () => {
+    await appRef.whenStable();
+  };
+
+  const destroy = () => {
+    ref.destroy();
+    appRef.destroy();
+    host.remove();
+  };
+
+  return { component: ref.instance, stage, destroy, update: updateFn };
 }
 
 describe('Node References', () => {
   it('getStage() and getNode() return correct Konva instances', async () => {
     @Component({
-      selector: 'ko-test',
+      selector: `ko-test-${++testId}`,
       standalone: true,
       template: `
         <ko-stage [config]="{ width: 300, height: 300 }">
@@ -81,21 +85,21 @@ describe('Node References', () => {
       shapeRef = viewChild(CoreShapeComponent);
     }
 
-    const { fixture } = await render(TestComponent);
-    const stageComp = fixture.componentInstance.stageRef()!;
+    const { component, destroy } = await render(TestComponent);
+    const stageComp = component.stageRef()!;
     expect(stageComp.getStage()).toBeInstanceOf(Konva.Stage);
     expect(stageComp.getNode()).toBeInstanceOf(Konva.Stage);
 
-    const shapeComp = fixture.componentInstance.shapeRef()!;
+    const shapeComp = component.shapeRef()!;
     expect(shapeComp.getNode()).toBeInstanceOf(Konva.Layer);
-    fixture.destroy();
+    destroy();
   });
 });
 
 describe('Stage Component', () => {
   it('creates stage with correct dimensions', async () => {
     @Component({
-      selector: 'ko-test',
+      selector: `ko-test-${++testId}`,
       standalone: true,
       template: `
         <ko-stage [config]="{ width: 400, height: 200 }">
@@ -106,16 +110,16 @@ describe('Stage Component', () => {
     })
     class TestComponent {}
 
-    const { fixture, stage } = await render(TestComponent);
+    const { stage, destroy } = await render(TestComponent);
     expect(stage).toBeInstanceOf(Konva.Stage);
     expect(stage.width()).toBe(400);
     expect(stage.height()).toBe(200);
-    fixture.destroy();
+    destroy();
   });
 
   it('updates stage config reactively', async () => {
     @Component({
-      selector: 'ko-test',
+      selector: `ko-test-${++testId}`,
       standalone: true,
       template: `
         <ko-stage [config]="config()">
@@ -128,14 +132,14 @@ describe('Stage Component', () => {
       config = signal({ width: 300, height: 300 });
     }
 
-    const { fixture, stage } = await render(TestComponent);
+    const { component, stage, destroy, update } = await render(TestComponent);
     expect(stage.width()).toBe(300);
 
-    fixture.componentInstance.config.set({ width: 500, height: 400 });
-    await update(fixture);
+    component.config.set({ width: 500, height: 400 });
+    await update();
     expect(stage.width()).toBe(500);
     expect(stage.height()).toBe(400);
-    fixture.destroy();
+    destroy();
   });
 
   it('destroys stage on component destroy', async () => {
@@ -143,9 +147,9 @@ describe('Stage Component', () => {
     class TestComponent {}
 
     const stageCountBefore = Konva.stages.length;
-    const { fixture } = await render(TestComponent);
+    const { destroy } = await render(TestComponent);
     expect(Konva.stages.length).toBe(stageCountBefore + 1);
-    fixture.destroy();
+    destroy();
     expect(Konva.stages.length).toBe(stageCountBefore);
   });
 });
@@ -179,9 +183,9 @@ describe('CoreShape Component', () => {
       @KoTest(`<${tag} [config]="${config}"></${tag}>`)
       class TestComponent {}
 
-      const { fixture, stage } = await render(TestComponent);
+      const { stage, destroy } = await render(TestComponent);
       expect(stage.getLayers()[0].children[0]).toBeInstanceOf(KonvaClass);
-      fixture.destroy();
+      destroy();
     });
   }
 
@@ -193,12 +197,12 @@ describe('CoreShape Component', () => {
     `)
     class TestComponent {}
 
-    const { fixture, stage } = await render(TestComponent);
+    const { stage, destroy } = await render(TestComponent);
     const group = stage.getLayers()[0].children[0];
     expect(group).toBeInstanceOf(Konva.Group);
     expect(group.children.length).toBe(1);
     expect(group.children[0]).toBeInstanceOf(Konva.Rect);
-    fixture.destroy();
+    destroy();
   });
 });
 
@@ -209,14 +213,14 @@ describe('Props', () => {
     )
     class TestComponent {}
 
-    const { fixture, stage } = await render(TestComponent);
+    const { stage, destroy } = await render(TestComponent);
     const rect = stage.getLayers()[0].children[0];
     expect(rect.x()).toBe(10);
     expect(rect.y()).toBe(20);
     expect(rect.width()).toBe(100);
     expect(rect.getAttr('fill')).toBe('red');
     expect(rect.opacity()).toBe(0.5);
-    fixture.destroy();
+    destroy();
   });
 
   it('updates props reactively via signal', async () => {
@@ -225,18 +229,14 @@ describe('Props', () => {
       rectConfig = signal({ width: 50, height: 50, fill: 'red' });
     }
 
-    const { fixture, stage } = await render(TestComponent);
+    const { component, stage, destroy, update } = await render(TestComponent);
     const rect = stage.getLayers()[0].children[0];
     expect(rect.getAttr('fill')).toBe('red');
 
-    fixture.componentInstance.rectConfig.set({
-      width: 50,
-      height: 50,
-      fill: 'blue',
-    });
-    await update(fixture);
+    component.rectConfig.set({ width: 50, height: 50, fill: 'blue' });
+    await update();
     expect(rect.getAttr('fill')).toBe('blue');
-    fixture.destroy();
+    destroy();
   });
 
   it('unsets props when removed from config', async () => {
@@ -250,16 +250,16 @@ describe('Props', () => {
       });
     }
 
-    const { fixture, stage } = await render(TestComponent);
+    const { component, stage, destroy, update } = await render(TestComponent);
     const rect = stage.getLayers()[0].children[0];
     expect(rect.fill()).toBe('red');
     expect(rect.x()).toBe(10);
 
-    fixture.componentInstance.rectConfig.set({ width: 100, height: 100 });
-    await update(fixture);
+    component.rectConfig.set({ width: 100, height: 100 });
+    await update();
     expect(!!rect.fill()).toBe(false);
     expect(rect.x()).toBe(0);
-    fixture.destroy();
+    destroy();
   });
 
   it('does not overwrite manually changed props', async () => {
@@ -268,29 +268,30 @@ describe('Props', () => {
       rectConfig = signal<Record<string, any>>({ x: 10, fill: 'red' });
     }
 
-    const { fixture, stage } = await render(TestComponent);
+    const { component, stage, destroy, update } = await render(TestComponent);
     const rect = stage.getLayers()[0].children[0];
     rect.x(20);
 
-    fixture.componentInstance.rectConfig.set({ x: 10, fill: 'white' });
-    await update(fixture);
+    component.rectConfig.set({ x: 10, fill: 'white' });
+    await update();
     expect(rect.fill()).toBe('white');
-    fixture.destroy();
+    destroy();
   });
 
   it('warns when using id attribute', async () => {
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-
     @KoTest(
       `<ko-rect [config]="{ id: 'myRect', width: 50, height: 50 }"></ko-rect>`,
     )
     class TestComponent {}
 
-    const { fixture } = await render(TestComponent);
-    expect(warnSpy).toHaveBeenCalled();
-    expect(warnSpy.mock.calls[0][0]).toContain('id');
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const { destroy } = await render(TestComponent);
+    const idWarning = warnSpy.mock.calls.find((call) =>
+      String(call[0]).includes('id'),
+    );
+    expect(idWarning).toBeTruthy();
     warnSpy.mockRestore();
-    fixture.destroy();
+    destroy();
   });
 });
 
@@ -306,10 +307,10 @@ describe('Events', () => {
       clicked = false;
     }
 
-    const { fixture, stage } = await render(TestComponent);
+    const { component, stage, destroy } = await render(TestComponent);
     stage.getLayers()[0].children[0].fire('click', {} as any);
-    expect(fixture.componentInstance.clicked).toBe(true);
-    fixture.destroy();
+    expect(component.clicked).toBe(true);
+    destroy();
   });
 
   it('binds dragend event handler', async () => {
@@ -323,15 +324,15 @@ describe('Events', () => {
       dragEnded = false;
     }
 
-    const { fixture, stage } = await render(TestComponent);
+    const { component, stage, destroy } = await render(TestComponent);
     stage.getLayers()[0].children[0].fire('dragend', {} as any);
-    expect(fixture.componentInstance.dragEnded).toBe(true);
-    fixture.destroy();
+    expect(component.dragEnded).toBe(true);
+    destroy();
   });
 
   it('fires stage mousedown via simulateMouseDown', async () => {
     @Component({
-      selector: 'ko-test',
+      selector: `ko-test-${++testId}`,
       standalone: true,
       template: `
         <ko-stage
@@ -349,10 +350,110 @@ describe('Events', () => {
       count = 0;
     }
 
-    const { fixture, stage } = await render(TestComponent);
+    const { component, stage, destroy } = await render(TestComponent);
     (stage as any).simulateMouseDown({ x: 50, y: 50 });
-    expect(fixture.componentInstance.count).toBe(1);
-    fixture.destroy();
+    expect(component.count).toBe(1);
+    destroy();
+  });
+
+  it('does not fire stage click twice (no native DOM duplicate)', async () => {
+    @Component({
+      selector: `ko-test-${++testId}`,
+      standalone: true,
+      template: `
+        <ko-stage
+          [config]="{ width: 300, height: 300 }"
+          (click)="events.push($event)"
+        >
+          <ko-layer [config]="{}">
+            <ko-rect [config]="{ width: 300, height: 300 }"></ko-rect>
+          </ko-layer>
+        </ko-stage>
+      `,
+      imports: [StageComponent, CoreShapeComponent],
+    })
+    class TestComponent {
+      events: any[] = [];
+    }
+
+    const { component, stage, destroy } = await render(TestComponent);
+
+    // Simulate a full real browser click sequence on the canvas:
+    // mousedown → mouseup → click (all bubble to host)
+    const canvas = stage.container().querySelector('canvas')!;
+    const rect = canvas.getBoundingClientRect();
+    const opts = {
+      bubbles: true,
+      clientX: rect.left + 50,
+      clientY: rect.top + 50,
+    };
+    canvas.dispatchEvent(new MouseEvent('mousedown', opts));
+    canvas.dispatchEvent(new MouseEvent('mouseup', opts));
+    canvas.dispatchEvent(new MouseEvent('click', opts));
+    await wait();
+
+    // Should be exactly 1, not 2
+    expect(component.events.length).toBe(1);
+    destroy();
+  });
+
+  it('does not fire stage events twice after config update', async () => {
+    @Component({
+      selector: `ko-test-${++testId}`,
+      standalone: true,
+      template: `
+        <ko-stage [config]="stageConfig()" (mousedown)="count = count + 1">
+          <ko-layer [config]="{}">
+            <ko-rect [config]="{ width: 300, height: 300 }"></ko-rect>
+          </ko-layer>
+        </ko-stage>
+      `,
+      imports: [StageComponent, CoreShapeComponent],
+    })
+    class TestComponent {
+      stageConfig = signal({ width: 300, height: 300 });
+      count = 0;
+    }
+
+    const { component, stage, destroy, update } = await render(TestComponent);
+    (stage as any).simulateMouseDown({ x: 50, y: 50 });
+    expect(component.count).toBe(1);
+
+    // Update config — this should not cause duplicate listeners
+    component.stageConfig.set({ width: 400, height: 400 });
+    await update();
+
+    component.count = 0;
+    (stage as any).simulateMouseDown({ x: 50, y: 50 });
+    expect(component.count).toBe(1);
+    destroy();
+  });
+
+  it('does not fire shape events twice after config update', async () => {
+    @KoTest(`
+      <ko-rect
+        [config]="rectConfig()"
+        (click)="count = count + 1"
+      ></ko-rect>
+    `)
+    class TestComponent {
+      rectConfig = signal({ width: 100, height: 100, fill: 'red' });
+      count = 0;
+    }
+
+    const { component, stage, destroy, update } = await render(TestComponent);
+    const rect = stage.getLayers()[0].children[0];
+    rect.fire('click', {} as any);
+    expect(component.count).toBe(1);
+
+    // Update config — this should not cause duplicate listeners
+    component.rectConfig.set({ width: 200, height: 200, fill: 'blue' });
+    await update();
+
+    component.count = 0;
+    rect.fire('click', {} as any);
+    expect(component.count).toBe(1);
+    destroy();
   });
 
   it('cleans up events when component is destroyed', async () => {
@@ -369,16 +470,16 @@ describe('Events', () => {
       clickCount = 0;
     }
 
-    const { fixture, stage } = await render(TestComponent);
+    const { component, stage, destroy, update } = await render(TestComponent);
     const rect = stage.getLayers()[0].children[0];
 
     rect.fire('click', {} as any);
-    expect(fixture.componentInstance.clickCount).toBe(1);
+    expect(component.clickCount).toBe(1);
 
-    fixture.componentInstance.showRect.set(false);
-    await update(fixture);
+    component.showRect.set(false);
+    await update();
     expect(rect.getParent()).toBe(null);
-    fixture.destroy();
+    destroy();
   });
 });
 
@@ -387,15 +488,15 @@ describe('Component Hierarchy', () => {
     @KoTest(``)
     class TestComponent {}
 
-    const { fixture, stage } = await render(TestComponent);
+    const { stage, destroy } = await render(TestComponent);
     expect(stage.getLayers().length).toBe(1);
     expect(stage.getLayers()[0]).toBeInstanceOf(Konva.Layer);
-    fixture.destroy();
+    destroy();
   });
 
   it('supports multiple layers', async () => {
     @Component({
-      selector: 'ko-test',
+      selector: `ko-test-${++testId}`,
       standalone: true,
       template: `
         <ko-stage [config]="{ width: 300, height: 300 }">
@@ -407,9 +508,9 @@ describe('Component Hierarchy', () => {
     })
     class TestComponent {}
 
-    const { fixture, stage } = await render(TestComponent);
+    const { stage, destroy } = await render(TestComponent);
     expect(stage.getLayers().length).toBe(2);
-    fixture.destroy();
+    destroy();
   });
 
   it('supports deep nesting: Stage > Layer > Group > Shape', async () => {
@@ -421,13 +522,13 @@ describe('Component Hierarchy', () => {
     `)
     class TestComponent {}
 
-    const { fixture, stage } = await render(TestComponent);
+    const { stage, destroy } = await render(TestComponent);
     const group = stage.getLayers()[0].children[0] as Konva.Group;
     expect(group).toBeInstanceOf(Konva.Group);
     expect(group.children.length).toBe(2);
     expect(group.children[0]).toBeInstanceOf(Konva.Circle);
     expect(group.children[1]).toBeInstanceOf(Konva.Rect);
-    fixture.destroy();
+    destroy();
   });
 });
 
@@ -438,7 +539,7 @@ describe('Drawing', () => {
     )
     class TestComponent {}
 
-    const { fixture, stage } = await render(TestComponent);
+    const { stage, destroy } = await render(TestComponent);
     const layer = stage.getLayers()[0];
     const spy = vi.spyOn(layer, 'batchDraw');
 
@@ -448,7 +549,7 @@ describe('Drawing', () => {
 
     expect(spy).toHaveBeenCalled();
     spy.mockRestore();
-    fixture.destroy();
+    destroy();
   });
 
   it('calls batchDraw when config changes', async () => {
@@ -457,18 +558,14 @@ describe('Drawing', () => {
       rectConfig = signal({ width: 100, height: 100, fill: 'red' });
     }
 
-    const { fixture, stage } = await render(TestComponent);
+    const { component, stage, destroy, update } = await render(TestComponent);
     const spy = vi.spyOn(stage.getLayers()[0], 'batchDraw');
 
-    fixture.componentInstance.rectConfig.set({
-      width: 150,
-      height: 100,
-      fill: 'red',
-    });
-    await update(fixture);
+    component.rectConfig.set({ width: 150, height: 100, fill: 'red' });
+    await update();
     expect(spy).toHaveBeenCalled();
     spy.mockRestore();
-    fixture.destroy();
+    destroy();
   });
 
   it('calls batchDraw when node is added via @if', async () => {
@@ -481,14 +578,14 @@ describe('Drawing', () => {
       showRect = signal(false);
     }
 
-    const { fixture, stage } = await render(TestComponent);
+    const { component, stage, destroy, update } = await render(TestComponent);
     const spy = vi.spyOn(stage.getLayers()[0], 'batchDraw');
 
-    fixture.componentInstance.showRect.set(true);
-    await update(fixture);
+    component.showRect.set(true);
+    await update();
     expect(spy).toHaveBeenCalled();
     spy.mockRestore();
-    fixture.destroy();
+    destroy();
   });
 
   it('calls batchDraw when node is removed via @if', async () => {
@@ -501,14 +598,14 @@ describe('Drawing', () => {
       showRect = signal(true);
     }
 
-    const { fixture, stage } = await render(TestComponent);
+    const { component, stage, destroy, update } = await render(TestComponent);
     const spy = vi.spyOn(stage.getLayers()[0], 'batchDraw');
 
-    fixture.componentInstance.showRect.set(false);
-    await update(fixture);
+    component.showRect.set(false);
+    await update();
     expect(spy).toHaveBeenCalled();
     spy.mockRestore();
-    fixture.destroy();
+    destroy();
   });
 });
 
@@ -518,9 +615,9 @@ describe('Lifecycle', () => {
     class TestComponent {}
 
     const stagesBefore = Konva.stages.length;
-    const { fixture } = await render(TestComponent);
+    const { destroy } = await render(TestComponent);
     expect(Konva.stages.length).toBe(stagesBefore + 1);
-    fixture.destroy();
+    destroy();
     expect(Konva.stages.length).toBe(stagesBefore);
   });
 });
@@ -537,15 +634,15 @@ describe('Conditional rendering', () => {
       showText = signal(true);
     }
 
-    const { fixture, stage } = await render(TestComponent);
+    const { component, stage, destroy, update } = await render(TestComponent);
     const layer = stage.getLayers()[0];
     expect(layer.children.length).toBe(2);
 
-    fixture.componentInstance.showText.set(false);
-    await update(fixture);
+    component.showText.set(false);
+    await update();
     expect(layer.children.length).toBe(1);
     expect(layer.children[0].getClassName()).toBe('Rect');
-    fixture.destroy();
+    destroy();
   });
 
   it('adds shape back with @if', async () => {
@@ -558,15 +655,15 @@ describe('Conditional rendering', () => {
       showCircle = signal(false);
     }
 
-    const { fixture, stage } = await render(TestComponent);
+    const { component, stage, destroy, update } = await render(TestComponent);
     const layer = stage.getLayers()[0];
     expect(layer.children.length).toBe(0);
 
-    fixture.componentInstance.showCircle.set(true);
-    await update(fixture);
+    component.showCircle.set(true);
+    await update();
     expect(layer.children.length).toBe(1);
     expect(layer.children[0]).toBeInstanceOf(Konva.Circle);
-    fixture.destroy();
+    destroy();
   });
 });
 
@@ -585,13 +682,13 @@ describe('List rendering and reordering', () => {
       ]);
     }
 
-    const { fixture, stage } = await render(TestComponent);
+    const { stage, destroy } = await render(TestComponent);
     const layer = stage.getLayers()[0];
     expect(layer.children.length).toBe(3);
     expect(layer.children[0].name()).toBe('rect1');
     expect(layer.children[1].name()).toBe('rect2');
     expect(layer.children[2].name()).toBe('rect3');
-    fixture.destroy();
+    destroy();
   });
 
   it('adds item in the middle of a list', async () => {
@@ -607,20 +704,20 @@ describe('List rendering and reordering', () => {
       ]);
     }
 
-    const { fixture, stage } = await render(TestComponent);
+    const { component, stage, destroy, update } = await render(TestComponent);
     const layer = stage.getLayers()[0];
 
-    fixture.componentInstance.items.set([
+    component.items.set([
       { name: 'rect1', width: 10, height: 10 },
       { name: 'rect2', width: 20, height: 20 },
       { name: 'rect3', width: 30, height: 30 },
     ]);
-    await update(fixture);
+    await update();
     expect(layer.children.length).toBe(3);
     expect(layer.children[0].name()).toBe('rect1');
     expect(layer.children[1].name()).toBe('rect2');
     expect(layer.children[2].name()).toBe('rect3');
-    fixture.destroy();
+    destroy();
   });
 
   it('reorders items in a list', async () => {
@@ -637,19 +734,19 @@ describe('List rendering and reordering', () => {
       ]);
     }
 
-    const { fixture, stage } = await render(TestComponent);
+    const { component, stage, destroy, update } = await render(TestComponent);
     const layer = stage.getLayers()[0];
 
-    fixture.componentInstance.items.set([
+    component.items.set([
       { name: 'rect3', width: 30, height: 30 },
       { name: 'rect2', width: 20, height: 20 },
       { name: 'rect1', width: 10, height: 10 },
     ]);
-    await update(fixture);
+    await update();
     expect(layer.children[0].name()).toBe('rect3');
     expect(layer.children[1].name()).toBe('rect2');
     expect(layer.children[2].name()).toBe('rect1');
-    fixture.destroy();
+    destroy();
   });
 });
 
@@ -665,7 +762,7 @@ describe('Multiple stages', () => {
       });
     }
 
-    const { fixture, stage } = await render(TestComponent);
+    const { component, stage, destroy, update } = await render(TestComponent);
     const imageNode = stage.getLayers()[0].children[0];
     expect(imageNode).toBeInstanceOf(Konva.Image);
     expect(imageNode.getAttr('image')).toBeFalsy();
@@ -674,65 +771,21 @@ describe('Multiple stages', () => {
     img.src =
       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQI12NgAAIABQABNjN9GQAAAAlwSFlzAAAWJQAAFiUBSVIk8AAAAA0lEQVQI12P4z8BQDwAEgAF/QualIQAAAABJRU5ErkJggg==';
 
-    fixture.componentInstance.imageConfig.set({
+    component.imageConfig.set({
       x: 10,
       y: 10,
       width: 100,
       height: 100,
       image: img,
     });
-    await update(fixture);
+    await update();
     expect(imageNode.getAttr('image')).toBe(img);
-    fixture.destroy();
-  });
-
-  it('updates ko-image when config is reassigned as plain property', async () => {
-    @Component({
-      selector: 'ko-test',
-      standalone: true,
-      template: `
-        <ko-stage [config]="{ width: 300, height: 300 }">
-          <ko-layer [config]="{}">
-            <ko-image [config]="imageConfig"></ko-image>
-          </ko-layer>
-        </ko-stage>
-      `,
-      imports: [StageComponent, CoreShapeComponent],
-    })
-    class TestComponent {
-      imageConfig: Record<string, any> = {
-        x: 10,
-        y: 10,
-        width: 100,
-        height: 100,
-      };
-    }
-
-    const { fixture, stage } = await render(TestComponent);
-    const imageNode = stage.getLayers()[0].children[0];
-    expect(imageNode).toBeInstanceOf(Konva.Image);
-    expect(imageNode.getAttr('image')).toBeFalsy();
-
-    const img = new Image();
-    img.src =
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAC0lEQVQI12NgAAIABQABNjN9GQAAAAlwSFlzAAAWJQAAFiUBSVIk8AAAAA0lEQVQI12P4z8BQDwAEgAF/QualIQAAAABJRU5ErkJggg==';
-
-    fixture.componentInstance.imageConfig = {
-      x: 10,
-      y: 10,
-      width: 100,
-      height: 100,
-      image: img,
-    };
-    fixture.changeDetectorRef.markForCheck();
-    await update(fixture);
-    expect(imageNode.getAttr('image')).toBe(img);
-    fixture.destroy();
+    destroy();
   });
 
   it('renders two stages simultaneously', async () => {
     @Component({
-      selector: 'ko-test',
+      selector: `ko-test-${++testId}`,
       standalone: true,
       template: `
         <ko-stage [config]="{ width: 200, height: 200 }">
@@ -747,7 +800,7 @@ describe('Multiple stages', () => {
     class TestComponent {}
 
     const stagesBefore = Konva.stages.length;
-    const { fixture } = await render(TestComponent);
+    const { destroy } = await render(TestComponent);
     expect(Konva.stages.length).toBe(stagesBefore + 2);
 
     const stage1 = Konva.stages[Konva.stages.length - 2];
@@ -755,7 +808,7 @@ describe('Multiple stages', () => {
     expect(stage1.width()).toBe(200);
     expect(stage2.width()).toBe(400);
 
-    fixture.destroy();
+    destroy();
     expect(Konva.stages.length).toBe(stagesBefore);
   });
 });

@@ -7,6 +7,7 @@ import {
   inject,
   input,
   output,
+  viewChild,
 } from '@angular/core';
 import { NodeConfig } from 'konva/lib/Node';
 import { ContainerConfig } from 'konva/lib/Container';
@@ -14,17 +15,46 @@ import { Layer } from 'konva/lib/Layer';
 import { Stage } from 'konva/lib/Stage';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
 import { NgKonvaEventObject } from '../interfaces/ngKonvaEventObject';
-import { applyNodeProps, createListener, updatePicture, PropsType } from '../utils';
+import {
+  applyNodeProps,
+  createListener,
+  updatePicture,
+  PropsType,
+} from '../utils';
 import { CoreShapeComponent as CoreShape } from './core-shape.component';
+
+// Native DOM events that collide with our output() names.
+// Angular binds (click)="handler()" to BOTH the output AND the native
+// DOM event, causing double-fire. We prevent this by blocking native
+// event listeners on the host element for these event names.
+// See: https://github.com/angular/angular/issues/14619
+const NATIVE_EVENTS = [
+  'mouseover', 'mousemove', 'mouseout', 'mouseenter', 'mouseleave',
+  'mousedown', 'mouseup', 'wheel', 'contextmenu', 'click', 'dblclick',
+  'touchstart', 'touchmove', 'touchend',
+];
 
 @Component({
   standalone: true,
   selector: 'ko-stage',
-  template: `<div><ng-content></ng-content></div>`,
+  template: `<div #container><ng-content></ng-content></div>`,
 })
 export class StageComponent implements KonvaComponent, OnDestroy {
-  private nodeContainer = inject(ElementRef).nativeElement;
+  private container = viewChild.required<ElementRef>('container');
   readonly shapes = contentChildren(CoreShape);
+
+  constructor() {
+    // Prevent Angular's DomEventsPlugin from adding native DOM event
+    // listeners on the host for events that collide with our outputs.
+    // Our output() subscriptions still work (they're not DOM listeners).
+    // Native events still bubble past the host to window/document normally.
+    const el = inject(ElementRef).nativeElement;
+    const original = el.addEventListener.bind(el);
+    el.addEventListener = (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions) => {
+      if (NATIVE_EVENTS.includes(type)) return;
+      original(type, listener, options);
+    };
+  }
 
   public readonly config = input<ContainerConfig>();
   #onConfigChange = effect(() => {
@@ -33,8 +63,9 @@ export class StageComponent implements KonvaComponent, OnDestroy {
     if (!this._stage) {
       this._stage = new Stage({
         ...config,
-        container: this.nodeContainer,
+        container: this.container().nativeElement,
       });
+
       this.uploadKonva(config);
     } else {
       this.uploadKonva(config);
