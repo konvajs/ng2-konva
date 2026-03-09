@@ -1,8 +1,12 @@
 {
   "name": "ng2-konva",
-  "version": "11.0.0",
+  "version": "12.0.0-beta.0",
   "description": "Angular binding to canvas element via Konva framework",
-  "keywords": ["angular", "konva", "canvas"],
+  "keywords": [
+    "angular",
+    "konva",
+    "canvas"
+  ],
   "repository": {
     "type": "git",
     "url": "git@github.com:konvajs/ng2-konva.git"
@@ -17,7 +21,11 @@
       "default": "./lib/index.js"
     }
   },
-  "files": ["lib", "README.md", "LICENSE"],
+  "files": [
+    "lib",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "rm -rf lib && ngc",
     "test": "vitest run",
