@@ -2,9 +2,10 @@
 
 # Compiled output
 /dist
+/lib
 /tmp
 /out-tsc
-/bazel-out
+.claude
 
 # Node
 /node_modules

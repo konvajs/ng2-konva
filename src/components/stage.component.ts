@@ -1,4 +1,3 @@
-/* eslint-disable @angular-eslint/no-output-native */
 import {
   Component,
   ElementRef,
@@ -9,16 +8,17 @@ import {
   input,
   output,
 } from '@angular/core';
+import { NodeConfig } from 'konva/lib/Node';
 import { ContainerConfig } from 'konva/lib/Container';
 import { Layer } from 'konva/lib/Layer';
 import { Stage } from 'konva/lib/Stage';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
 import { NgKonvaEventObject } from '../interfaces/ngKonvaEventObject';
-import { applyNodeProps, createListener, updatePicture } from '../utils/index';
-import { PropsType } from '../utils/types';
+import { applyNodeProps, createListener, updatePicture, PropsType } from '../utils';
 import { CoreShapeComponent as CoreShape } from './core-shape.component';
 
 @Component({
+  standalone: true,
   selector: 'ko-stage',
   template: `<div><ng-content></ng-content></div>`,
 })
@@ -75,7 +75,7 @@ export class StageComponent implements KonvaComponent, OnDestroy {
     return this._stage;
   }
 
-  public getConfig(): ContainerConfig {
+  public getConfig(): NodeConfig {
     return this.config() || {};
   }
 
@@ -93,7 +93,7 @@ export class StageComponent implements KonvaComponent, OnDestroy {
       if (!(item.getStage() instanceof Layer)) {
         throw 'You can only add Layer Nodes to Stage Nodes!';
       }
-      this._stage.add(<Layer>item.getStage());
+      this._stage.add(item.getStage() as Layer);
       item.getStage().zIndex(index);
       updatePicture(this._stage);
     });

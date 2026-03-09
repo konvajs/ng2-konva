@@ -3,7 +3,7 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
 import { NgKonvaEventObject } from '../interfaces/ngKonvaEventObject';
-import { PropsType } from './types';
+type PropsType = Record<string, any>;
 import updatePicture from './updatePicture';
 
 export default function applyNodeProps(

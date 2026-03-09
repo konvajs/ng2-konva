@@ -1,8 +1,9 @@
 import { OutputEmitterRef } from '@angular/core';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
 import applyNodeProps from './applyNodeProps';
-import { ListenerRecord } from './types';
 import updatePicture from './updatePicture';
+
+export type PropsType = Record<string, any>;
 
 function camelize(str: string): string {
   return str
@@ -22,8 +23,8 @@ export function getName(componentTag: string): string {
   );
 }
 
-export function createListener(instance: KonvaComponent): ListenerRecord {
-  const output: ListenerRecord = {};
+export function createListener(instance: KonvaComponent): PropsType {
+  const output: PropsType = {};
   [
     'mouseover',
     'mousemove',
@@ -48,12 +49,14 @@ export function createListener(instance: KonvaComponent): ListenerRecord {
     'transform',
     'transformend',
   ].forEach((eventName) => {
-    const name: keyof KonvaComponent = <keyof KonvaComponent>eventName;
-
-    const outputEmitter: OutputEmitterRef<unknown> = <
-      OutputEmitterRef<unknown>
-    >instance[name];
-    if (outputEmitter['listeners']?.length > 0) {
+    const outputEmitter = (instance as unknown as Record<string, unknown>)[
+      eventName
+    ] as OutputEmitterRef<unknown> | undefined;
+    if (
+      outputEmitter &&
+      (outputEmitter as unknown as { listeners: unknown[] })['listeners']
+        ?.length > 0
+    ) {
       output['on' + eventName] = outputEmitter.emit.bind(outputEmitter);
     }
   });

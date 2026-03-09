@@ -1,56 +1,51 @@
 {
-  "name": "konva",
-  "version": "0.0.0",
-  "scripts": {
-    "ng": "ng",
-    "start": "ng serve --watch --project demo",
-    "build": "ng build",
-    "build:ng2-konva": "ng build --configuration production --project ng2-konva",
-    "watch": "ng build --watch --configuration development --project demo",
-    "test": "ng test",
-    "lint": "ng lint",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
+  "name": "ng2-konva",
+  "version": "11.0.0",
+  "description": "Angular binding to canvas element via Konva framework",
+  "keywords": ["angular", "konva", "canvas"],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:konvajs/ng2-konva.git"
   },
-  "private": true,
-  "dependencies": {
-    "@angular/animations": "^21.0.6",
-    "@angular/common": "^21.0.6",
-    "@angular/compiler": "^21.0.6",
-    "@angular/core": "^21.0.6",
-    "@angular/forms": "^21.0.6",
-    "@angular/platform-browser": "^21.0.6",
-    "@angular/platform-browser-dynamic": "^21.0.6",
-    "@angular/router": "^21.0.6",
-    "konva": "^9.3.22",
-    "rxjs": "~7.8.2",
-    "tslib": "^2.8.1",
-    "zone.js": "~0.16.0"
+  "license": "MIT",
+  "bugs": "https://github.com/konvajs/ng2-konva/issues",
+  "module": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    }
+  },
+  "files": ["lib", "README.md", "LICENSE"],
+  "scripts": {
+    "build": "rm -rf lib && ngc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:debug": "HEADLESS=false vitest",
+    "preversion": "npm test",
+    "version": "npm run build",
+    "postversion": "git push && git push --tags && npm publish"
+  },
+  "peerDependencies": {
+    "@angular/core": "^21.0.0",
+    "konva": "^9.3.22 || ^10.0.0"
   },
   "devDependencies": {
-    "@angular-eslint/builder": "21.1.0",
-    "@angular-eslint/eslint-plugin": "21.1.0",
-    "@angular-eslint/eslint-plugin-template": "21.1.0",
-    "@angular-eslint/schematics": "21.1.0",
-    "@angular-eslint/template-parser": "21.1.0",
-    "@angular/build": "^21.0.4",
-    "@angular/cli": "~21.0.4",
-    "@angular/compiler-cli": "^21.0.6",
-    "@types/jasmine": "~5.1.13",
-    "@typescript-eslint/eslint-plugin": "8.51.0",
-    "@typescript-eslint/parser": "8.51.0",
-    "eslint": "9.39.2",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
-    "jasmine-core": "~5.13.0",
-    "karma": "~6.4.4",
-    "karma-chrome-launcher": "~3.2.0",
-    "karma-coverage": "~2.2.1",
-    "karma-jasmine": "~5.1.0",
-    "karma-jasmine-html-reporter": "~2.1.0",
-    "ng-packagr": "^21.0.1",
-    "prettier": "^3.7.4",
-    "prettier-eslint": "^16.4.2",
-    "typescript": "^5.9.3"
-  }
+    "@analogjs/vite-plugin-angular": "^2.3.1",
+    "@angular/build": "^21.2.1",
+    "@angular/common": "^21.2.1",
+    "@angular/compiler": "^21.2.1",
+    "@angular/compiler-cli": "^21.2.1",
+    "@angular/core": "^21.2.1",
+    "@angular/platform-browser": "^21.2.1",
+    "@vitest/browser": "^4.0.18",
+    "@vitest/browser-playwright": "^4.0.18",
+    "konva": "^10.2.0",
+    "rxjs": "~7.8.2",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18",
+    "zone.js": "~0.16.1"
+  },
+  "sideEffects": false
 }

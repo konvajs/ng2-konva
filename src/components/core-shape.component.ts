@@ -1,4 +1,3 @@
-/* eslint-disable @angular-eslint/no-output-native */
 import {
   Component,
   ElementRef,
@@ -10,36 +9,16 @@ import {
   output,
 } from '@angular/core';
 import Konva from 'konva';
-import { FastLayer } from 'konva/lib/FastLayer';
-import { Group } from 'konva/lib/Group';
-import { Layer } from 'konva/lib/Layer';
+import { Node, NodeConfig } from 'konva/lib/Node';
+import { Container } from 'konva/lib/Container';
 import { Shape } from 'konva/lib/Shape';
-import { Arc } from 'konva/lib/shapes/Arc';
-import { Arrow } from 'konva/lib/shapes/Arrow';
-import { Circle } from 'konva/lib/shapes/Circle';
-import { Ellipse } from 'konva/lib/shapes/Ellipse';
-import { Image } from 'konva/lib/shapes/Image';
-import { Label, Tag } from 'konva/lib/shapes/Label';
-import { Line } from 'konva/lib/shapes/Line';
-import { Path } from 'konva/lib/shapes/Path';
-import { Rect } from 'konva/lib/shapes/Rect';
-import { RegularPolygon } from 'konva/lib/shapes/RegularPolygon';
-import { Ring } from 'konva/lib/shapes/Ring';
-import { Sprite, SpriteConfig } from 'konva/lib/shapes/Sprite';
-import { Star } from 'konva/lib/shapes/Star';
-import { Text } from 'konva/lib/shapes/Text';
-import { TextPath } from 'konva/lib/shapes/TextPath';
-import { Transformer } from 'konva/lib/shapes/Transformer';
-import { Wedge } from 'konva/lib/shapes/Wedge';
+import { SpriteConfig } from 'konva/lib/shapes/Sprite';
 import { KonvaComponent } from '../interfaces/ko-component.interface';
 import { NgKonvaEventObject } from '../interfaces/ngKonvaEventObject';
-import { updatePicture } from '../utils';
-import { ShapeConfigTypes } from '../utils/configTypes';
-import { applyNodeProps, createListener, getName } from '../utils/index';
-import { ShapeTypes } from '../utils/shapeTypes';
-import { PropsType } from '../utils/types';
+import { applyNodeProps, createListener, getName, updatePicture, PropsType } from '../utils';
 
 @Component({
+  standalone: true,
   selector:
     'ko-shape, ko-layer, ko-circle, ko-fastlayer, ko-group, ko-label, ko-rect, ko-ellipse, ko-wedge, ko-line, ko-sprite, ko-image, ko-text, ko-text-path, ko-star, ko-ring, ko-arc, ko-tag, ko-path, ko-regular-polygon, ko-arrow, ko-transformer',
   template: `<div><ng-content></ng-content></div>`,
@@ -47,7 +26,7 @@ import { PropsType } from '../utils/types';
 export class CoreShapeComponent implements KonvaComponent, OnDestroy {
   readonly shapes = contentChildren(CoreShapeComponent);
 
-  public readonly config = model<ShapeConfigTypes>();
+  public readonly config = model<NodeConfig>();
   #onConfigChange = effect(() => {
     const config = this.config();
     if (!config) return;
@@ -77,88 +56,22 @@ export class CoreShapeComponent implements KonvaComponent, OnDestroy {
   readonly transform = output<NgKonvaEventObject<MouseEvent>>();
   readonly transformend = output<NgKonvaEventObject<MouseEvent>>();
 
-  public nameNode: keyof typeof ShapeTypes | 'Shape' | 'Sprite' = getName(
+  public nameNode: string = getName(
     inject(ElementRef).nativeElement.localName,
-  ) as keyof typeof ShapeTypes | 'Shape' | 'Sprite';
+  );
 
   private cacheProps: PropsType = {};
-  private _stage:
-    | Shape
-    | Arc
-    | Arrow
-    | Circle
-    | Ellipse
-    | Image
-    | Label
-    | Tag
-    | Line
-    | Path
-    | Rect
-    | RegularPolygon
-    | Ring
-    | Sprite
-    | Star
-    | Text
-    | TextPath
-    | Transformer
-    | Wedge
-    | Group
-    | Layer
-    | FastLayer;
+  private _stage: Node;
 
-  public getStage():
-    | Shape
-    | Arc
-    | Arrow
-    | Circle
-    | Ellipse
-    | Image
-    | Label
-    | Tag
-    | Line
-    | Path
-    | Rect
-    | RegularPolygon
-    | Ring
-    | Sprite
-    | Star
-    | Text
-    | TextPath
-    | Transformer
-    | Wedge
-    | Group
-    | Layer
-    | FastLayer {
+  public getStage(): Node {
     return this._stage;
   }
 
-  public getNode():
-    | Shape
-    | Arc
-    | Arrow
-    | Circle
-    | Ellipse
-    | Image
-    | Label
-    | Tag
-    | Line
-    | Path
-    | Rect
-    | RegularPolygon
-    | Ring
-    | Sprite
-    | Star
-    | Text
-    | TextPath
-    | Transformer
-    | Wedge
-    | Group
-    | Layer
-    | FastLayer {
+  public getNode(): Node {
     return this._stage;
   }
 
-  public getConfig(): ShapeConfigTypes {
+  public getConfig(): NodeConfig {
     return this.config() || {};
   }
 
@@ -167,20 +80,16 @@ export class CoreShapeComponent implements KonvaComponent, OnDestroy {
   }
 
   private initKonva(): void {
-    if (!this._stage) {
-      this._stage = new Shape();
-    }
-    if (this.nameNode === 'Shape') {
-      this._stage = new Shape();
-    } else if (this.nameNode === 'Sprite') {
-      this._stage = new Sprite(this.config() as SpriteConfig);
+    if (this.nameNode === 'Sprite') {
+      this._stage = new Konva.Sprite(this.config() as SpriteConfig);
     } else {
-      this._stage = new Konva[this.nameNode](undefined);
+      const NodeClass = (Konva as Record<string, unknown>)[this.nameNode] as new (config?: NodeConfig) => Node;
+      this._stage = new NodeClass();
     }
 
     const animationStage = this._stage.to.bind(this._stage);
 
-    this._stage.to = (newConfig: ShapeConfigTypes): void => {
+    this._stage.to = (newConfig: NodeConfig): void => {
       animationStage(newConfig);
       setTimeout(() => {
         Object.keys(this._stage.attrs).forEach((key) => {
@@ -200,7 +109,7 @@ export class CoreShapeComponent implements KonvaComponent, OnDestroy {
     }
   }
 
-  protected uploadKonva(config: ShapeConfigTypes): void {
+  protected uploadKonva(config: NodeConfig): void {
     if (!this._stage) return;
     const props = {
       ...config,
@@ -213,8 +122,8 @@ export class CoreShapeComponent implements KonvaComponent, OnDestroy {
   #onShapesChange = effect(() => {
     this.shapes().forEach((item: CoreShapeComponent, index: number) => {
       if (this !== item) {
-        if (this._stage instanceof Group || this._stage instanceof Layer) {
-          this._stage.add(item.getStage());
+        if (this._stage instanceof Container) {
+          this._stage.add(item.getStage() as Shape);
         }
         item.getStage().zIndex(index);
         updatePicture(this._stage);
