@@ -313,6 +313,30 @@ describe('Events', () => {
     destroy();
   });
 
+  it('registers events even without [config] binding', async () => {
+    @KoTest(`
+      <ko-transformer
+        (transformstart)="events.push('start')"
+        (transform)="events.push('transform')"
+        (transformend)="events.push('end')"
+      ></ko-transformer>
+    `)
+    class TestComponent {
+      events: string[] = [];
+    }
+
+    const { component, stage, destroy } = await render(TestComponent);
+    const transformer = stage.getLayers()[0].children[0];
+    expect(transformer.getClassName()).toBe('Transformer');
+
+    transformer.fire('transformstart', {} as any);
+    transformer.fire('transform', {} as any);
+    transformer.fire('transformend', {} as any);
+
+    expect(component.events).toEqual(['start', 'transform', 'end']);
+    destroy();
+  });
+
   it('binds dragend event handler', async () => {
     @KoTest(`
       <ko-rect

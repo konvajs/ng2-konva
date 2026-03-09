@@ -29,8 +29,7 @@ export class CoreShapeComponent implements KonvaComponent, OnDestroy {
   public readonly config = model<NodeConfig>();
   #onConfigChange = effect(() => {
     const config = this.config();
-    if (!config) return;
-    this.uploadKonva(config);
+    this.uploadKonva(config || {});
   });
 
   readonly mouseover = output<NgKonvaEventObject<MouseEvent>>();
