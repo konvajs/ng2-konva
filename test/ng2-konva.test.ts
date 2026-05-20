@@ -10,6 +10,10 @@ import {
   Type,
   createComponent,
   EnvironmentInjector,
+  effect,
+  computed,
+  afterNextRender,
+  AfterViewInit,
 } from '@angular/core';
 import { createApplication } from '@angular/platform-browser';
 
@@ -894,6 +898,242 @@ describe('DOM Structure', () => {
     expect(koLayer!.querySelector(':scope > div')).toBeNull();
     expect(koRect!.querySelector(':scope > div')).toBeNull();
 
+    destroy();
+  });
+});
+
+/**
+ * Lifecycle-readiness contract (GH issue #80).
+ *
+ * A parent that holds a viewChild() reference to <ko-stage>, <ko-layer>, or
+ * a shape component must see a fully-constructed Konva node by the time the
+ * standard Angular lifecycle says the view is ready — same guarantee as a
+ * plain DOM ref. Concretely: when viewChild() first emits a non-empty value,
+ * inside ngAfterViewInit, and inside afterNextRender, getStage()/getNode()
+ * must return the real Konva instance, not undefined.
+ */
+describe('Lifecycle readiness (issue #80)', () => {
+  // A parent effect reading viewChild()?.getStage() must reactively observe
+  // the Konva.Stage once it is constructed. Angular's signal-based viewChild
+  // emits the component instance at construction — before the child's own
+  // lifecycle work runs — so the effect may transiently see `undefined`
+  // first, but it MUST recover. Before the signal-backed _stage fix, no
+  // recovery happened and the effect was stuck on `undefined` forever.
+  it('parent effect on viewChild()?.getStage() eventually observes Konva.Stage', async () => {
+    const observed: unknown[] = [];
+
+    @Component({
+      selector: `ko-test-${++testId}`,
+      standalone: true,
+      template: `
+        <ko-stage [config]="{ width: 200, height: 200 }">
+          <ko-layer [config]="{}"></ko-layer>
+        </ko-stage>
+      `,
+      imports: [StageComponent, CoreShapeComponent],
+    })
+    class TestComponent {
+      stageRef = viewChild(StageComponent);
+      constructor() {
+        effect(() => {
+          const sc = this.stageRef();
+          if (sc) observed.push(sc.getStage());
+        });
+      }
+    }
+
+    const { destroy } = await render(TestComponent);
+    expect(observed.at(-1)).toBeInstanceOf(Konva.Stage);
+    destroy();
+  });
+
+  it('ngAfterViewInit sees a ready Konva.Stage via getStage()', async () => {
+    let result: unknown;
+
+    @Component({
+      selector: `ko-test-${++testId}`,
+      standalone: true,
+      template: `
+        <ko-stage [config]="{ width: 200, height: 200 }">
+          <ko-layer [config]="{}"></ko-layer>
+        </ko-stage>
+      `,
+      imports: [StageComponent, CoreShapeComponent],
+    })
+    class TestComponent implements AfterViewInit {
+      stageRef = viewChild(StageComponent);
+      ngAfterViewInit() {
+        result = this.stageRef()?.getStage();
+      }
+    }
+
+    const { destroy } = await render(TestComponent);
+    expect(result).toBeInstanceOf(Konva.Stage);
+    destroy();
+  });
+
+  it('afterNextRender sees a ready Konva.Stage via getStage()', async () => {
+    let result: unknown;
+
+    @Component({
+      selector: `ko-test-${++testId}`,
+      standalone: true,
+      template: `
+        <ko-stage [config]="{ width: 200, height: 200 }">
+          <ko-layer [config]="{}"></ko-layer>
+        </ko-stage>
+      `,
+      imports: [StageComponent, CoreShapeComponent],
+    })
+    class TestComponent {
+      stageRef = viewChild(StageComponent);
+      constructor() {
+        afterNextRender(() => {
+          result = this.stageRef()?.getStage();
+        });
+      }
+    }
+
+    const { destroy } = await render(TestComponent);
+    expect(result).toBeInstanceOf(Konva.Stage);
+    destroy();
+  });
+
+  // Mirrors the exact pattern from the GH issue: a computed deriving the
+  // Konva.Stage from viewChild, read eagerly by a constructor effect. With
+  // the current implementation the computed caches `undefined` on first
+  // evaluation and — viewChild signal never changing again — never recovers.
+  it('computed(() => viewChild()?.getStage()) recovers (issue #80 repro)', async () => {
+    @Component({
+      selector: `ko-test-${++testId}`,
+      standalone: true,
+      template: `
+        <ko-stage [config]="{ width: 200, height: 200 }">
+          <ko-layer [config]="{}"></ko-layer>
+        </ko-stage>
+      `,
+      imports: [StageComponent, CoreShapeComponent],
+    })
+    class TestComponent {
+      stageRef = viewChild(StageComponent);
+      konvaStage = computed(() => this.stageRef()?.getStage());
+      constructor() {
+        effect(() => this.konvaStage());
+      }
+    }
+
+    const { component, destroy } = await render(TestComponent);
+    expect(component.konvaStage()).toBeInstanceOf(Konva.Stage);
+    destroy();
+  });
+
+  // Same eager-computed pattern as the stage repro, applied to a layer.
+  // Passes today because CoreShapeComponent constructs its Konva node
+  // synchronously in its constructor (no lazy effect).
+  it('computed(() => viewChild()?.getNode()) on ko-layer yields Konva.Layer', async () => {
+    @Component({
+      selector: `ko-test-${++testId}`,
+      standalone: true,
+      template: `
+        <ko-stage [config]="{ width: 200, height: 200 }">
+          <ko-layer #layer [config]="{}"></ko-layer>
+        </ko-stage>
+      `,
+      imports: [StageComponent, CoreShapeComponent],
+    })
+    class TestComponent {
+      layerRef = viewChild<CoreShapeComponent>('layer');
+      konvaNode = computed(() => this.layerRef()?.getNode());
+      constructor() {
+        effect(() => this.konvaNode());
+      }
+    }
+
+    const { component, destroy } = await render(TestComponent);
+    expect(component.konvaNode()).toBeInstanceOf(Konva.Layer);
+    destroy();
+  });
+
+  // Same eager-computed pattern, applied to a shape.
+  it('computed(() => viewChild()?.getNode()) on ko-circle yields Konva.Circle', async () => {
+    @Component({
+      selector: `ko-test-${++testId}`,
+      standalone: true,
+      template: `
+        <ko-stage [config]="{ width: 200, height: 200 }">
+          <ko-layer [config]="{}">
+            <ko-circle #circle [config]="{ radius: 30 }"></ko-circle>
+          </ko-layer>
+        </ko-stage>
+      `,
+      imports: [StageComponent, CoreShapeComponent],
+    })
+    class TestComponent {
+      shapeRef = viewChild<CoreShapeComponent>('circle');
+      konvaNode = computed(() => this.shapeRef()?.getNode());
+      constructor() {
+        effect(() => this.konvaNode());
+      }
+    }
+
+    const { component, destroy } = await render(TestComponent);
+    expect(component.konvaNode()).toBeInstanceOf(Konva.Circle);
+    destroy();
+  });
+
+  it('afterNextRender sees a ready Konva.Layer via getNode() on ko-layer', async () => {
+    let result: unknown;
+
+    @Component({
+      selector: `ko-test-${++testId}`,
+      standalone: true,
+      template: `
+        <ko-stage [config]="{ width: 200, height: 200 }">
+          <ko-layer #layer [config]="{}"></ko-layer>
+        </ko-stage>
+      `,
+      imports: [StageComponent, CoreShapeComponent],
+    })
+    class TestComponent {
+      layerRef = viewChild<CoreShapeComponent>('layer');
+      constructor() {
+        afterNextRender(() => {
+          result = this.layerRef()?.getNode();
+        });
+      }
+    }
+
+    const { destroy } = await render(TestComponent);
+    expect(result).toBeInstanceOf(Konva.Layer);
+    destroy();
+  });
+
+  it('afterNextRender sees a ready Konva shape via getNode() on ko-circle', async () => {
+    let result: unknown;
+
+    @Component({
+      selector: `ko-test-${++testId}`,
+      standalone: true,
+      template: `
+        <ko-stage [config]="{ width: 200, height: 200 }">
+          <ko-layer [config]="{}">
+            <ko-circle #circle [config]="{ radius: 30 }"></ko-circle>
+          </ko-layer>
+        </ko-stage>
+      `,
+      imports: [StageComponent, CoreShapeComponent],
+    })
+    class TestComponent {
+      shapeRef = viewChild<CoreShapeComponent>('circle');
+      constructor() {
+        afterNextRender(() => {
+          result = this.shapeRef()?.getNode();
+        });
+      }
+    }
+
+    const { destroy } = await render(TestComponent);
+    expect(result).toBeInstanceOf(Konva.Circle);
     destroy();
   });
 });

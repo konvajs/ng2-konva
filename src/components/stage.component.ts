@@ -6,6 +6,8 @@ import {
   inject,
   input,
   output,
+  signal,
+  untracked,
 } from '@angular/core';
 import { NodeConfig } from 'konva/lib/Node';
 import { ContainerConfig } from 'konva/lib/Container';
@@ -66,17 +68,19 @@ export class StageComponent implements KonvaComponent, KonvaContainer, OnDestroy
   #onConfigChange = effect(() => {
     const config = this.config();
     if (!config) return;
-    if (!this._stage) {
-      this._stage = new Stage({
+    // untracked read: we mutate _stage from inside this effect; depending on
+    // it would cause the effect to re-run on every assignment.
+    if (untracked(this._stage)) {
+      this.uploadKonva(config);
+    } else {
+      const stage = new Stage({
         ...config,
         container: this.konvaContainer,
       });
-
+      this._stage.set(stage);
       this.uploadKonva(config);
       // Add any children that registered before the stage was created
       this.flushPendingChildren();
-    } else {
-      this.uploadKonva(config);
     }
   });
 
@@ -103,15 +107,17 @@ export class StageComponent implements KonvaComponent, KonvaContainer, OnDestroy
   readonly transform = output<NgKonvaEventObject<MouseEvent>>();
   readonly transformend = output<NgKonvaEventObject<MouseEvent>>();
 
-  private _stage: Stage;
+  // Signal-backed so reactive readers (effect/computed) re-evaluate the
+  // instant the Konva.Stage is constructed. See GH issue #80.
+  private readonly _stage = signal<Stage | undefined>(undefined);
   private cacheProps: PropsType = {};
 
   public getStage(): Stage {
-    return this._stage;
+    return this._stage()!;
   }
 
   public getNode(): Stage {
-    return this._stage;
+    return this._stage()!;
   }
 
   public getConfig(): NodeConfig {
@@ -123,10 +129,11 @@ export class StageComponent implements KonvaComponent, KonvaContainer, OnDestroy
       throw 'You can only add Layer Nodes to Stage Nodes!';
     }
     this.children.push(child);
-    if (this._stage) {
-      this._stage.add(child.getStage() as Layer);
+    const stage = untracked(this._stage);
+    if (stage) {
+      stage.add(child.getStage() as Layer);
       this.syncZIndices();
-      updatePicture(this._stage);
+      updatePicture(stage);
     }
   }
 
@@ -136,8 +143,9 @@ export class StageComponent implements KonvaComponent, KonvaContainer, OnDestroy
       this.children.splice(idx, 1);
       child.getStage().remove();
       this.syncZIndices();
-      if (this._stage) {
-        updatePicture(this._stage);
+      const stage = untracked(this._stage);
+      if (stage) {
+        updatePicture(stage);
       }
     }
   }
@@ -151,8 +159,10 @@ export class StageComponent implements KonvaComponent, KonvaContainer, OnDestroy
   }
 
   private flushPendingChildren(): void {
+    const stage = untracked(this._stage);
+    if (!stage) return;
     this.children.forEach((child) => {
-      this._stage.add(child.getStage() as Layer);
+      stage.add(child.getStage() as Layer);
     });
     this.syncZIndices();
   }
@@ -167,6 +177,6 @@ export class StageComponent implements KonvaComponent, KonvaContainer, OnDestroy
   }
 
   ngOnDestroy(): void {
-    this._stage.destroy();
+    untracked(this._stage)?.destroy();
   }
 }
