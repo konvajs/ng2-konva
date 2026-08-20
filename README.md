@@ -11,27 +11,25 @@
 
 ![Ng2Konva Logo](n2-konva.png)
 
-**ng2-konva** is a JavaScript library for drawing complex canvas graphics using Angular.
+**ng2-konva** provides declarative Angular components for the [Konva](https://konvajs.org/) 2D canvas scene graph. Use it to build design editors, whiteboards, diagrams, annotations, and other interactive graphics.
 
-It provides declarative and reactive bindings to the [Konva Framework](http://konvajs.github.io/).
+ng2-konva is MIT licensed. Each component uses the name of its Konva node with a `ko-` prefix.
 
-All `ng2-konva` components correspond to `Konva` components of the same name with the prefix 'ko-'. All the parameters available for `Konva` objects can be passed as `config` to the corresponding `ng2-konva` components.
+- [Angular tutorial](https://konvajs.org/docs/angular/index.html)
+- [Live demos](https://konvajs.org/docs/sandbox.html)
+- [Konva API](https://konvajs.org/api/Konva.html)
+- [Star the project](https://github.com/konvajs/ng2-konva)
 
-Core shapes are: ko-stage, ko-layer, ko-rect, ko-circle, ko-ellipse, ko-line, ko-image, ko-text, ko-text-path, ko-star, ko-label, SVG Path, ko-regular-polygon.
-Also you can create custom shape.
+[![A Konva Transformer around a selected image](https://konvajs.org/assets/demos/image-resize-min.png)](https://konvajs.org/docs/angular/Transformer.html)
 
-To get more info about `Konva` you can read [Konva Overview](http://konvajs.github.io/docs/overview.html).
+All `ng2-konva` components correspond to Konva components. Pass Konva properties through the component `config` input.
 
-## Documentation
+## Install
 
-[https://konvajs.org/docs/angular/index.html](https://konvajs.org/docs/angular/index.html)
-
-## Installation
-
-To install this library, run:
+ng2-konva 12 requires Angular `^21.0.0`.
 
 ```bash
-$ npm install ng2-konva --save
+npm install ng2-konva konva
 ```
 
 `ng2-konva` components are all standalone. There are two components you will need to import: `CoreShapeComponent` and `StageComponent`
@@ -90,8 +88,8 @@ You can find more examples in the demo project located in `projects/demo`.
 
 ## Related repositories
 
-- [react-konva](https://github.com/lavrton/react-konva) - React + Konva
-- [vue-konva](http://rafaelescala.com/vue-konva-doc/) - Vue + Konva
+- [react-konva](https://github.com/konvajs/react-konva) - React + Konva
+- [vue-konva](https://github.com/konvajs/vue-konva) - Vue + Konva
 
 ## License
 
