@@ -36,22 +36,22 @@
     "postversion": "git push && git push --tags"
   },
   "peerDependencies": {
-    "@angular/core": "^21.0.0",
+    "@angular/core": "^21.0.0 || ^22.0.0",
     "konva": "^9.3.22 || ^10.0.0"
   },
   "devDependencies": {
-    "@analogjs/vite-plugin-angular": "^2.3.1",
-    "@angular/build": "^21.2.1",
-    "@angular/common": "^21.2.1",
-    "@angular/compiler": "^21.2.1",
-    "@angular/compiler-cli": "^21.2.1",
-    "@angular/core": "^21.2.1",
-    "@angular/platform-browser": "^21.2.1",
+    "@analogjs/vite-plugin-angular": "^2.7.1",
+    "@angular/build": "^22.1.6",
+    "@angular/common": "^22.1.4",
+    "@angular/compiler": "^22.1.4",
+    "@angular/compiler-cli": "^22.1.4",
+    "@angular/core": "^22.1.4",
+    "@angular/platform-browser": "^22.1.4",
     "@vitest/browser": "^4.0.18",
     "@vitest/browser-playwright": "^4.0.18",
     "konva": "^10.2.0",
     "rxjs": "~7.8.2",
-    "typescript": "^5.9.3",
+    "typescript": "~6.0.0",
     "vitest": "^4.0.18",
     "zone.js": "~0.16.1"
   },

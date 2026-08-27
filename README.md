@@ -26,7 +26,7 @@ All `ng2-konva` components correspond to Konva components. Pass Konva properties
 
 ## Install
 
-ng2-konva 12 requires Angular `^21.0.0`.
+ng2-konva 12 requires Angular `^21.0.0` or `^22.0.0`.
 
 ```bash
 npm install ng2-konva konva
