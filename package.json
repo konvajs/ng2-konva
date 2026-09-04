@@ -15,7 +15,7 @@
   "homepage": "https://konvajs.org/docs/angular/index.html",
   "repository": {
     "type": "git",
-    "url": "git@github.com:konvajs/ng2-konva.git"
+    "url": "git+ssh://git@github.com/konvajs/ng2-konva.git"
   },
   "license": "MIT",
   "bugs": "https://github.com/konvajs/ng2-konva/issues",
