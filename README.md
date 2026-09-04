@@ -82,6 +82,8 @@ export class CircleExampleComponent {
 }
 ```
 
+> **Building a full design editor?** [Polotno](https://polotno.com/?utm_source=konvajs&utm_medium=readme&utm_content=ng2-konva) is a commercial design editor SDK built on Konva by the Konva maintainers. It ships templates, text editing, and export, so you integrate an editor instead of building one: `npm install polotno`. Polotno has an [Angular integration guide](https://polotno.com/docs/angular?utm_source=konvajs&utm_medium=readme&utm_content=ng2-konva).
+
 ## Demo
 
 You can find more examples in the demo project located in `projects/demo`.

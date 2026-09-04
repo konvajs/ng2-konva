@@ -1,12 +1,18 @@
 {
   "name": "ng2-konva",
   "version": "12.1.0",
-  "description": "Angular binding to canvas element via Konva framework",
+  "description": "Angular components for the Konva 2d canvas library. Build interactive graphics, design editors, and whiteboards in Angular.",
   "keywords": [
     "angular",
     "konva",
-    "canvas"
+    "canvas",
+    "graphics",
+    "design-editor",
+    "canvas-editor",
+    "whiteboard",
+    "transformer"
   ],
+  "homepage": "https://konvajs.org/docs/angular/index.html",
   "repository": {
     "type": "git",
     "url": "git@github.com:konvajs/ng2-konva.git"
@@ -49,7 +55,7 @@
     "@angular/platform-browser": "^22.1.4",
     "@vitest/browser": "^4.0.18",
     "@vitest/browser-playwright": "^4.0.18",
-    "konva": "^10.2.0",
+    "konva": "^10.3.3",
     "rxjs": "~7.8.2",
     "typescript": "~6.0.0",
     "vitest": "^4.0.18",
