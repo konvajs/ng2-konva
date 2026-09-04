@@ -1,6 +1,6 @@
 {
   "name": "ng2-konva",
-  "version": "12.1.0",
+  "version": "12.1.1",
   "description": "Angular components for the Konva 2d canvas library. Build interactive graphics, design editors, and whiteboards in Angular.",
   "keywords": [
     "angular",
